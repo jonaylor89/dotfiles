@@ -24,7 +24,8 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'tpope/vim-fugitive'
 Plugin 'ryanoasis/vim-devicons'
-"Plugin 'majutsushi/tagbar'
+Plugin 'majutsushi/tagbar'
+Plugin 'rust-lang/rust.vim'
 " }}}
 
 call vundle#end()
@@ -53,6 +54,7 @@ colorscheme onedark
 
 let python_highlight_all=1
 let NERDTreeIgnore=['\.pyc$', '\~$', '\.out$', 'node_modules$', '__pycache__$']
+let g:rustfmt_autosave=1
 let g:airline_theme='murmur'
 let g:airline_powerline_fonts=1
 let g:airline#extensions#tabline#enabled=1
@@ -61,7 +63,7 @@ let g:ycm_autoclose_preview_window_after_competion=1
 " General mappings ------------{{{
 map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
 map <leader>n <plug>NERDTreeTabsToggle<CR>
-map <F5> :!gcc % && ./a.out<CR>
+map <leader>t :TagbarToggle<cr>
 " }}}
 
 " normal mode mappings----------------{{{
@@ -79,13 +81,18 @@ nnoremap <leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 nnoremap <S-Up> <C-Y>
 nnoremap <S-Down> <C-E>
-"nnoremap <F8> :TagbarToggle<cr>
 " }}}
 
 " Insert mode mappings ----------------------{{{
 inoremap jk <esc>
 inoremap <esc> <nop>
+inoremap ( ()<left>
+inoremap { {}<left>
 " }}}
+
+" Visual mode mappings ---------------------{{{
+vnoremap jk <esc>
+}}}
 
 " Mapped operators -----------------------{{{
 onoremap p i(
@@ -101,8 +108,10 @@ augroup END
 " Autocommands for commenting code ------------------{{{
 augroup Comments
 	autocmd!
-	autocmd FileType java nnoremap <buffer> <leader>c I//<esc>
-	autocmd FileType python nnoremap <buffer> <leader>c I#<esc>
+	autocmd FileType java nnoremap <buffer> <leader>c I//jk
+    autocmd FileType javascript nnoremap <buffer> <leader>c I//jk
+    autocmd FileType c nnoremap <buffer> <leader>c I//jk
+	autocmd FileType python nnoremap <buffer> <leader>c I#jk
 augroup END
 " }}}
 
@@ -111,26 +120,8 @@ augroup ifstatement
 	autocmd!
 	autocmd FileType python iabbr <buffer> iff if:<left>
 	autocmd FileType java iabbr <buffer> iff if()<left>
+    autocmd FileType c iabbr <buffer> iff if()<left>
+    autocmd FileType javascript iabbr <buffer> iff if()<left>
 augroup END
 " }}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
