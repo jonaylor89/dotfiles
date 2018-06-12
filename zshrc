@@ -102,5 +102,9 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+ alias zshconfig="vim ~/.zshrc"
+ alias ohmyzsh="vim ~/.oh-my-zsh"
+ alias tmuxconfig="vim ~/.tmux.conf"
+ alias vimconfig="vim ~/.vimrc"
+ alias cls="clear"
+ alias rmd="rm -rf"
