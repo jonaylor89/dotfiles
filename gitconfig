@@ -1,0 +1,18 @@
+[user]
+	email = jonaylor89@gmail.com
+	name = John Naylor
+
+[github]
+    user = jonaylor89
+
+[alias]
+    ci = commit
+    cl = clone
+    ps = push
+    pl = pull
+    psom = push origin master
+    plom = pull origin master
+    ra = remote add
+    st = status
+
+    
