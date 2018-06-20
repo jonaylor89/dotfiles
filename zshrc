@@ -69,7 +69,6 @@ plugins=(
   vi-mode
   virtualenv
   sudo
-  ubuntu
   python
   web-search
 )
