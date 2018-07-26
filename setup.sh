@@ -22,6 +22,7 @@ git clone https://github.com/VundleVim/Vundle.vim.git  ~/.vim/bundle/Vundle.vim
 # for a minimal installation
 # sudo pacman -S 
 
+./Documents/vimplugins/YouCompleteMe/install.sh --clang-system --system-libclang
 
 # Link config files to files in dotfiles directory
 ln ~/dotfiles/zshrc ~/.zshrc
