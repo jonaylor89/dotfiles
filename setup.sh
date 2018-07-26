@@ -1,11 +1,9 @@
 
-# A work in progress
-
 # download git, zsh, tmux, and vim
 sudo pacman -S git zsh tmux vim curl
 
 # Download config files
-git clone https://github.com/jonaylor89/dotfiles.git
+git clone https://github.com/jonaylor89/dotfiles.git ~/dotfiles
 
 # Download oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -17,12 +15,12 @@ git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/theme
 git clone https://github.com/VundleVim/Vundle.vim.git  ~/.vim/bundle/Vundle.vim
 
 # Download nerd font
-git clone https://github.com/nerdfont
+# git clone 'https://github.com/ryanoasis/nerd-fonts/patched-fonts/SouceCodePro/Regular/complete/Sauce Code Pro Nerd Font Complete Mono.ttf'
 
 # Installations forr YouCompleteMe
 # This should be skipped if you're looking
 # for a minimal installation
-sudo pacman -S $ThingsForYouCompleteMe
+# sudo pacman -S 
 
 
 # Link config files to files in dotfiles directory
