@@ -2,19 +2,19 @@
 # A work in progress
 
 # download git, zsh, tmux, and vim
-sudo pacman -S git zsh tmux vim 
+sudo pacman -S git zsh tmux vim curl
 
 # Download config files
 git clone https://github.com/jonaylor89/dotfiles.git
 
 # Download oh-my-zsh
-git clone https://github.com/oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 # Download powerlevel9k zsh theme
-git clone https://github.com/powerlevel9k
+git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/
 
 # Download and install Vundle
-git clone https://github.com/Vundle
+git clone https://github.com/VundleVim/Vundle.vim.git  ~/.vim/bundle/Vundle.vim
 
 # Download nerd font
 git clone https://github.com/nerdfont
