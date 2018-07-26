@@ -15,12 +15,9 @@ git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/theme
 git clone https://github.com/VundleVim/Vundle.vim.git  ~/.vim/bundle/Vundle.vim
 
 # Download nerd font
-# git clone 'https://github.com/ryanoasis/nerd-fonts/patched-fonts/SouceCodePro/Regular/complete/Sauce Code Pro Nerd Font Complete Mono.ttf'
-
-# Installations forr YouCompleteMe
-# This should be skipped if you're looking
-# for a minimal installation
-# sudo pacman -S 
+git clone https://github.com/ryanoasis/nerd-fonts.git
+./nerd-fonts/install.sh 'Sauce Code Pro Nerd Font Complete Mono'
+rm -rf nerd-fonts
 
 ./Documents/vimplugins/YouCompleteMe/install.sh --clang-system --system-libclang
 
