@@ -26,4 +26,5 @@ ln ~/dotfiles/zshrc ~/.zshrc
 ln ~/dotfiles/vimrc ~/.vimrc
 ln ~/dotfiles/tmux.conf ~/.tmux.conf
 ln ~/dotfiles/gitconfig ~/.gitconfig
+ln ~/dorfiles/Xresources ~/.Xresources
 
