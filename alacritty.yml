@@ -19,8 +19,8 @@ window:
   # Falls back to size specified by window manager if set to 0x0.
   # (changes require restart)
   dimensions:
-    columns: 80
-    lines: 24
+    columns: 160
+    lines: 48
 
   # Adds this many blank pixels of padding around the window
   # Units are physical pixels; this is not DPI aware.
@@ -31,10 +31,10 @@ window:
 
   # Window decorations
   # Setting this to false will result in window without borders and title bar.
-  decorations: true
+  decorations: false
 
 # Display tabs using this many cells (changes require restart)
-tabspaces: 8
+tabspaces: 4
 
 # When true, bold text is drawn using the bright variant of colors.
 draw_bold_text_with_bright_colors: true
@@ -78,7 +78,7 @@ font:
     # style: Italic
 
   # Point size of the font
-  size: 11.0
+  size: 10.0
 
   # Offset is the extra space around each character. offset.y can be thought of
   # as modifying the linespacing, and offset.x as modifying the letter spacing.
@@ -192,7 +192,7 @@ visual_bell:
   duration: 0
 
 # Background opacity
-background_opacity: 1.0
+background_opacity: 0.75
 
 # Mouse bindings
 #
@@ -244,7 +244,7 @@ hide_cursor_when_typing: false
 # - Block
 # - Underline
 # - Beam
-cursor_style: Block
+cursor_style: Beam
 
 # Whether the cursor should be a hollow block on window focus loss
 unfocused_hollow_cursor: true
