@@ -1,6 +1,7 @@
+#!/usr/bin/sh
 
 # download git, zsh, tmux, and vim
-sudo pacman -S git zsh tmux vim curl
+pacman -S git zsh tmux vim curl
 
 # Download config files
 git clone https://github.com/jonaylor89/dotfiles.git ~/dotfiles
