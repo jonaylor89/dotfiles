@@ -10,8 +10,39 @@
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="powerlevel9k/powerlevel9k"
 
+# Add newline before prompt and after prompt
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+
+# OS segment
+POWERLEVEL9K_OS_ICON_BACKGROUND='black'
+POWERLEVEL9K_LINUX_ICON='%F{cyan} \uf303 %F{white} arch %F{cyan}linux%f'
+
+# Battery
+POWERLEVEL9K_BATTERY_LOW_FOREGROUND='red'
+POWERLEVEL9K_BATTERY_CHARGING_FOREGROUND='blue'
+POWERLEVEL9K_BATTERY_CHARGED_FOREGROUND='green'
+POWERLEVEL9K_BATTERY_DISCONNECTED_FOREGROUND='blue'
+POWERLEVEL9K_BATTERY_VERBOSE=false
+
+# Status
+POWERLEVEL9K_OK_ICON=$'\uf164'
+POWERLEVEL9K_FAIL_ICON=$'\uf165'
+POWERLEVEL9K_CARRIAGE_RETURN_ICON=$'\uf165'
+
+# Time
+POWERLEVEL9K_TIME_FORMAT="%F{black}%D{%I:%M}%f"
+POWERLEVEL9K_TIME_BACKGROUND='blue'
+
+# User with skull
+user_with_skull() {
+    echo -n "\ufb8a $(whoami)"
+}
+
+POWERLEVEL9K_CUSTOM_USER="user_with_skull"
+
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_user dir vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(background_jobs time battery)
 
 # Set list of themes to load
 # Setting this variable when ZSH_THEME=random
@@ -72,6 +103,7 @@ plugins=(
   python
   web-search
   zsh-autosuggestions
+  zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
