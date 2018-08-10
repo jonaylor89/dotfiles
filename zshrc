@@ -127,6 +127,6 @@ source $ZSH/oh-my-zsh.sh
  alias ohmyzsh="vim ~/.oh-my-zsh"
  alias tmuxconfig="vim ~/.tmux.conf"
  alias vimconfig="vim ~/.vimrc"
- alias la="exa -abghHliS --git"
+ alias la="exa -abghlS --git"
  alias cls="clear"
  alias rmd="rm -rf"
