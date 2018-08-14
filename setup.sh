@@ -38,10 +38,9 @@ git clone https://github.cim/jihem/tmux-themepack.git ~/.tmux-themepack
 source "${HOME}/.tmux-themepack/powerline/block/blue.tmuxtheme"
 
 # Link config files to files in dotfiles directory
-ln -s ~/dotfiles/zshrc ~/.zshrc
-ln -s ~/dotfiles/vimrc ~/.vimrc
-ln -s ~/dotfiles/tmux.conf ~/.tmux.conf
-ln -s ~/dotfiles/gitconfig ~/.gitconfig
-ln -s ~/dorfiles/Xresources ~/.Xresources
-
+ln -s -T ~/dotfiles/zshrc ~/.zshrc
+ln -s -T ~/dotfiles/vimrc ~/.vimrc
+ln -s -T ~/dotfiles/tmux.conf ~/.tmux.conf
+ln -s -T ~/dotfiles/gitconfig ~/.gitconfig
+ln -s -T ~/dorfiles/Xresources ~/.Xresources
 
