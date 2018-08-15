@@ -1,10 +1,7 @@
 #!/usr/bin/sh
 
 # download git, zsh, tmux, and vim
-pacman -S git zsh tmux vim curl exa
-
-# Download config files
-git clone https://github.com/jonaylor89/dotfiles.git ~/dotfiles
+pacman -S git zsh tmux vim curl exa 
 
 # Download oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -42,5 +39,6 @@ ln -s -T ~/dotfiles/zshrc ~/.zshrc
 ln -s -T ~/dotfiles/vimrc ~/.vimrc
 ln -s -T ~/dotfiles/tmux.conf ~/.tmux.conf
 ln -s -T ~/dotfiles/gitconfig ~/.gitconfig
-ln -s -T ~/dorfiles/Xresources ~/.Xresources
+ln -s -T ~/dotfiles/Xresources ~/.Xresources
+ln -s -T ~/dotfiles/alacritty.yml ~/.config/alacritty/alacritty.yml
 
