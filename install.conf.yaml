@@ -6,11 +6,9 @@
 - clean: ['~', '~/.config']
 
 - link:
-    ~/dotfiles: ''
+    # ~/dotfiles: ''
     ~/.tmux.conf: tmux.conf
-    ~/.vim: vim
     ~/.vimrc: vimrc
-    ~/.zsh: zsh
     ~/.zshrc: zshrc
     ~/.config/alacritty/alacritty.yml:
         glob: true
@@ -18,6 +16,5 @@
     ~/.Xresources: Xresources
 
 - shell:
-    - [pacman -S git exa, Installing necessary appplications]
-    - [git submodule update --init --recursive, Installing submodules]
-    - [git update-submodules, Updating submodules]
+    # - [pacman -S git exa, Installing necessary appplications]
+    - [git submodule update --init --recursive, Updating submodules]
