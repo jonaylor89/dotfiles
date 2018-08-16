@@ -11,13 +11,13 @@
 
 ## Setting up system
 
-First run the setup.sh file. I'm currently trying to transition everything to
+First run the setup file. I'm currently trying to transition everything to
 dotbot but it's taking looker than I thought to get it just right (If it isn't
 perfect then I won't do it) so I still have a shell script to do most things. I
 wouldn't recommend executing this file more than once. I haven't tested to make
 sure it doesn't clutter everything up.
 ```
-    ~$ ./setup.sh
+    ~$ ./setup
 ```
 This should download and install all the nesessary packages, themes, fonts,
 etc. etc.
