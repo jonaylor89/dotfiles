@@ -3,6 +3,9 @@
         relink: true
         create: true
 
+- shell:
+    - [pacman git zsh tmux exa curl, Installing necessary packages]
+
 - clean: ['~', '~/.config']
 
 - link:
