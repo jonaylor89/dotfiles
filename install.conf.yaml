@@ -16,5 +16,4 @@
     ~/.Xresources: Xresources
 
 - shell:
-    # - [pacman -S git exa curl tmux, Installing necessary appplications]
     - [git submodule update --init --recursive, Updating submodules]

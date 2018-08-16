@@ -34,11 +34,3 @@ rm -rf nerd-fonts
 git clone https://github.cim/jihem/tmux-themepack.git ~/.tmux-themepack
 source "${HOME}/.tmux-themepack/powerline/block/blue.tmuxtheme"
 
-# Link config files to files in dotfiles directory
-ln -s -T ~/dotfiles/zshrc ~/.zshrc
-ln -s -T ~/dotfiles/vimrc ~/.vimrc
-ln -s -T ~/dotfiles/tmux.conf ~/.tmux.conf
-ln -s -T ~/dotfiles/gitconfig ~/.gitconfig
-ln -s -T ~/dotfiles/Xresources ~/.Xresources
-ln -s -T ~/dotfiles/alacritty.yml ~/.config/alacritty/alacritty.yml
-
