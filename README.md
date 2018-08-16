@@ -1,7 +1,5 @@
 # John's dotfiles
 
-*Disclaimer: this is configured for arch linux systems*
-
 1. vim
 2. zsh/oh-my-zsh
 3. tmux
@@ -16,8 +14,10 @@ dotbot but it's taking looker than I thought to get it just right (If it isn't
 perfect then I won't do it) so I still have a shell script to do most things. I
 wouldn't recommend executing this file more than once. I haven't tested to make
 sure it doesn't clutter everything up.
+
+### arch
 ```
-    ~$ ./setup
+    ~$ ./arch/setup
 ```
 This should download and install all the nesessary packages, themes, fonts,
 etc. etc.
