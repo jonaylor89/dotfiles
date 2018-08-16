@@ -7,13 +7,13 @@
 
 - link:
     # ~/dotfiles: ''
-    ~/.tmux.conf: tmux.conf
-    ~/.vimrc: vimrc
-    ~/.zshrc: zshrc
+    ~/.tmux.conf: tmux/tmux.conf
+    ~/.vimrc: vim/vimrc
+    ~/.zshrc: zsh/zshrc
     ~/.config/alacritty/alacritty.yml:
         glob: true
-        path: alacritty.yml
-    ~/.Xresources: Xresources
+        path: alacritty/alacritty.yml
+    ~/.Xresources: X/Xresources
 
 - shell:
     - [git submodule update --init --recursive, Updating submodules]
