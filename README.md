@@ -17,6 +17,9 @@ sure it doesn't clutter everything up.
 
 ### arch
 ```
+    ~$ sudo pacman -S git
+    ~$ git clone https://github.com/jonaylor89/dotfiles.git
+    ~$ cd dotfiles
     ~$ ./arch/setup
 ```
 This should download and install all the nesessary packages, themes, fonts,
