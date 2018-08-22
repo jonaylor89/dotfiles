@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 #######################################
 # YOU MUST HAVE HOMEBREW INSTALLED!!!!#
