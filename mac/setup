@@ -3,3 +3,5 @@
 #######################################
 # YOU MUST HAVE HOMEBREW INSTALLED!!!!#
 #######################################
+
+brew install neofetch zsh
