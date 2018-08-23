@@ -7,32 +7,49 @@ read -p 'zshrc install? [Y/n] ' install_zsh
 read -p 'alacritty.yml install? [Y/n] ' install_alacritty
 read -p 'Xresources install? [Y/n] ' install_X
 
-if [ ! $install_tmux in ("n" "N") && ! -f ~/.tmux.conf ]
+if [ ! $install_tmux in ('n' 'N') ]
 then
     if [ -f ~/.tmux.conf ]
     then
-        echo [!!!] File already exists!
+        echo "[!!!] File already exists on system (tmux.conf)"
     else
         ln -s ~/dotfiles/tmux/tmux.conf ~/.tmux.conf
     fi
 fi
 
-if [[ $install_vim != 'n' ]]
+if [ ! $install_vim in ('n' 'N') ]
 then
-    ln -s ~/dotfiles/vim/vimrc ~/.vimrc
+    if [ -f ~/.vimrc ]
+    then
+        echo "[!!!] File already exists on system (vimrc)"
+    else
+        ln -s ~/dotfiles/vim/vimrc ~/.vimrc
+    fi
 fi
 
-if [[ $install_zsh != 'n' ]]
+if [ ! $install_zsh in ('n' 'N') ]
 then
-    ln -s ~/dotfiles/zsh/zshrc ~/.zshrc
+    if [ -f ~/.zshrc ]
+    then
+        echo "[!!!] File already exists on system (zshrc)"
+    else
+        ln -s ~/dotfiles/zsh/zshrc ~/.zshrc
+    fi
 fi
 
-if [[ $install_alacritty != 'n' ]]
+if [ ! $install_alacritty != ('n' 'N') ]
 then
-    ln -s ~/dotfiles/alacritty/alacritty.yml ~/.config/alacritty.yml
+    if [ -f ~/.config/alacritty.yml ]
+    then
+        echo "[!!!] File already exists on system (alacritty.yml)"
+    else
+        ln -s ~/dotfiles/alacritty/alacritty.yml ~/.config/alacritty.yml
+    fi
 fi 
 
-if [[ $install_X != 'n' ]]
+if [ ! $install_X in ('n' 'N') ]
 then
-    ln -s ~/dotfiles/X/Xresources ~/.Xresources
+        echo "[!!!] File already exists on system (Xresources)"
+    else
+        ln -s ~/dotfiles/X/Xresources ~/.Xresources
 fi
