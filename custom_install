@@ -7,27 +7,32 @@ read -p 'zshrc install? [Y/n] ' install_zsh
 read -p 'alacritty.yml install? [Y/n] ' install_alacritty
 read -p 'Xresources install? [Y/n] ' install_X
 
-if [ $install_tmux != 'n' ]
+if [ ! $install_tmux in ("n" "N") && ! -f ~/.tmux.conf ]
 then
-    ln -s ~/dotfiles/tmux/tmux.conf ~/.tmux.conf
+    if [ -f ~/.tmux.conf ]
+    then
+        echo [!!!] File already exists!
+    else
+        ln -s ~/dotfiles/tmux/tmux.conf ~/.tmux.conf
+    fi
 fi
 
-if [ $install_vim != 'n' ]
+if [[ $install_vim != 'n' ]]
 then
     ln -s ~/dotfiles/vim/vimrc ~/.vimrc
 fi
 
-if [ $install_zsh != 'n' ]
+if [[ $install_zsh != 'n' ]]
 then
     ln -s ~/dotfiles/zsh/zshrc ~/.zshrc
 fi
 
-if [ $install_alacritty != 'n' ]
+if [[ $install_alacritty != 'n' ]]
 then
     ln -s ~/dotfiles/alacritty/alacritty.yml ~/.config/alacritty.yml
 fi 
 
-if [ $install_X != 'n' ]
+if [[ $install_X != 'n' ]]
 then
     ln -s ~/dotfiles/X/Xresources ~/.Xresources
 fi
