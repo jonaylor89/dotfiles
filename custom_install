@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+
+read -p 'tmux.conf install? [Y/n] ' install_tmux
+read -p 'vimrc install? [Y/n] ' install_vim
+read -p 'zshrc install? [Y/n] ' install_zsh
+read -p 'alacritty.yml install? [Y/n] ' install_alacritty
+read -p 'Xresources install? [Y/n] ' install_X
+
+if [ $install_tmux != 'n' ]
+then
+    ln -s ~/dotfiles/tmux/tmux.conf ~/.tmux.conf
+fi
+
+if [ $install_vim != 'n' ]
+then
+    ln -s ~/dotfiles/vim/vimrc ~/.vimrc
+fi
+
+if [ $install_zsh != 'n' ]
+then
+    ln -s ~/dotfiles/zsh/zshrc ~/.zshrc
+fi
+
+if [ $install_alacritty != 'n' ]
+then
+    ln -s ~/dotfiles/alacritty/alacritty.yml ~/.config/alacritty.yml
+fi 
+
+if [ $install_X != 'n' ]
+then
+    ln -s ~/dotfiles/X/Xresources ~/.Xresources
+fi
