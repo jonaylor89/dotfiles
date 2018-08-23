@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 
-#######################################
-# YOU MUST HAVE HOMEBREW INSTALLED!!!!#
-#######################################
+########################################
+#                                      #
+# YOU MUST HAVE HOMEBREW INSTALLED!!!! #
+#                                      #
+########################################
 
-brew install neofetch zsh
+brew install zsh
+
+# Download oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+# Download and install Vundle
+git clone https://github.com/VundleVim/Vundle.vim.git  ~/.vim/bundle/Vundle.vim
+
