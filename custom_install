@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 read -p 'tmux.conf install? [Y/n] ' install_tmux
 read -p 'vimrc install? [Y/n] ' install_vim
 read -p 'zshrc install? [Y/n] ' install_zsh
