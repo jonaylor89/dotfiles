@@ -1,5 +1,20 @@
 #!/usr/bin/env bash
 
+system_type=$(uname -s)
+
+if [ $system_type = "Darwin" ]
+then
+    echo "=-=-=-=-=-= Files for Darwin installation =-=-=-=-=-="
+    # Module for Mac
+fi
+
+if [ $system_type = "Linux" ]
+then
+    # Modules for Linux
+fi
+
+# Modules for both mac and linux
+
 read -p 'tmux.conf install? [Y/n] ' install_tmux
 read -p 'vimrc install? [Y/n] ' install_vim
 read -p 'zshrc install? [Y/n] ' install_zsh
@@ -52,3 +67,4 @@ then
     else
         ln -s ~/dotfiles/X/Xresources ~/.Xresources
 fi
+
