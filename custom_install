@@ -4,22 +4,25 @@ system_type=$(uname -s)
 
 if [ $system_type = "Darwin" ]
 then
-    echo "=-=-=-=-=-= Files for Darwin installation =-=-=-=-=-="
+    echo "=-=-=-=-=-= Darwin System Installation =-=-=-=-=-="
+    echo "--------------------------------------------------"
     # Module for Mac
 fi
 
 if [ $system_type = "Linux" ]
 then
+    echo "=-=-=-=-=-= Linux System Installation =-=-=-=-=-="
+    echo "-------------------------------------------------"
     # Modules for Linux
 fi
 
 # Modules for both mac and linux
 
-read -p 'tmux.conf install? [Y/n] ' install_tmux
-read -p 'vimrc install? [Y/n] ' install_vim
-read -p 'zshrc install? [Y/n] ' install_zsh
-read -p 'alacritty.yml install? [Y/n] ' install_alacritty
-read -p 'Xresources install? [Y/n] ' install_X
+read -p '[*] tmux.conf install? [Y/n] ' install_tmux
+read -p '[*] vimrc install? [Y/n] ' install_vim
+read -p '[*] zshrc install? [Y/n] ' install_zsh
+read -p '[*] alacritty.yml install? [Y/n] ' install_alacritty
+read -p '[*] Xresources install? [Y/n] ' install_X
 
 if [ ! $install_tmux in ('n' 'N') ]
 then
@@ -27,6 +30,7 @@ then
     then
         echo "[!!!] File already exists on system (tmux.conf)"
     else
+        echo "===> Linking tmux configurations"
         ln -s ~/dotfiles/tmux/tmux.conf ~/.tmux.conf
     fi
 fi
@@ -37,6 +41,7 @@ then
     then
         echo "[!!!] File already exists on system (vimrc)"
     else
+        echo "===> Linking vim configurations"
         ln -s ~/dotfiles/vim/vimrc ~/.vimrc
     fi
 fi
@@ -47,6 +52,7 @@ then
     then
         echo "[!!!] File already exists on system (zshrc)"
     else
+        echo "===> Linking zsh configurations"
         ln -s ~/dotfiles/zsh/zshrc ~/.zshrc
     fi
 fi
@@ -57,14 +63,19 @@ then
     then
         echo "[!!!] File already exists on system (alacritty.yml)"
     else
+        echo "===> Linking alacritty configurations"
         ln -s ~/dotfiles/alacritty/alacritty.yml ~/.config/alacritty.yml
     fi
 fi 
 
 if [ ! $install_X in ('n' 'N') ]
 then
+    if [ -f ~/.Xresources ]
+    then
         echo "[!!!] File already exists on system (Xresources)"
     else
+        echo "===> Linking X server configurations"
         ln -s ~/dotfiles/X/Xresources ~/.Xresources
+    fi
 fi
 
