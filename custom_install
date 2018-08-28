@@ -30,7 +30,7 @@ read -p '[*] zshrc install? [Y/n] ' install_zsh
 read -p '[*] alacritty.yml install? [Y/n] ' install_alacritty
 read -p '[*] Xresources install? [Y/n] ' install_X
 
-if [ $install_tmux != 'n' ] && [ $install_tmux != 'N' ]
+if [ $install_tmux != 'n' ] && [ $install_tmux != 'N' ] 
 then
     if [ -f ~/.tmux.conf ]
     then
@@ -63,7 +63,7 @@ then
     fi
 fi
 
-if [ $install_alacritty != 'n'] && [ $install_alacritty != 'N' ]
+if [ $install_alacritty != 'n' ] && [ $install_alacritty != 'N' ]
 then
     if [ -f ~/.config/alacritty.yml ]
     then
@@ -86,5 +86,6 @@ then
 fi
 
 echo
-echo "Install Complete"
+echo "[+] Install Complete"
+echo
 
