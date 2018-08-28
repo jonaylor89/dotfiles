@@ -4,15 +4,21 @@ system_type=$(uname -s)
 
 if [ $system_type = "Darwin" ]
 then
+    echo
+    echo "--------------------------------------------------"
     echo "=-=-=-=-=-= Darwin System Installation =-=-=-=-=-="
     echo "--------------------------------------------------"
+    echo
     # Module for Mac
 fi
 
 if [ $system_type = "Linux" ]
 then
+    echo
+    echo "-------------------------------------------------"
     echo "=-=-=-=-=-= Linux System Installation =-=-=-=-=-="
     echo "-------------------------------------------------"
+    echo 
     # Modules for Linux
 fi
 
@@ -24,7 +30,7 @@ read -p '[*] zshrc install? [Y/n] ' install_zsh
 read -p '[*] alacritty.yml install? [Y/n] ' install_alacritty
 read -p '[*] Xresources install? [Y/n] ' install_X
 
-if [ ! $install_tmux in ('n' 'N') ]
+if [ $install_tmux != 'n' ] && [ $install_tmux != 'N' ]
 then
     if [ -f ~/.tmux.conf ]
     then
@@ -35,7 +41,7 @@ then
     fi
 fi
 
-if [ ! $install_vim in ('n' 'N') ]
+if [ $install_vim != 'n' ] && [ $install_vim != 'N' ]
 then
     if [ -f ~/.vimrc ]
     then
@@ -46,7 +52,7 @@ then
     fi
 fi
 
-if [ ! $install_zsh in ('n' 'N') ]
+if [ $install_zsh != 'n' ] && [ $install_zsh != 'N' ]
 then
     if [ -f ~/.zshrc ]
     then
@@ -57,7 +63,7 @@ then
     fi
 fi
 
-if [ ! $install_alacritty != ('n' 'N') ]
+if [ $install_alacritty != 'n'] && [ $install_alacritty != 'N' ]
 then
     if [ -f ~/.config/alacritty.yml ]
     then
@@ -68,7 +74,7 @@ then
     fi
 fi 
 
-if [ ! $install_X in ('n' 'N') ]
+if [ $install_X != 'n' ] && [ $install_X != 'N' ]
 then
     if [ -f ~/.Xresources ]
     then
@@ -78,4 +84,7 @@ then
         ln -s ~/dotfiles/X/Xresources ~/.Xresources
     fi
 fi
+
+echo
+echo "Install Complete"
 
