@@ -25,10 +25,15 @@ fi
 # Modules for both mac and linux
 
 read -p '[*] tmux.conf install? [Y/n] ' install_tmux
+install_tmux=${install_tmux:-Y}
 read -p '[*] vimrc install? [Y/n] ' install_vim
+install_vim=${install_vim:-Y}
 read -p '[*] zshrc install? [Y/n] ' install_zsh
+install_zsh=${install_zsh:-Y}
 read -p '[*] alacritty.yml install? [Y/n] ' install_alacritty
+install_alacritty=${install_alacritty:-Y}
 read -p '[*] Xresources install? [Y/n] ' install_X
+install_X=${install_X:-Y}
 
 if [ $install_tmux != 'n' ] && [ $install_tmux != 'N' ] 
 then
