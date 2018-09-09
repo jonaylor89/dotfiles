@@ -21,17 +21,17 @@ sure it doesn't clutter everything up.
     ~$ cd dotfiles
 ```
 
-### arch
+### Arch
 ```
     ~$ ./arch/setup
 ```
 
-### mac
+### Mac
 ```
     ~$ ./mac/setup
 ```
 
-### windows
+### Windows
 **Cmd must be run as administrator**
 ```
     C:> del C:\Windows\System32
@@ -48,6 +48,4 @@ as desired and it won't break anything or clutter anything.
 ```
     ~$ ./install
 ```
-
-
 
