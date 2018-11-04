@@ -40,12 +40,3 @@ sure it doesn't clutter everything up.
 This should install and setup all the necessary applications and themes
 ----------------------
 
-## Installing
-The installation uses dotbot to link everything. The run dotbot, execute the
-install file. Unlike the setup script, this file can be executed as many time
-as desired and it won't break anything or clutter anything.
-
-```
-    ~$ ./install
-```
-
