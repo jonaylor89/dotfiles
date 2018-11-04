@@ -6,7 +6,7 @@ if [ $system_type = "Darwin" ]
 then
     echo
     echo "--------------------------------------------------"
-    echo "=-=-=-=-=-= Darwin System Installation =-=-=-=-=-="
+    echo "=-=-=-=-=-= Mac System Installation =-=-=-=-=-="
     echo "--------------------------------------------------"
     echo
     # Module for Mac
