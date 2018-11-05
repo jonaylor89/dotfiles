@@ -37,6 +37,11 @@ sure it doesn't clutter everything up.
     C:> del C:\Windows\System32
 ```
 
+and
+
+```
+    ~$ ./install
+```
+
 This should install and setup all the necessary applications and themes
 ----------------------
-
