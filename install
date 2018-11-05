@@ -2,11 +2,13 @@
 
 #################################################
 #
-# System install
+# System configuration
 # 
-# Terminal - Zsh
+# Terminal           - Zsh
 # 
-# Theme    - Spaceship (Requires Nerd Font)
+# Zsh Theme          - Spaceship (Requires Nerd Font)
+#
+# Vim Plugin Manager - Vundle
 #
 ################################################
 
@@ -127,11 +129,21 @@ else
 fi
 
 # Download and install shapship theme
-git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
-ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+if [ -d $ZSH_CUSTOM/themes/spaceship-prompt ]
+then
+    echo "[!!!] zsh spaceship theme is already installed"
+else
+    git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
+    ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+fi
 
 # Download and install Vundle
-git clone https://github.com/VundleVim/Vundle.vim.git  ~/.vim/bundle/Vundle.vim
+if [ -d ~/.vim/bundle/Vundle.vim ]
+then
+    echo "[!!!] Vundle is already installed"
+else
+    git clone https://github.com/VundleVim/Vundle.vim.git  ~/.vim/bundle/Vundle.vim
+fi
 
 # Download and install a nerd font
 FONT_INSTALLED=$(fc-list | grep -i "SauceCodePro Nerd Font Complete Mono")
