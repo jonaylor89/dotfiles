@@ -17,11 +17,11 @@ system_type=$(uname -s)
 
 if [ $system_type = "Darwin" ]
 then
-    echo
+    echo ""
     echo "--------------------------------------------------"
     echo "=-=-=-=-=-= Mac System Installation =-=-=-=-=-="
     echo "--------------------------------------------------"
-    echo
+    echo ""
     # Module for Mac
 fi
 
@@ -105,7 +105,7 @@ fi
 
 # Download oh-my-zsh
 
-if [ -d ~/.oh-my.zsh ] 
+if [ -d ~/.oh-my-zsh ] 
 then
     echo "[!!!] oh-my-zsh already installed"
 else
@@ -129,12 +129,12 @@ else
 fi
 
 # Download and install shapship theme
-if [ -d $ZSH_CUSTOM/themes/spaceship-prompt ]
+if [ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/spaceship-prompt ]
 then
     echo "[!!!] zsh spaceship theme is already installed"
 else
-    git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
-    ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+    git clone https://github.com/denysdovhan/spaceship-prompt.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/spaceship-prompt"
+    ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/spaceship.zsh-theme"
 fi
 
 # Download and install Vundle
@@ -148,26 +148,25 @@ fi
 # Download and install a nerd font
 FONT_INSTALLED=$(fc-list | grep -i "SauceCodePro Nerd Font Complete Mono")
 if [ -z "$FONT_INSTALLED" ]; then
-    echo "The SauceCodePro Nerd Font Complete Mono font is not currently installed, would you like to install it now? (Y/N)"
-    read response
+    read -p "[*] The SauceCodePro Nerd Font Complete Mono font is not currently installed, would you like to install it now? (y/N) " response
     if [[ "$response" == [yY] ]]; then
-        echo "Installing the SauceCodePro Nerd FontComplete Mono font to the ~/.fonts directory..."
+        echo "[*] Installing the SauceCodePro Nerd FontComplete Mono font to the ~/.fonts directory..."
         git clone https://github.com/ryanoasis/nerd-fonts.git
         ./nerd-fonts/install.sh 'SauceCodePro Nerd Font Complete Mono'
         rm -rf nerd-fonts
         FONT_INSTALLED=$(fc-list | grep -i "SauceCodePro Nerd Font Complete
         Mono");
         if [ -n "$FONT_INSTALLED" ]; then
-            echo "The SauceCodePro Nerd Font Complete Mono font was sucessfully installed!"
+            echo "[*] The SauceCodePro Nerd Font Complete Mono font was sucessfully installed!"
         else
-            echo "Something went wrong while trying to install the SauceCodePro Nerd Font Mono font."
+            echo "[!!!] Something went wrong while trying to install the SauceCodePro Nerd Font Mono font."
         fi
     else
-        echo "Skipping the installation of the SauceCodePro Nerd Font Complete Mono font..."
-        echo "Please note that this Conky configuration will not work without a nerd font."
+        echo "[*] Skipping the installation of the SauceCodePro Nerd Font Complete Mono font..."
+        echo "[*] Please note that this configuration will not work without a nerd font."
     fi
 else
-    echo "The SauceCodePro Nerd Font Complete Mono font has already been installed.";
+    echo "[!!!] The SauceCodePro Nerd Font Complete Mono font has already been installed.";
 fi
 
 # Download and install Tmux theme
@@ -175,11 +174,9 @@ if [ -d ~/.tmux-themepack ]
 then
     echo "[!!!] tmux themepack already installed"
 else
-    git clone https://github.cim/jihem/tmux-themepack.git ~/.tmux-themepack
+    git clone https://github.com/jihem/tmux-themepack.git ~/.tmux-themepack
     source "${HOME}/.tmux-themepack/powerline/block/blue.tmuxtheme"
-if
+fi
 
-echo
-echo "[+] Install Complete"
-echo
+echo "[*] Configuration complete"
 
