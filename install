@@ -46,7 +46,7 @@ install_alacritty=${install_alacritty:-Y}
 read -p '[*] Xresources install? [Y/n] ' install_X
 install_X=${install_X:-Y}
 
-if [ $install_tmux != 'n' ] && [ $install_tmux != 'N' ] 
+if [[ $install_tmux != [nN] ]]
 then
     if [ -f ~/.tmux.conf ]
     then
@@ -57,7 +57,7 @@ then
     fi
 fi
 
-if [ $install_vim != 'n' ] && [ $install_vim != 'N' ]
+if [[ $install_vim != [nN] ]]
 then
     if [ -f ~/.vimrc ]
     then
@@ -68,7 +68,7 @@ then
     fi
 fi
 
-if [ $install_zsh != 'n' ] && [ $install_zsh != 'N' ]
+if [[ $install_zsh != [nN] ]]
 then
     if [ -f ~/.zshrc ]
     then
@@ -79,7 +79,7 @@ then
     fi
 fi
 
-if [ $install_alacritty != 'n' ] && [ $install_alacritty != 'N' ]
+if [[ $install_alacritty != [nN] ]]
 then
     if [ -f ~/.config/alacritty.yml ]
     then
@@ -90,7 +90,7 @@ then
     fi
 fi 
 
-if [ $install_X != 'n' ] && [ $install_X != 'N' ]
+if [[ $install_X != [nN] ]]
 then
     if [ -f ~/.Xresources ]
     then
@@ -102,13 +102,29 @@ then
 fi
 
 # Download oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+if [ -d ~/.oh-my.zsh ] 
+then
+    echo "[!!!] oh-my-zsh already installed"
+else
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+fi
 
 # Download autosuggestions
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+if [ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]
+then
+    echo "[!!!] zsh autosuggestion already installed"
+else
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+fi
 
 # Download syntex highlighting
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+if [ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]
+then
+    echo "[!!!] zsh autosuggestion already installed"
+else
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+fi
 
 # Download and install shapship theme
 git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
@@ -118,13 +134,38 @@ ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/the
 git clone https://github.com/VundleVim/Vundle.vim.git  ~/.vim/bundle/Vundle.vim
 
 # Download and install a nerd font
-git clone https://github.com/ryanoasis/nerd-fonts.git
-./nerd-fonts/install.sh 'SauceCodePro Nerd Font Complete Mono'
-rm -rf nerd-fonts
+FONT_INSTALLED=$(fc-list | grep -i "SauceCodePro Nerd Font Complete Mono")
+if [ -z "$FONT_INSTALLED" ]; then
+    echo "The SauceCodePro Nerd Font Complete Mono font is not currently installed, would you like to install it now? (Y/N)"
+    read response
+    if [[ "$response" == [yY] ]]; then
+        echo "Installing the SauceCodePro Nerd FontComplete Mono font to the ~/.fonts directory..."
+        git clone https://github.com/ryanoasis/nerd-fonts.git
+        ./nerd-fonts/install.sh 'SauceCodePro Nerd Font Complete Mono'
+        rm -rf nerd-fonts
+        FONT_INSTALLED=$(fc-list | grep -i "SauceCodePro Nerd Font Complete
+        Mono");
+        if [ -n "$FONT_INSTALLED" ]; then
+            echo "The SauceCodePro Nerd Font Complete Mono font was sucessfully installed!"
+        else
+            echo "Something went wrong while trying to install the SauceCodePro Nerd Font Mono font."
+        fi
+    else
+        echo "Skipping the installation of the SauceCodePro Nerd Font Complete Mono font..."
+        echo "Please note that this Conky configuration will not work without a nerd font."
+    fi
+else
+    echo "The SauceCodePro Nerd Font Complete Mono font has already been installed.";
+fi
 
 # Download and install Tmux theme
-git clone https://github.cim/jihem/tmux-themepack.git ~/.tmux-themepack
-source "${HOME}/.tmux-themepack/powerline/block/blue.tmuxtheme"
+if [ -d ~/.tmux-themepack ]
+then
+    echo "[!!!] tmux themepack already installed"
+else
+    git clone https://github.cim/jihem/tmux-themepack.git ~/.tmux-themepack
+    source "${HOME}/.tmux-themepack/powerline/block/blue.tmuxtheme"
+if
 
 echo
 echo "[+] Install Complete"
