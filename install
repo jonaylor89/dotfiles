@@ -37,22 +37,22 @@ fi
 
 # Modules for both mac and linux
 
-read -p '[*] tmux.conf install? [Y/n] ' install_tmux
+read -p '[+] tmux.conf install? [Y/n] ' install_tmux
 install_tmux=${install_tmux:-Y}
-read -p '[*] vimrc install? [Y/n] ' install_vim
+read -p '[+] vimrc install? [Y/n] ' install_vim
 install_vim=${install_vim:-Y}
-read -p '[*] zshrc install? [Y/n] ' install_zsh
+read -p '[+] zshrc install? [Y/n] ' install_zsh
 install_zsh=${install_zsh:-Y}
-read -p '[*] alacritty.yml install? [Y/n] ' install_alacritty
+read -p '[+] alacritty.yml install? [Y/n] ' install_alacritty
 install_alacritty=${install_alacritty:-Y}
-read -p '[*] Xresources install? [Y/n] ' install_X
+read -p '[+] Xresources install? [Y/n] ' install_X
 install_X=${install_X:-Y}
 
 if [[ $install_tmux != [nN] ]]
 then
     if [ -f ~/.tmux.conf ]
     then
-        echo "[!!!] File already exists on system (tmux.conf)"
+        echo "[INFO] File already exists on system (tmux.conf)"
     else
         echo "===> Linking tmux configurations"
         ln -s ~/dotfiles/tmux/tmux.conf ~/.tmux.conf
@@ -63,7 +63,7 @@ if [[ $install_vim != [nN] ]]
 then
     if [ -f ~/.vimrc ]
     then
-        echo "[!!!] File already exists on system (vimrc)"
+        echo "[INFO] File already exists on system (vimrc)"
     else
         echo "===> Linking vim configurations"
         ln -s ~/dotfiles/vim/vimrc ~/.vimrc
@@ -74,7 +74,7 @@ if [[ $install_zsh != [nN] ]]
 then
     if [ -f ~/.zshrc ]
     then
-        echo "[!!!] File already exists on system (zshrc)"
+        echo "[INFO] File already exists on system (zshrc)"
     else
         echo "===> Linking zsh configurations"
         ln -s ~/dotfiles/zsh/zshrc ~/.zshrc
@@ -85,7 +85,7 @@ if [[ $install_alacritty != [nN] ]]
 then
     if [ -f ~/.config/alacritty.yml ]
     then
-        echo "[!!!] File already exists on system (alacritty.yml)"
+        echo "[INFO] File already exists on system (alacritty.yml)"
     else
         echo "===> Linking alacritty configurations"
         ln -s ~/dotfiles/alacritty/alacritty.yml ~/.config/alacritty.yml
@@ -96,7 +96,7 @@ if [[ $install_X != [nN] ]]
 then
     if [ -f ~/.Xresources ]
     then
-        echo "[!!!] File already exists on system (Xresources)"
+        echo "[INFO] File already exists on system (Xresources)"
     else
         echo "===> Linking X server configurations"
         ln -s ~/dotfiles/X/Xresources ~/.Xresources
@@ -107,7 +107,7 @@ fi
 
 if [ -d ~/.oh-my-zsh ] 
 then
-    echo "[!!!] oh-my-zsh already installed"
+    echo "[INFO] oh-my-zsh already installed"
 else
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 fi
@@ -115,7 +115,7 @@ fi
 # Download autosuggestions
 if [ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ]
 then
-    echo "[!!!] zsh autosuggestion already installed"
+    echo "[INFO] zsh autosuggestion already installed"
 else
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 fi
@@ -123,7 +123,7 @@ fi
 # Download syntex highlighting
 if [ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]
 then
-    echo "[!!!] zsh autosuggestion already installed"
+    echo "[INFO] zsh autosuggestion already installed"
 else
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 fi
@@ -131,7 +131,7 @@ fi
 # Download and install shapship theme
 if [ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/spaceship-prompt ]
 then
-    echo "[!!!] zsh spaceship theme is already installed"
+    echo "[INFO] zsh spaceship theme is already installed"
 else
     git clone https://github.com/denysdovhan/spaceship-prompt.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/spaceship-prompt"
     ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/spaceship.zsh-theme"
@@ -140,39 +140,44 @@ fi
 # Download and install Vundle
 if [ -d ~/.vim/bundle/Vundle.vim ]
 then
-    echo "[!!!] Vundle is already installed"
+    echo "[INFO] Vundle is already installed"
 else
     git clone https://github.com/VundleVim/Vundle.vim.git  ~/.vim/bundle/Vundle.vim
 fi
 
 # Download and install a nerd font
-FONT_INSTALLED=$(fc-list | grep -i "SauceCodePro Nerd Font Complete Mono")
-if [ -z "$FONT_INSTALLED" ]; then
-    read -p "[*] The SauceCodePro Nerd Font Complete Mono font is not currently installed, would you like to install it now? (y/N) " response
-    if [[ "$response" == [yY] ]]; then
-        echo "[*] Installing the SauceCodePro Nerd FontComplete Mono font to the ~/.fonts directory..."
-        git clone https://github.com/ryanoasis/nerd-fonts.git
-        ./nerd-fonts/install.sh 'SauceCodePro Nerd Font Complete Mono'
-        rm -rf nerd-fonts
-        FONT_INSTALLED=$(fc-list | grep -i "SauceCodePro Nerd Font Complete
-        Mono");
-        if [ -n "$FONT_INSTALLED" ]; then
-            echo "[*] The SauceCodePro Nerd Font Complete Mono font was sucessfully installed!"
+if [[ $install_X != [nN] ]]
+then
+    FONT_INSTALLED=$(fc-list | grep -i "SauceCodePro Nerd Font Complete Mono")
+    if [ -z "$FONT_INSTALLED" ]; then
+        read -p "[+] The SauceCodePro Nerd Font Complete Mono font is not currently installed, would you like to install it now? (y/N) " response
+        if [[ "$response" == [yY] ]]; then
+            echo "[*] Installing the SauceCodePro Nerd FontComplete Mono font to the ~/.fonts directory..."
+            git clone https://github.com/ryanoasis/nerd-fonts.git
+            ./nerd-fonts/install.sh 'SauceCodePro Nerd Font Complete Mono'
+            rm -rf nerd-fonts
+            FONT_INSTALLED=$(fc-list | grep -i "SauceCodePro Nerd Font Complete Mono");
+            if [ -n "$FONT_INSTALLED" ]; then
+                echo "[*] The SauceCodePro Nerd Font Complete Mono font was sucessfully installed!"
+            else
+                echo "[INFO] Something went wrong while trying to install the SauceCodePro Nerd Font Mono font."
+            fi
         else
-            echo "[!!!] Something went wrong while trying to install the SauceCodePro Nerd Font Mono font."
+            echo "[*] Skipping the installation of the SauceCodePro Nerd Font Complete Mono font..."
+            echo "[*] Please note that this configuration will not work without a nerd font."
         fi
     else
-        echo "[*] Skipping the installation of the SauceCodePro Nerd Font Complete Mono font..."
-        echo "[*] Please note that this configuration will not work without a nerd font."
+        echo "[INFO] The SauceCodePro Nerd Font Complete Mono font has already been installed.";
     fi
 else
-    echo "[!!!] The SauceCodePro Nerd Font Complete Mono font has already been installed.";
+    echo "[*] Skipping the installation of the SauceCodePro Nerd Font Complete Mono font..."
+    echo "[*] Please note that this configuration will not work without a nerd font."
 fi
 
 # Download and install Tmux theme
 if [ -d ~/.tmux-themepack ]
 then
-    echo "[!!!] tmux themepack already installed"
+    echo "[INFO] tmux themepack already installed"
 else
     git clone https://github.com/jihem/tmux-themepack.git ~/.tmux-themepack
     source "${HOME}/.tmux-themepack/powerline/block/blue.tmuxtheme"
