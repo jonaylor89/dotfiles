@@ -37,15 +37,15 @@ fi
 
 # Modules for both mac and linux
 
-read -p '[+] tmux.conf install? [Y/n] ' install_tmux
+read -p '[+] tmux configs install? [Y/n] ' install_tmux
 install_tmux=${install_tmux:-Y}
-read -p '[+] vimrc install? [Y/n] ' install_vim
+read -p '[+] vim configs install? [Y/n] ' install_vim
 install_vim=${install_vim:-Y}
-read -p '[+] zshrc install? [Y/n] ' install_zsh
+read -p '[+] zsh configs install? [Y/n] ' install_zsh
 install_zsh=${install_zsh:-Y}
-read -p '[+] alacritty.yml install? [Y/n] ' install_alacritty
+read -p '[+] alacritty configs install? [Y/n] ' install_alacritty
 install_alacritty=${install_alacritty:-Y}
-read -p '[+] Xresources install? [Y/n] ' install_X
+read -p '[+] X server configs install? [Y/n] ' install_X
 install_X=${install_X:-Y}
 
 if [[ $install_tmux != [nN] ]]
