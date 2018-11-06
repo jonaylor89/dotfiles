@@ -69,6 +69,7 @@ source $ZSH/oh-my-zsh.sh
  alias tmuxconf="vim ~/.tmux.conf"
  alias vimrc="vim ~/.vimrc"
  alias la="exa -abghl --git"
+ alias ll="exa -bghl --git"
  alias cls="clear"
  alias rmd="rm -rf"
 
