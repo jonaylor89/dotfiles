@@ -219,6 +219,10 @@ else
     ln -s $HOME/dotfiles/update_git_repos $HOME/bin/update_git_repos
 fi
 
+# Change to zsh
+chsh $(whoami) -s $(which zsh)
+source $HOME/zshrc
+
 printf "[*] \x1b[32mConfiguration complete\x1b[m\n"
 
 
