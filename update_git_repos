@@ -4,7 +4,7 @@
 CUR_DIR=$(pwd)
 
 update_repo() {
-    printf "\n\x1b[95m"+$1+"\x1b[m\n"
+    printf "\n\x1b[95m=-=-={$1}=-=-=\x1b[m\n"
     git --git-dir=$1 --work-tree=$1/.. pull origin master
 }
 export -f update_repo
