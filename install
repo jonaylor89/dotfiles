@@ -178,7 +178,7 @@ if [ -d ~/.tmux-themepack ]
 then
     printf "[*] tmux themepack already installed\n"
 else
-    git clone https://github.com/jihem/tmux-themepack.git ~/.tmux-themepack
+    git clone https://github.com/jimeh/tmux-themepack.git ~/.tmux-themepack
     source "${HOME}/.tmux-themepack/powerline/block/blue.tmuxtheme"
 fi
 
