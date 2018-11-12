@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#################################################
+########################################################
 #
 # System configuration
 # 
@@ -10,13 +10,13 @@
 #
 # Vim Plugin Manager - Vundle
 #
-################################################
+########################################################
 
 system_type=$(uname -s) if [ $system_type = "Darwin" ]
 then
     echo ""
     echo "--------------------------------------------------"
-    echo "=-=-=-=-=-= Mac System Installation =-=-=-=-=-="
+    echo "=-=-=-=-=-= Mac System Installation =-=-=-=-=-=-=-"
     echo "--------------------------------------------------"
     echo ""
     # Module for Mac
@@ -180,5 +180,5 @@ else
     source "${HOME}/.tmux-themepack/powerline/block/blue.tmuxtheme"
 fi
 
-echo "[*] Configuration complete"
+printf "[*] \x1b[32mConfiguration complete\x1b[m\n"
 
