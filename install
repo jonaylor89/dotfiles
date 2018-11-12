@@ -191,6 +191,33 @@ else
     mkdir $HOME/Repos
 fi
 
+if [ -d $HOME/bin ]
+then
+    printf "[*] Home bin directory already exits!\n"
+else
+    printf "[*] Creating 'bin' directory\n"
+    mkdir $HOME/bin
+fi
+
+printf "[*] Adding scripts and binaries\n"
+
+ln -s $HOME/dotfiles/update_git_repos $HOME/bin/update_git_repos
+
+if [ -f $HOME/bin/install ]
+then
+    printf "[*] File already exists on system (~/bin/install)\n"
+else
+    printf "===> Linking installation file\n"
+    ln -s $HOME/dotfiles/install $HOME/bin/install
+fi
+
+if [ -f $HOME/dotfiles/update_git_repos ]
+then
+    printf "[*] File already exists on system (~/bin/update_git_repos)\n"
+else
+    printf "===> Linking repository updaing script\n"
+    ln -s $HOME/dotfiles/update_git_repos $HOME/bin/update_git_repos
+fi
 
 printf "[*] \x1b[32mConfiguration complete\x1b[m\n"
 
