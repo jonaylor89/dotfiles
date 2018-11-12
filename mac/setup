@@ -6,5 +6,8 @@
 #                                      #
 ########################################
 
-brew install zsh git curl 
+brew install zsh \
+            git \
+            curl 
+
 
