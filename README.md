@@ -1,4 +1,4 @@
-# <span style="color:blue">Johannes' dotfiles</span>
+# Johannes' dotfiles
 
 1. vim
 2. zsh/oh-my-zsh
