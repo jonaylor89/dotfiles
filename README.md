@@ -37,7 +37,7 @@ sure it doesn't clutter everything up.
     C:> del C:\Windows\System32
 ```
 
-and
+## Finally
 
 ```
     ~$ ./install
