@@ -25,7 +25,7 @@ if __name__ == '__main__':
         repos = os.listdir(os.getcwd())
         repos = [os.path.join(os.getcwd(), repo) for repo in repos]
 
-    with Pool(5) as p:
+    with Pool(10) as p:
         p.map(update_repo, repos)
     
     print("\n\x1b[32mComplete!\x1b[m\n")
