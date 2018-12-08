@@ -71,6 +71,7 @@ source $ZSH/oh-my-zsh.sh
 
  alias la="exa -abghl --git"
  alias ll="exa -bghl --git"
+ alias lt="exa --tree"
  alias cls="clear"
  alias rmd="rm -rf"
 
