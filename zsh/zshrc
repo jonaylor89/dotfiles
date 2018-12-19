@@ -74,6 +74,7 @@ source $ZSH/oh-my-zsh.sh
  alias lt="exa --tree"
  alias cls="clear"
  alias rmd="rm -rf"
+ alias r="ranger"
 
  # Custom bins
  alias gls="gitlocalstats"
