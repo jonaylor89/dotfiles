@@ -1,4 +1,4 @@
-# John's dotfiles
+# Johannes' dotfiles
 
 1. vim
 2. zsh/oh-my-zsh
@@ -37,7 +37,7 @@ sure it doesn't clutter everything up.
     C:> del C:\Windows\System32
 ```
 
-and
+## Finally
 
 ```
     ~$ ./install
