@@ -6,7 +6,10 @@ import subprocess
 from multiprocessing import Pool
 
 def update_repo(repo):
-    print("\n\x1b[95m=-=-=-=[{0}]=-=-=-=\x1b[m\n".format(repo))
+
+    relative = repo.replace(os.environ['HOME'], '~')
+
+    print("\n\x1b[95m=-=-=-=[{0}]=-=-=-=\x1b[m\n".format(relative))
     subprocess.run(['git', '--git-dir='+os.path.join(repo, '.git'),
                     'pull', 'origin', 'master']) 
     
