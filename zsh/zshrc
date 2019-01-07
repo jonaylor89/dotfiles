@@ -75,6 +75,7 @@ source $ZSH/oh-my-zsh.sh
  alias cls="clear"
  alias rmd="rm -rf"
  alias r="ranger"
+ alias fetch="neofetch"
 
  # Custom bins
  alias gls="gitlocalstats"
