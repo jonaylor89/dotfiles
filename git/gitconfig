@@ -15,5 +15,6 @@
     plom = pull origin master
     ra = remote add
     st = status
+    tree = log --graph --decorate --pretty=oneline --abbrev-commit
 
     
