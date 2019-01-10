@@ -34,6 +34,8 @@ Plugin 'honza/vim-snippets'
 Plugin 'christoomey/vim-tmux-runner'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'ryanoasis/vim-devicons'
+
+Plugin 'dylanaraps/wal.vim'
 " }}}
 
 call vundle#end()
@@ -61,7 +63,8 @@ syntax enable
 " }}}
 
 " Colorscheme from atom text editor 
-colorscheme onedark
+" colorscheme onedark
+colorscheme wal
 
 let python_highlight_all=1
 let NERDTreeIgnore=['\.pyc$', '\~$', '\.out$', 'node_modules$', '__pycache__$']
@@ -69,7 +72,7 @@ let g:rustfmt_autosave=1
 let g:airline_theme='murmur'
 let g:airline_powerline_fonts=1
 let g:airline#extensions#tabline#enabled=1
-let g:VtrStripLeadingWhitespace = 0
+let g:VtrStripLeadingWhitespace = 0 
 let g:VtrClearEmptyLines = 0
 let g:VtrAppendNewline = 1
 
