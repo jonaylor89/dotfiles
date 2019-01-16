@@ -1,0 +1,19 @@
+{
+    "telemetry.enableTelemetry": false,
+    "telemetry.enableCrashReporter": false,
+    "files.autoSave": "afterDelay",
+    "workbench.iconTheme": "eq-material-theme-icons-darker",
+    "workbench.colorTheme": "Visual Studio Dark",
+    "vim.insertModeKeyBindings": [
+        {
+            "before": ["j", "k"],
+            "after": ["<Esc>"]
+        }
+    ],
+    "editor.fontSize": 14,
+    "git.enableSmartCommit": true,
+    "terminal.external.osxExec": "Alacritty.app",
+    "terminal.integrated.cursorStyle": "line",
+    "terminal.integrated.fontFamily": "Anonymice Nerd Font Mono",
+    "terminal.integrated.fontWeightBold": "normal"
+}
