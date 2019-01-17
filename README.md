@@ -2,10 +2,12 @@
 
 1. vim
 2. zsh/oh-my-zsh
-3. tmux
-4. alacritty
-5. git
-6. X
+3. fish/oh-my-fish
+4. tmux
+5. alacritty
+6. git
+7. X
+8. VSCode
 
 ## Setting up system
 
