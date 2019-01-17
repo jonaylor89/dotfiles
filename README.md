@@ -17,12 +17,12 @@
     ~$ cd dotfiles
 ```
 
-### Arch
+### Arch Linux
 ```
     ~$ ./arch/setup
 ```
 
-### Mac
+### MacOS
 ```
     ~$ ./mac/setup
 ```
