@@ -1,6 +1,5 @@
 #!/usr/bin/env fish
 
-alias rmd="rm -rf"
 alias r='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
 alias fetch="neofetch"
 alias al="sl -alf"
@@ -8,7 +7,7 @@ alias gcal="gcalcli"
 
 alias rainbow="lolcat"
 
-function serve
+function serve -d "Spin up a simple http server"
     if python -c 'import sys; sys.exit(sys.version_info[0] != 3)'
         python -m http.server $argv
     else
