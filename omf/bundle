@@ -1,5 +1,6 @@
 package config
 package spark
+package vi-mode
 package weather
 theme default
 theme spacefish
