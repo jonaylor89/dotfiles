@@ -1,14 +1,11 @@
 #!/usr/bin/env fish
 
-alias cls="clear"
 alias rmd="rm -rf"
 alias r='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
 alias fetch="neofetch"
 alias al="sl -alf"
 alias gcal="gcalcli"
 
-alias gls="gitlocalstats"
-alias ugr="update_git_repos"
 alias rainbow="lolcat"
 
 function serve
