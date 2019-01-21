@@ -12,6 +12,7 @@ alias cls="clear"
 alias rmd="rm -rf"
 alias r="ranger"
 alias fetch="neofetch"
+alias gcal="gcalcli"
 alias v="$EDITOR"
 alias e="$EDITOR"
 
