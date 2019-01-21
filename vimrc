@@ -1,6 +1,11 @@
 set nocompatible 
 filetype off 
 
+" Change shell to POSIX shell for plugins
+if &shell =~# 'fish$'
+    set shell=sh
+endif
+
 set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin() 
@@ -25,6 +30,7 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'tpope/vim-fugitive'
+Plugin 'dag/vim-fish'
 Plugin 'rust-lang/rust.vim'
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'MarcWeber/vim-addon-mw-utils'
@@ -47,7 +53,7 @@ set t_Co=256
 set laststatus=2
 set foldmethod=indent
 set foldlevel=99
-set nu
+set nu rnu
 set encoding=utf-8
 set tabstop=4 
 set softtabstop=4 
@@ -151,5 +157,13 @@ augroup execution
     autocmd!
     autocmd FileType python imap <F5> <ESC>:w<CR>:!clear;python %<CR>
     autocmd FileType c imap <F5> <ESC>:w<CR>:!clear;make<CR>
+augroup END
+" }}}
+
+" Line Numbering Style --------------------- {{{
+augroup numbertoggle
+    autocmd!
+    autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+    autocmd BufLeave,FocusLost,InsertEnter * set norelativenumber
 augroup END
 " }}}
