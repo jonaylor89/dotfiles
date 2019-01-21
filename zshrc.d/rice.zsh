@@ -1,2 +1,5 @@
+#!/usr/bin/env sh
 
- wal -q -i "$HOME/Pictures/wallpaper.png"
+if command -v wal; then
+    wal -q -i "$HOME/Pictures/wallpaper.png"
+fi
