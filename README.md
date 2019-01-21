@@ -39,5 +39,6 @@
     ~$ ./install
 ```
 
-This should install and setup all the necessary applications and themes
-----------------------
+shell configurations are configured using conf.d style rather than one big rc
+file for each shell. Fish does this natively but zsh and bash have zshrc.d and
+bashrc.d directories that do essentially the same. 
