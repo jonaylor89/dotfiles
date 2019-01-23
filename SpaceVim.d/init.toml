@@ -39,3 +39,7 @@ default_height = 31
 
 [[layers]]
 name = 'colorscheme'
+
+[[layers]]
+name = "lang#python"
+format_on_save = 1
