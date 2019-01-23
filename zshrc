@@ -8,7 +8,7 @@ if [ -d $HOME/Repos/dotfiles/zshrc.d ]; then
 fi
 
 # load all files from .shell/rc.d directory
-if [ -d $HOME/.dotfiles/rc.d ]; then
+if [ -d $HOME/Repos/dotfiles/rc.d ]; then
   for file in "$HOME/Repos/dotfiles/rc.d/"*.sh; do
     source $file
   done

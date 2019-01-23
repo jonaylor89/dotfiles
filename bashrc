@@ -16,14 +16,14 @@ fi
 
 # load all files from .shell/bashrc.d directory
 if [ -d $HOME/Repos/dotfiles/bashrc.d ]; then
-  for file in $HOME/Repos/dotfiles/bashrc.d/*.bash; do
+  for file in "$HOME/Repos/dotfiles/bashrc.d/"*.bash; do
     source $file
   done
 fi
 
 # load all files from .shell/rc.d directory
 if [ -d $HOME/Repos/dotfiles/rc.d ]; then
-  for file in $HOME/Repos/dotfiles/rc.d/*.sh; do
+  for file in "$HOME/Repos/dotfiles/rc.d/"*.sh; do
     source $file
   done
 fi
