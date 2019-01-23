@@ -1,13 +1,14 @@
 # Johannes' dotfiles
 
 1. vim
-2. zsh/oh-my-zsh
-3. fish/oh-my-fish
-4. tmux
-5. alacritty
-6. git
-7. X
-8. VSCode
+2. SpaceVim
+3. zsh/oh-my-zsh
+4. fish/oh-my-fish
+5. tmux
+6. alacritty
+7. git
+8. X
+9. VSCode
 
 ## Setting up system
 
