@@ -9,6 +9,7 @@
 7. git
 8. X
 9. VSCode
+10. hammerspoon
 
 ## Setting up system
 
