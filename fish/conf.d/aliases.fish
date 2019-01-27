@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-alias r='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
+alias r='ranger'
 alias fetch="neofetch"
 alias al="sl -alf"
 alias gcal="gcalcli"
