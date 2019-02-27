@@ -15,5 +15,7 @@
     "terminal.external.osxExec": "Alacritty.app",
     "terminal.integrated.cursorStyle": "line",
     "terminal.integrated.fontFamily": "Anonymice Nerd Font Mono",
-    "terminal.integrated.fontWeightBold": "normal"
+    "terminal.integrated.fontWeightBold": "normal",
+    "window.zoomLevel": -1,
+    "python.jediEnabled": false
 }
