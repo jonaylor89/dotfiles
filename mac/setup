@@ -10,4 +10,7 @@ brew install zsh \
             git \
             curl 
 
+brew tap koekeishiya/formulae
+brew install --HEAD chunkwm
+
 
