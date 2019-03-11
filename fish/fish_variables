@@ -3,6 +3,7 @@
 SETUVAR __fish_init_2_39_8:\x1d
 SETUVAR __fish_init_2_3_0:\x1d
 SETUVAR __fish_init_3_x:\x1d
+SETUVAR _fish_abbr_agenda:gcal\x20agenda
 SETUVAR _fish_abbr_bubu:brew\x20update\x20\x26\x26\x20brew\x20upgrade\x20\x26\x26\x20brew\x20cleanup
 SETUVAR _fish_abbr_cls:clear
 SETUVAR _fish_abbr_fetch:neofetch

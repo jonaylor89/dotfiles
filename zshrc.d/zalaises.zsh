@@ -13,6 +13,7 @@ alias rmd="rm -rf"
 alias r="ranger"
 alias fetch="neofetch"
 alias gcal="gcalcli"
+alias agenda="gcal agenda"
 alias v="$EDITOR"
 alias e="$EDITOR"
 
