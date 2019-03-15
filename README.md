@@ -59,3 +59,8 @@ NOTE: Deployment with JARBS will take care of this set for you
 Shell configurations are configured using conf.d style rather than one big rc
 file for each shell. Fish does this natively but zsh and bash have zshrc.d and
 bashrc.d directories that do essentially the same. 
+
+-----------------------
+
+-> # TODO <-
+1. I'm still considering making deployment controlled by ansible playbook rather than the pure bash used by JARBS
