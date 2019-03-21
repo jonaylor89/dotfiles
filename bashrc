@@ -27,3 +27,7 @@ if [ -d $HOME/Repos/dotfiles/rc.d ]; then
     source $file
   done
 fi
+
+if [ -e $HOME/.bashrc_local ]; then
+  source $HOME/.bashrc_local
+fi

@@ -13,3 +13,7 @@ if [ -d $HOME/Repos/dotfiles/rc.d ]; then
     source $file
   done
 fi
+
+if [ -e $HOME/.zshrc_local ]; then
+  source $HOME/.zshrc_local
+fi
