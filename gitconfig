@@ -1,3 +1,4 @@
+
 [user]
 	email = jonaylor89@gmail.com
 	name = John Naylor
@@ -9,13 +10,19 @@
     ci = commit
     cim = commit -m
     cl = clone
+
     ps = push
     pl = pull
     psom = push origin master
     plom = pull origin master
+    
     ra = remote add
     rao = remote add origin
+
     st = status
+
     tree = log --graph --decorate --pretty=oneline --abbrev-commit
+    
+    rinit = !sh -c "remote_and_mirror"
 
     
