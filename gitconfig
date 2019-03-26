@@ -4,25 +4,26 @@
 	name = John Naylor
 
 [github]
-    user = jonaylor89
+  user = jonaylor89
 
 [alias]
-    ci = commit
-    cim = commit -m
-    cl = clone
+  ci = commit
+  cim = commit -m
+  cl = clone
 
-    ps = push
-    pl = pull
-    psom = push origin master
-    plom = pull origin master
-    
-    ra = remote add
-    rao = remote add origin
+  ps = push
+  pl = pull
+  psom = push origin master
+  plom = pull origin master
+  
+  ra = remote add
+  rao = remote add origin
 
-    st = status
+  st = status
 
-    tree = log --graph --decorate --pretty=oneline --abbrev-commit
-    
-    rinit = !sh -c "remote_and_mirror"
+  tree = log --graph --decorate --pretty=oneline --abbrev-commit
+  
+  rinit = !sh -c "remote_and_mirror"
+  sync =  !sh -c "sync_mirror"
 
     
