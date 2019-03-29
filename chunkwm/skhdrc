@@ -91,3 +91,6 @@ shift + lctrl + alt - r : \
 # Make window native fullscreen
 alt - f         : chunkc tiling::window --toggle fullscreen
 shift + alt - f : chunkc tiling::window --toggle native-fullscreen
+
+# Close window
+alt - q : chunkc tiling::window --close
