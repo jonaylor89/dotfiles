@@ -2,7 +2,7 @@
     "telemetry.enableTelemetry": false,
     "telemetry.enableCrashReporter": false,
     "files.autoSave": "afterDelay",
-    "workbench.iconTheme": "eq-material-theme-icons-darker",
+    "workbench.iconTheme": "material-icon-theme",
     "workbench.colorTheme": "Visual Studio Dark",
     "vim.insertModeKeyBindings": [
         {
@@ -19,5 +19,7 @@
     "window.zoomLevel": -1,
     "python.jediEnabled": false,
     "editor.suggestSelection": "first",
-    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue"
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "python.formatting.provider": "black",
+    "python.linting.mypyEnabled": true
 }

@@ -1,5 +1,5 @@
 # opens iTerm2
-alt - return : "${HOME}"/Repos/dotfiles/chunkwm/scripts/open_iterm2.sh
+alt - t : "${HOME}"/Repos/dotfiles/chunkwm/scripts/open_iterm2.sh
 
 # Show system statistics
 fn + lalt - 1 : "${HOME}"/Repos/dotfiles/scripts/show_cpu.sh
