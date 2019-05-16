@@ -1,7 +1,9 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_cnt =7
 let g:netrw_dirhist_1='/Users/johannes/Repos/CMSC257/asgn4'
 let g:netrw_dirhist_2='/Users/johannes/Repos/CMSC257/asgn4/Source'
 let g:netrw_dirhist_3='/Users/johannes/Repos/CMSC257/asgn4/Source/Transposed'
 let g:netrw_dirhist_4='/Users/johannes/Repos/CMSC257/asgn4/Source'
 let g:netrw_dirhist_5='/Users/johannes/Repos/CMSC257/asgn4/Source/Normal'
+let g:netrw_dirhist_6='/Users/johannes/Repos/CMSC257/asgn5'
+let g:netrw_dirhist_7='/Users/johannes/Repos/CMSC257/asgn5/server_dir'
