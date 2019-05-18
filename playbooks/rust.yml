@@ -1,0 +1,14 @@
+
+- name: install rust
+  hosts: localhost
+  tasks:
+  - name: install rustup
+    shell: curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path --default-toolchain nightly
+    args:
+      warn: False
+
+  - name: install rustfmt, clippy
+    command: rustup component add {{ item }}
+    with_items:
+    - rustfmt
+    - clippy
