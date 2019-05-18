@@ -1,4 +1,12 @@
 
 - name: Install and configure chunkwm 
   hosts: localhost
+  pre_tasks: 
+    # Check if homebrew is installed and fail otherwise
+    
+  tasks:
+    # tap homebrew
+    # install chunkwm and skhd
+    # if custom dotfile is found for either than link them in their proper
+    # place
   
