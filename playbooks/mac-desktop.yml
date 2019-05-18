@@ -8,3 +8,10 @@
         path: '{{ ansible_env.HOME }}/Repos'
         state: directory
         mode: '0755'
+    # Create ssh keys for github
+  tasks: 
+    - name: Pull dotfiles
+      git: 
+        accept_hostkey: yes
+        repo: git@github.com:jonaylor89/dotfiles.git
+        dest: '{{ ansible_env.HOME }}/Repos/dotfiles'
