@@ -1,0 +1,10 @@
+
+-   
+    name: Arch Desktop Configuration
+    hosts: localhost
+    tasks:
+        - name: Install packages
+          pacman: 
+            name: ansible
+            state: latest
+
