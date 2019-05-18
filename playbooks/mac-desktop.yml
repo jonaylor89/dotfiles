@@ -15,13 +15,13 @@
       - 'skype'
       - 'slack'
       - 'spotify'
+      - 'ubersicht'
       - 'visual-studio-code'
       - 'vmware-fusion'
     brew_packages:
       - 'autoconf'
       - 'ansible'
       - 'bash-completion'
-      - 'chunkwm'
       - 'cmake'
       - 'cowsay'
       - 'docker-compose'
@@ -44,9 +44,7 @@
       - 'openssl'
       - 'python'
       - 'ranger'
-      - 'skhd'
       - 'tmux'
-      - 'ubersicht'
       - 'wget'
       - 'yarn'
       - 'youtube-dl'
@@ -71,6 +69,12 @@
       when: >
             not homebrew_check.stat.exists and
             install_homebrew_if_missing
+    - name: Create directory for repositories
+      file: 
+        path: '{{ ansible_env.HOME }}/Repos'
+        state: directory
+        mode: '0755'
+
   tasks:
       - name: Updating Homebrew
       homebrew:

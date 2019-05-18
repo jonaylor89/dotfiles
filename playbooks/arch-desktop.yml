@@ -7,4 +7,8 @@
           pacman: 
             name: ansible
             state: latest
-
+        - name: Create directories for git repositories
+          file:
+            path: '{{ ansible_env.HOME }}\Repos'
+            state: directory
+            mode: '0755'
