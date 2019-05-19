@@ -56,10 +56,6 @@
        dest: '{{ ansible_env.HOME }}/.local/share/dein/repos/github.com/Shougo/dein.vim'
        update: yes
 
-   - name: Package Manager
-     include_role:
-       name: homebrew
-
    - name: Window Manager 
      include_role:
        name: chunkwm
@@ -82,7 +78,7 @@
           path: /usr/local/bin/zsh
         register: brew_zsh
 
-      - name: add homwbrew zsh to /etc/shells
+      - name: add homebrew zsh to /etc/shells
         lineinfile: 
           dest: /etc/shells 
           line: "/usr/local/bin/zsh" 
@@ -94,7 +90,7 @@
           path: /usr/local/bin/fish
         register: brew_fish
 
-      - name: add homwbrew fish to /etc/shells
+      - name: add homebrew fish to /etc/shells
         lineinfile: 
           dest: /etc/shells 
           line: "/usr/local/bin/fish" 
@@ -238,7 +234,7 @@
        # Disable “natural” (Lion-style) scrolling
        - { key: "com.apple.swipescrolldirection", type: "bool", value: "false" }
        # Disable press-and-hold for keys in favor of key repeat
-       - { key: "ApplePressAndHoldEnabled", type: "bool", value: "false" }
+       # - { key: "ApplePressAndHoldEnabled", type: "bool", value: "false" }
        # Set a blazingly fast keyboard repeat rate
        - { key: "KeyRepeat", type: "float", value: "{{keyboard_key_repeat_rate}}" }
        - { key: "InitialKeyRepeat", type: "int", value: "{{keyboard_initial_key_repeat_delay}}" }
@@ -342,7 +338,28 @@
        - { key: "wvous-bl-corner", type: "int", value: "10" }
        - { key: "wvous-bl-modifier", type: "int", value: "0" }
    
-   
+   - name: Package Manager
+     include_role:
+       name: homebrew
+
+  handlers:
+   - name: Kill Dock
+     command: killall Dock
+
+   - name: Kill Finder
+     command: killall Finder
+
+   - name: Kill Transmission
+     command: killall Transmission
+     ignore_errors: yes
+
+   - name: Kill Safari
+     command: killall Safari
+     ignore_errors: yes
+
+   - name: Kill Terminal
+     command: killall Terminal
+     ignore_errors: yes
    
    
    
