@@ -5,7 +5,6 @@ homebrew_cask_apps:
     - 'beaker-browser'
     - 'boostnote'
     - 'docker'
-    - 'dropbox'
     - 'discord'
     - 'firefox'
       # - 'firefox-nightly'
@@ -21,7 +20,7 @@ homebrew_cask_apps:
       # - 'slack' 
     - 'spotify' 
     - 'transmission'
-    - 'ubersicht'
+      # - 'ubersicht'
     - 'visual-studio-code'
 homebrew_installed_packages:
     - 'autoconf'
