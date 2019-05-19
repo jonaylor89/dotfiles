@@ -11,6 +11,7 @@
     - macos_auto_correct: "false"
     - sudo_without_password: false
     - use_dnscrypt: true
+    - dotfiles: jonaylor89/dotfiles
   pre_tasks:
     - name: Pull Configurations
       file: 
@@ -18,12 +19,12 @@
         state: directory
     # Create ssh keys for github
   tasks: 
-  # - name: Dotfiles
-  # git: 
-  # repo: git@github.com:jonaylor89/dotfiles.git
-  # dest: '{{ ansible_env.HOME }}/Repos/dotfiles'
-  # key_file: '{{ ansible_env.HOME }}/.ssh/id_rsa.pub'
-  # accept_hostkey: yes
+   - name: Dotfiles
+     git: 
+       repo: 'git@github.com:{{ dotfiles }}.git'
+       dest: '{{ ansible_env.HOME }}/Repos/dotfiles'
+       key_file: '{{ ansible_env.HOME }}/.ssh/id_rsa.pub'
+       accept_hostkey: yes
 
   # - name: OSX Config
   # include_role:
