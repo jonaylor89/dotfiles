@@ -66,27 +66,38 @@
 
     - block:
       - name: check if homebrew bash is installed
-        stat: path=/usr/local/bin/bash
+        stat: 
+          path: /usr/local/bin/bash
         register: brew_bash
 
       - name: add homwbrew bash to /etc/shells
-        lineinfile: dest=/etc/shells line="/usr/local/bin/bash" state=present
+        lineinfile: 
+          dest: /etc/shells 
+          line: "/usr/local/bin/bash" 
+          state: present
         when: brew_bash.stat.exists
 
       - name: check if homebrew zsh is installed
-        stat: path=/usr/local/bin/zsh
+        stat: 
+          path: /usr/local/bin/zsh
         register: brew_zsh
 
       - name: add homwbrew zsh to /etc/shells
-        lineinfile: dest=/etc/shells line="/usr/local/bin/zsh" state=present
+        lineinfile: 
+          dest: /etc/shells line: "/usr/local/bin/zsh" 
+          state: present
         when: brew_zsh.stat.exists
 
       - name: check if homebrew fish is installed
-        stat: path=/usr/local/bin/fish
+        stat: 
+          path: /usr/local/bin/fish
         register: brew_fish
 
       - name: add homwbrew fish to /etc/shells
-        lineinfile: dest=/etc/shells line="/usr/local/bin/fish" state=present
+        lineinfile: 
+          dest: /etc/shells 
+          line: "/usr/local/bin/fish" 
+          state: present
         when: brew_fish.stat.exists
 
     when: ansible_os_family == "Darwin"
