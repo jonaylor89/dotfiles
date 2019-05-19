@@ -10,21 +10,21 @@
         mode: '0755'
     # Create ssh keys for github
   tasks: 
-    - name: Dotfiles
-      git: 
-        repo: git@github.com:jonaylor89/dotfiles.git
-        dest: '{{ ansible_env.HOME }}/Repos/dotfiles'
-        key_file: '{{ ansible_env.HOME }}/.ssh/id_rsa.pub'
-        accept_hostkey: yes
+  # - name: Dotfiles
+  # git: 
+  # repo: git@github.com:jonaylor89/dotfiles.git
+  # dest: '{{ ansible_env.HOME }}/Repos/dotfiles'
+  # key_file: '{{ ansible_env.HOME }}/.ssh/id_rsa.pub'
+  # accept_hostkey: yes
 
-    - name: OSX Config
-      include_role:
-      name: osx
+  # - name: OSX Config
+  # include_role:
+  # name: osx
 
     - name: Package Manager
       include_role:
         name: homebrew
 
-    - name: Window Manager 
-      include_role:
-        name: chunkwm
+  # - name: Window Manager 
+  # include_role:
+  # name: chunkwm

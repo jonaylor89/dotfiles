@@ -1,5 +1,5 @@
 
-- brew_cask_packages: 
+homebrew_cask_apps: 
     - 'atom'
     - 'blender'
     - 'boostnote'
@@ -23,7 +23,7 @@
     - 'ubersicht'
     - 'visual-studio-code'
     - 'vmware-fusion'
-- brew_packages:
+homebrew_installed_packages:
     - 'autoconf'
     - 'ansible'
     - 'bash-completion'
@@ -55,6 +55,17 @@
     - 'youtube-dl'
     - 'zsh'
     - 'zsh-syntax-highlighting'
-- install_homebrew_if_missing: true
-- upgrade_homebrew_packages: true
+homebrew_taps:
+    - koekeishiya/formulae
+    - crisidev/chunkwm
+    - caskroom/fonts
+    - homebrew/bundle
+    - homebrew/cask
+    - homebrew/cask-drivers
+    - homebrew/cask-fonts
+    - homebrew/cask-versions
+    - homebrew/core
+    - homebrew/services
+    - jonaylor89/tap
+
 
