@@ -19,10 +19,10 @@
         state: directory
     # Create ssh keys for github
   tasks: 
-   - name: Dotfiles
-     git: 
-       repo: 'https://github.com:{{ dotfiles }}.git'
-       dest: '{{ ansible_env.HOME }}/Repos/dotfiles'
+  # - name: Dotfiles
+  # git: 
+  # repo: 'https://github.com:{{ dotfiles }}.git'
+  # dest: '{{ ansible_env.HOME }}/Repos/dotfiles'
 
   # - name: OSX Config
   # include_role:
@@ -55,11 +55,11 @@
        dest: '{{ ansible_env.HOME }}/.local/share/dein/repos/github.com/Shougo/dein.vim'
        update: yes
 
-   - name: Symlink Config Files
-     file:
-         src: ""
-         dest: ""
-         state: link
+       # - name: Symlink Config Files
+       # file:
+       # src: ""
+       # dest: ""
+       # state: link
 
    - name: Window Manager 
      include_role:
