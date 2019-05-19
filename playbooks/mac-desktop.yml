@@ -21,10 +21,8 @@
   tasks: 
    - name: Dotfiles
      git: 
-       repo: 'git@github.com:{{ dotfiles }}.git'
+       repo: 'https://github.com:{{ dotfiles }}.git'
        dest: '{{ ansible_env.HOME }}/Repos/dotfiles'
-       key_file: '{{ ansible_env.HOME }}/.ssh/id_rsa.pub'
-       accept_hostkey: yes
 
   # - name: OSX Config
   # include_role:
