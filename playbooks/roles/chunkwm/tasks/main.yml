@@ -1,12 +1,35 @@
 
-- name: Install and configure chunkwm 
+- name: ChunkWM Configuration
   hosts: localhost
   pre_tasks: 
     # Check if homebrew is installed and fail otherwise
     
-  tasks:
-    # tap homebrew
-    # install chunkwm and skhd
+  tasks: 
+    # tap homebrew # install chunkwm and skhd
+    
     # if custom dotfile is found for either than link them in their proper
     # place
+    
+    - name: Symlink chunkwm Config
+      file:
+        src: "{{ ansible_env.HOME }}/Repos/chunkwm/chunkwmrc"
+        dest: "{{ ansible_env.HOME }}/.chunkrmrc"
+        owner: "{{ ansible_env.LOGNAME }}"
+        group: "staff"
+        state: link
+
+    - name: +x chunkwmrc
+      file:
+          dest: "{{ ansible_env.HOME }}/Repos/chunkwm/chunkrmrc"
+          mode: +x
+
+    - name: Symlink skhd Config
+      file:
+          src: "{{ ansible_env.HOME }}/Repos/chunkwm/skhdrc"
+          dest: "{{ ansible_env.HOME }}/.skhdrc"
+          owner: "{{ ansible_env.LOGNAME }}"
+          group: "staff"
+          state: link
+
+
   
