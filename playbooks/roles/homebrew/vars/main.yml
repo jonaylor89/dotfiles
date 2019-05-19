@@ -2,6 +2,7 @@
 homebrew_cask_apps: 
     - 'atom'
     - 'blender'
+    - 'beaker-browser'
     - 'boostnote'
     - 'docker'
     - 'dropbox'
@@ -22,7 +23,6 @@ homebrew_cask_apps:
     - 'transmission'
     - 'ubersicht'
     - 'visual-studio-code'
-    - 'vmware-fusion'
 homebrew_installed_packages:
     - 'autoconf'
     - 'ansible'
