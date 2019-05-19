@@ -8,7 +8,7 @@
 
 
 # Install developer tools
-xcode-select install
+xcode-select --install
 
 # Create nest for all configurations
 mkdir "$HOME/Repos"
