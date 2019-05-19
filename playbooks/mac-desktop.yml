@@ -3,6 +3,7 @@
   name: MacOS Desktop Configuration
   hosts: localhost
   vars:
+    - login_shell: /usr/local/bin/fish 
     - dotfiles: jonaylor89/dotfiles
   pre_tasks:
     - name: Pull Configurations
