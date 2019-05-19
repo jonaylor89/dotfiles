@@ -20,7 +20,7 @@ git clone --recurse-submodules https://github.com/jonaylor89/dotfiles.git "$HOME
 pip install ansible
 
 # Put downloaded plays into default location
-ln -sf "$HOME/Repos/dotfiles/ansible" "$HOME/.ansible"
+ln -s "$HOME/Repos/dotfiles/ansible" "$HOME/.ansible"
 
 # Execute MacOS playbook
 ansible-playbook "$HOME/Repos/dotfiles/playbooks/mac-desktop.yml" -K
