@@ -14,7 +14,7 @@
       file:
         src: "{{ ansible_env.HOME }}/Repos/chunkwm/chunkwmrc"
         dest: "{{ ansible_env.HOME }}/.chunkrmrc"
-        owner: "{{ ansible_env.LOGNAME }}"
+        owner: "{{ ansible_user_id }}"
         group: "staff"
         state: link
 
@@ -27,7 +27,7 @@
       file:
           src: "{{ ansible_env.HOME }}/Repos/chunkwm/skhdrc"
           dest: "{{ ansible_env.HOME }}/.skhdrc"
-          owner: "{{ ansible_env.LOGNAME }}"
+          owner: "{{ ansible_user_id }}"
           group: "staff"
           state: link
 
