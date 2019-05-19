@@ -7,7 +7,6 @@
       file: 
         path: '{{ ansible_env.HOME }}/Repos'
         state: directory
-        mode: '0755'
     # Create ssh keys for github
   tasks: 
   # - name: Dotfiles
@@ -20,6 +19,33 @@
   # - name: OSX Config
   # include_role:
   # name: osx
+
+   - name: Link Configs
+     file: 
+        
+   - name: Install oh-my-zsh
+      git: 
+        repo: https://github.com/robbyrussell/oh-my-zsh.git 
+        dest: '{{ ansible_env.HOME }}/.local/share/oh-my-zsh'
+        update: yes
+
+    - name: Install oh-my-fish
+      git: 
+        repo: https://github.com/oh-my-fish/oh-my-fish.git 
+        dest: '{{ ansible_env.HOME }}/.local/share/omf'
+        update: yes
+
+    - name: Install tmux plugin manager
+      git: 
+        repo: https://github.com/tmux-plugins/tpm.git 
+        dest: '{{ ansible_env.HOME }}/.local/share/tpm'
+        update: yes
+
+    - name: Install dein.vim
+      git: 
+        repo: https://github.com/Shougo/dein.vim.git 
+        dest: '{{ ansible_env.HOME }}/.local/share/dein/repos/github.com/Shougo/dein.vim'
+        update: yes
 
     - name: Package Manager
       include_role:

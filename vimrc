@@ -1,4 +1,72 @@
-set nocompatible 
+
+"dein Scripts-----------------------------
+if &compatible
+  set nocompatible               " Be iMproved
+endif
+
+" Required:
+set runtimepath+=/Users/johannes/.cache/dein/repos/github.com/Shougo/dein.vim
+
+" Required:
+if dein#load_state('/Users/johannes/.cache/dein')
+  call dein#begin('/Users/johannes/.cache/dein')
+
+  " Let dein manage dein
+  " Required:
+  call dein#add('/Users/johannes/.cache/dein/repos/github.com/Shougo/dein.vim')
+
+  " Add or remove your plugins here like this:
+  "call dein#add('Shougo/neosnippet.vim')
+  "call dein#add('Shougo/neosnippet-snippets')
+
+" Installed Plugins -------------------{{{
+  call dein#add('maralla/completor.vim')
+  call dein#add('tmhedberg/SimpylFold')
+  call dein#add('vim-scripts/indentpython.vim')
+  call dein#add('vim-scripts/a.vim')
+  call dein#add('nvie/vim-flake8')
+  call dein#add('jmcantrell/vim-virtualenv')
+  call dein#add('joshdick/onedark.vim')
+  call dein#add('vim-syntastic/syntastic')
+  call dein#add('jnurmine/Zenburn')
+  call dein#add('altercation/vim-colors-solarized')
+  call dein#add('scrooloose/nerdtree')
+  call dein#add('jistr/vim-nerdtree-tabs')
+  call dein#add('scrooloose/nerdcommenter')
+  call dein#add('vim-airline/vim-airline')
+  call dein#add('vim-airline/vim-airline-themes')
+  call dein#add('tpope/vim-fugitive')
+  call dein#add('dag/vim-fish')
+  call dein#add('rust-lang/rust.vim')
+  call dein#add('rstacruz/sparkup', {'rtp': 'vim/'})
+  call dein#add('MarcWeber/vim-addon-mw-utils')
+  call dein#add('tomtom/tlib_vim')
+  call dein#add('garbas/vim-snipmate')
+  call dein#add('honza/vim-snippets')
+  call dein#add('christoomey/vim-tmux-runner')
+  call dein#add('christoomey/vim-tmux-navigator')
+  call dein#add('ryanoasis/vim-devicons')
+
+  call dein#add('dylanaraps/wal.vim')
+" }}}
+
+"
+  " Required:
+  call dein#end()
+  call dein#save_state()
+endif
+
+" Required:
+filetype plugin indent on
+syntax enable
+
+" If you want to install not installed plugins on startup.
+if dein#check_install()
+  call dein#install()
+endif
+
+"End dein Scripts-------------------------
+
 filetype off 
 
 " Change shell to POSIX shell for plugins
@@ -6,45 +74,15 @@ if &shell =~# 'fish$'
     set shell=sh
 endif
 
-set rtp+=~/.vim/bundle/Vundle.vim
+" set rtp+=~/.vim/bundle/Vundle.vim
 
-call vundle#begin() 
+" call vundle#begin() 
 
-call vundle#begin('~/Documents/vimplugins')
+" call vundle#begin('~/Documents/vimplugins')
 
-" Installed Plugins -------------------{{{
-Plugin 'gmarik/Vundle.vim'
-Plugin 'maralla/completor.vim'
-Plugin 'tmhedberg/SimpylFold'
-Plugin 'vim-scripts/indentpython.vim'
-Plugin 'vim-scripts/a.vim'
-Plugin 'nvie/vim-flake8'
-Plugin 'jmcantrell/vim-virtualenv'
-Plugin 'joshdick/onedark.vim'
-Plugin 'vim-syntastic/syntastic'
-Plugin 'jnurmine/Zenburn'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'scrooloose/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'tpope/vim-fugitive'
-Plugin 'dag/vim-fish'
-Plugin 'rust-lang/rust.vim'
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
-Plugin 'garbas/vim-snipmate'
-Plugin 'honza/vim-snippets'
-Plugin 'christoomey/vim-tmux-runner'
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'ryanoasis/vim-devicons'
-
-Plugin 'dylanaraps/wal.vim'
 " }}}
 
-call vundle#end()
+" call vundle#end()
 
 set exrc
 set secure
