@@ -56,6 +56,12 @@
        dest: '{{ ansible_env.HOME }}/.local/share/dein/repos/github.com/Shougo/dein.vim'
        update: yes
 
+   - name: Symlink Config Files
+     file:
+         src: ""
+         dest: ""
+         state: link
+
    - name: Window Manager 
      include_role:
        name: chunkwm
