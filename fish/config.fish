@@ -1,9 +1,9 @@
 
-set PATH /usr/local/bin /usr/sbin $HOME/bin $HOME/Library/Python/3.7/bin $HOME/dotfiles/widgets/Pecan/ $HOME/.cargo/bin $PATH
+set PATH /usr/local/bin /usr/sbin $HOME/bin $HOME/.cargo/bin $HOME/.local/bin $PATH
 
 export UBER_PATH="$HOME/Repos/dotfiles/" 
 
-wal -q -i ~/Pictures/DigitSun.png -n
+wal -q -i ~/Pictures/Pink.jpg -n
 
 # tabtab source for serverless package
 # uninstall by removing these lines or running `tabtab uninstall serverless`
