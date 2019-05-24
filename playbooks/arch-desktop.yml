@@ -3,12 +3,12 @@
     name: Arch Desktop Configuration
     hosts: localhost
     tasks:
-        - name: Install packages
-          pacman: 
-            name: ansible
-            state: latest
         - name: Create directories for git repositories
           file:
             path: '{{ ansible_env.HOME }}\Repos'
             state: directory
             mode: '0755'
+
+        - name: Install packages
+          include_role:
+              name: pacman

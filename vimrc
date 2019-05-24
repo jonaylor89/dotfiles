@@ -5,15 +5,15 @@ if &compatible
 endif
 
 " Required:
-set runtimepath+=/Users/johannes/.cache/dein/repos/github.com/Shougo/dein.vim
+set runtimepath+=/home/johannes/.cache/dein/repos/github.com/Shougo/dein.vim
 
 " Required:
-if dein#load_state('/Users/johannes/.cache/dein')
-  call dein#begin('/Users/johannes/.cache/dein')
+if dein#load_state('/home/johannes/.cache/dein')
+  call dein#begin('/home/johannes/.cache/dein')
 
   " Let dein manage dein
   " Required:
-  call dein#add('/Users/johannes/.cache/dein/repos/github.com/Shougo/dein.vim')
+  call dein#add('/home/johannes/.cache/dein/repos/github.com/Shougo/dein.vim')
 
   " Add or remove your plugins here like this:
   "call dein#add('Shougo/neosnippet.vim')

@@ -3,7 +3,7 @@ set PATH $HOME/.local/bin /usr/local/bin /usr/sbin $HOME/bin $HOME/Library/Pytho
 
 export UBER_PATH="$HOME/Repos/dotfiles/" 
 
-wal -q -i ~/Pictures/Mountains.jpg -n
+wal -q -i ~/Pictures/wallpaper.png -n
 
 # tabtab source for serverless package
 # uninstall by removing these lines or running `tabtab uninstall serverless`
