@@ -3,7 +3,8 @@
 1. vim
 2. SpaceVim
 3. bash
-4. zsh/oh-my-zsh 5. fish/oh-my-fish
+4. zsh/oh-my-zsh 
+5. fish/oh-my-fish
 6. tmux
 7. alacritty
 8. git
@@ -42,11 +43,15 @@ so it'll probably work best with that.
     ~$ ./arch/setup
 ```
 
-Alternatively, deployment can be done with the experimental 'JARBS' system 
-
 ## MacOS
 ```
     ~$ ./mac/setup
+```
+
+Alternatively this can just be done with a curl command
+
+```
+    ~$ curl -sSL https://raw.githubusercontent.com/jonaylor89/dotfiles/master/{{ mac || arch || ubuntu }}/setup
 ```
 
 ---------------------------
