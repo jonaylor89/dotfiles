@@ -1,0 +1,9 @@
+
+- 
+  name: Ubuntu Desktop Configuration
+  hosts: localhost
+  tasks:
+      name: Install ansible
+      apt:
+          name: ansible
+            

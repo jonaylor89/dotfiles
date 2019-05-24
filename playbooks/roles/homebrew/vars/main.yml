@@ -1,0 +1,71 @@
+
+homebrew_cask_apps: 
+    - 'atom'
+    - 'blender'
+    - 'beaker-browser'
+    - 'boostnote'
+    - 'docker'
+    - 'discord'
+    - 'firefox'
+    - 'firefox-nightly'
+    - 'gb-studio'
+    - 'google-chrome' 
+    - 'iterm2'
+    - 'jetbrains-toolbox'
+    - 'lastpass'
+    - 'macvim'
+    - 'processing'
+    - 'skype'
+    - 'signal'
+    - 'slack' 
+    - 'spotify' 
+    - 'transmission'
+    - 'ubersicht'
+    - 'visual-studio-code'
+homebrew_installed_packages:
+    - 'autoconf'
+    - 'ansible'
+    - 'bash-completion'
+    - 'cmake'
+    - 'cowsay'
+    - 'docker-compose'
+    - 'docker-machine'
+    - 'fd'
+    - 'figlet'
+    - 'fish'
+    - 'fortune'
+    - 'fx'
+    - 'fzf' 
+    - 'gcc'
+    - 'gdb' 
+    - 'git'
+    - 'git-lfs'
+    - 'go'
+    - 'htop'
+    - 'hub'
+    - 'neofetch'
+    - 'nmap'
+    - 'openssl'
+    - 'python'
+    - 'ranger'
+    - 'tmux'
+    - 'wget'
+    - 'yarn'
+    - 'youtube-dl'
+    - 'zsh'
+    - 'zsh-syntax-highlighting'
+homebrew_taps:
+    - koekeishiya/formulae
+    - crisidev/chunkwm
+    - caskroom/fonts
+    - homebrew/bundle
+    - homebrew/cask
+    - homebrew/cask-drivers
+    - homebrew/cask-fonts
+    - homebrew/cask-versions
+    - homebrew/core
+    - homebrew/services
+    - jonaylor89/tap
+
+homebrew_upgrade_all_packages: true
+

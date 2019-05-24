@@ -3,7 +3,7 @@
 1. vim
 2. SpaceVim
 3. bash
-4. zsh/oh-my-zsh
+4. zsh/oh-my-zsh 
 5. fish/oh-my-fish
 6. tmux
 7. alacritty
@@ -14,6 +14,19 @@
 12. Ubersicht+widgets
 13. VSCode
 14. hammerspoon
+
+------------------------
+
+# THE ENTIRE SETUP AND INSTALLATION SECTION IS BEING REPLACED WITH ANSIBLE PLAYBOOKS
+
+I finally taught myself how ansible works and decided that it is much better
+than my janky bash scripts. There will be a MacOS, Arch, and Ubuntu playbook
+for computers running MacOS, Arch based linux distros, and Ubuntu based linux
+distros respectively. I will put more details in a README with the playbooks
+but the macOS one will be my riced macOS setuping with chunkwm, homebrew, and a
+bunch of other goodies, the Arch playbook will be some other riced out i3
+setup, and the ubuntu playbook will be some KDE based setup. I prefer neon OS
+so it'll probably work best with that.
 
 ------------------------
 
@@ -30,11 +43,15 @@
     ~$ ./arch/setup
 ```
 
-Alternatively, deployment can be done with the experimental 'JARBS' system 
-
 ## MacOS
 ```
     ~$ ./mac/setup
+```
+
+Alternatively this can just be done with a curl command
+
+```
+    ~$ curl -sSL https://raw.githubusercontent.com/jonaylor89/dotfiles/master/{{ mac || arch || ubuntu }}/setup
 ```
 
 ---------------------------
@@ -46,7 +63,7 @@ Alternatively, deployment can be done with the experimental 'JARBS' system
 
 ----------------
 
--> # Installation (I haven't updated this scripts in a while: BEWARE) <-
+-> # Installation (I haven't updated this scripts in a while: BEWARE) <-j
 
 ```
     ~$ ./install
@@ -62,5 +79,3 @@ bashrc.d directories that do essentially the same.
 
 -----------------------
 
--> # TODO <-
-1. I'm still considering making deployment controlled by ansible playbook rather than the pure bash used by JARBS

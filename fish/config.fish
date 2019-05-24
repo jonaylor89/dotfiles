@@ -1,9 +1,10 @@
 
-set PATH /usr/local/bin /usr/sbin $HOME/bin $HOME/.cargo/bin $HOME/.local/bin $PATH
+
+set PATH $HOME/.local/bin /usr/local/bin /usr/sbin $HOME/bin $HOME/Library/Python/3.7/bin $HOME/dotfiles/widgets/Pecan/ $HOME/.cargo/bin $HOME/flutter/bin /Users/johannes/.dat/releases/dat-13.13.0-macos-x64 $PATH
 
 export UBER_PATH="$HOME/Repos/dotfiles/" 
 
-wal -q -i ~/Pictures/Pink.jpg -n
+wal -q -i ~/Pictures/wallpaper.png -n
 
 # tabtab source for serverless package
 # uninstall by removing these lines or running `tabtab uninstall serverless`
