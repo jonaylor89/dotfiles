@@ -1,9 +1,14 @@
 
-    # tap homebrew # install chunkwm and skhd
+    # tap homebrew 
+    # install chunkwm and skhd
     
     # if custom dotfile is found for either than link them in their proper
     # place
-    
+ 
+- name: Install packages
+  include_role:
+    name: geerlingguy.homebrew
+
 - name: Symlink chunkwm Config
   file:
     src: "{{ ansible_env.HOME }}/Repos/dotfiles/chunkwm/chunkwmrc"
@@ -24,6 +29,12 @@
     owner: "{{ ansible_user_id }}"
     group: "staff"
     state: link
+
+- name: Start chunkwm
+  command: brew service start chunkwm
+
+- name: Start skhd 
+  command: brew service start skhd
 
 
   
