@@ -28,6 +28,7 @@ if [ -d $HOME/Repos/dotfiles/rc.d ]; then
   done
 fi
 
+# Load any local bash commands
 if [ -e $HOME/.bashrc_local ]; then
   source $HOME/.bashrc_local
 fi

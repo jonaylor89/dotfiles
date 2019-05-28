@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-# download zsh, tmux, and vim
-pacman -S zsh \
-        tmux \
-        vim \
-        curl \
-        exa 
