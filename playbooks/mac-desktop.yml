@@ -21,6 +21,10 @@
      include_role:
         name: osx
 
+   - name: Install rust
+     include_role:
+       name: rust
+
   # - name: Link Configs
   # file: 
         
@@ -111,5 +115,6 @@
        shell: "{{ login_shell }}"
      when: login_shell_installed.stat.exists
      become: yes
+
 
 
