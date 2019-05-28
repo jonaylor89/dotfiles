@@ -45,7 +45,7 @@
    - name: Install dein.vim
      git: 
        repo: https://github.com/Shougo/dein.vim.git 
-       dest: '{{ ansible_env.HOME }}/.local/share/dein/repos/github.com/Shougo/dein.vim'
+       dest: '{{ ansible_env.HOME }}/.cache/dein/repos/github.com/Shougo/dein.vim'
        update: yes
 
        # - name: Symlink Config Files
@@ -57,6 +57,9 @@
    - name: Window Manager 
      include_role:
        name: chunkwm
+   - name: Package Manager
+     include_role:
+       name: homebrew
 
    - block:
       - name: check if homebrew bash is installed
@@ -64,7 +67,7 @@
           path: /usr/local/bin/bash
         register: brew_bash
 
-      - name: add homwbrew bash to /etc/shells
+      - name: add homebrew bash to /etc/shells
         lineinfile: 
           dest: /etc/shells 
           line: "/usr/local/bin/bash" 
@@ -109,7 +112,4 @@
      when: login_shell_installed.stat.exists
      become: yes
 
-   - name: Package Manager
-     include_role:
-       name: homebrew
 
