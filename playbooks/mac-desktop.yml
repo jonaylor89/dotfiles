@@ -117,5 +117,11 @@
      when: login_shell_installed.stat.exists
      become: yes
 
+   - name: Specify iTerm preferences directory 
+     command: defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/Repos/dotfiles/iterm2"
+
+   - name: Tell iTerm to use custom preferences 
+     command: defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
+
 
 
