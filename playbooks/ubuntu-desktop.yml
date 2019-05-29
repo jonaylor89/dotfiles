@@ -3,7 +3,7 @@
   name: Ubuntu Desktop Configuration
   hosts: localhost
   tasks:
-      name: Install ansible
-      apt:
-          name: ansible
+      - name: Install packages
+        include_role:
+            name: apt
             
