@@ -8,16 +8,15 @@
 6. tmux
 7. alacritty
 8. git
-9. X
+9. X/urxvt
 10. i3
 11. chunkwm/skhd
 12. Ubersicht+widgets
 13. VSCode
 14. hammerspoon
+15. polybar
 
 ------------------------
-
-# THE ENTIRE SETUP AND INSTALLATION SECTION IS BEING REPLACED WITH ANSIBLE PLAYBOOKS
 
 I finally taught myself how ansible works and decided that it is much better
 than my janky bash scripts. There will be a MacOS, Arch, and Ubuntu playbook
@@ -30,52 +29,24 @@ so it'll probably work best with that.
 
 ------------------------
 
--> # Setting up system <-
-
-## Download project
-```
-    ~$ git clone https://github.com/jonaylor89/dotfiles.git 
-    ~$ cd dotfiles
-```
-
-## Arch Linux
-```
-    ~$ ./arch/setup
-```
-
-## MacOS
-```
-    ~$ ./mac/setup
-```
-
-Alternatively this can just be done with a curl command
-
+## Nix systems
 ```
     ~$ curl -sSL https://raw.githubusercontent.com/jonaylor89/dotfiles/master/{{ mac || arch || ubuntu }}/setup
 ```
 
 ---------------------------
 
-## Windows **Cmd must be run as administrator**
+## Windows 
+(**Cmd must be run as administrator**)
 ```
     C:> del C:\Windows\System32
 ```
 
 ----------------
 
--> # Installation (I haven't updated this scripts in a while: BEWARE) <-j
-
-```
-    ~$ ./install
-```
-
-NOTE: Deployment with JARBS will take care of this set for you
-
------------------------
-
 Shell configurations are configured using conf.d style rather than one big rc
-file for each shell. Fish does this natively but zsh and bash have zshrc.d and
-bashrc.d directories that do essentially the same. 
+file for each shell. Fish does this natively but I gave zsh and bash a zshrc.d and
+bashrc.d directory that do essentially the same. 
 
 -----------------------
 
