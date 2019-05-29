@@ -2,6 +2,3 @@
   path = scripts
 	url = git@github.com:jonaylor89/scripts
 	branch = master
-[submodule "widgets/Pecan"]
-	path = widgets/Pecan
-	url = git@github.com:zzzeyez/Pecan.git
