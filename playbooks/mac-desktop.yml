@@ -23,7 +23,7 @@
 
    - name: Install rust
      include_role:
-       name: rust
+        name: rust
 
   # - name: Link Configs
   # file: 
@@ -61,6 +61,7 @@
    - name: Window Manager 
      include_role:
        name: chunkwm
+
    - name: Package Manager
      include_role:
        name: homebrew

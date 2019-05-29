@@ -2,6 +2,6 @@
   path = scripts
 	url = git@github.com:jonaylor89/scripts
 	branch = master
-[submodule "widgets/Pecan"]
-	path = widgets/Pecan
-	url = git@github.com:zzzeyez/Pecan.git
+[submodule "ansible/plugins/modules/aur"]
+	path = ansible/plugins/modules/aur
+	url = https://github.com/kewlfft/ansible-aur.git
