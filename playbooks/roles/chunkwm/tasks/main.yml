@@ -12,7 +12,7 @@
 - name: Symlink chunkwm Config
   file:
     src: "{{ ansible_env.HOME }}/Repos/dotfiles/chunkwm/chunkwmrc"
-    dest: "{{ ansible_env.HOME }}/.chunkrmrc"
+    dest: "{{ ansible_env.HOME }}/.chunkwmrc"
     owner: "{{ ansible_user_id }}"
     group: "staff"
     state: link
@@ -31,10 +31,10 @@
     state: link
 
 - name: Start chunkwm
-  command: brew service start chunkwm
+  command: brew services start chunkwm
 
 - name: Start skhd 
-  command: brew service start skhd
+  command: brew services start skhd
 
 
   
