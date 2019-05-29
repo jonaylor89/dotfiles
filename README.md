@@ -36,7 +36,8 @@ so it'll probably work best with that.
 
 ---------------------------
 
-## Windows **Cmd must be run as administrator**
+## Windows 
+(**Cmd must be run as administrator**)
 ```
     C:> del C:\Windows\System32
 ```
