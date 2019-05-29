@@ -9,12 +9,12 @@
 [alias]
   ci = commit
   cim = commit -m
-  cl = clone
+  cl = clone --recursive
 
   ps = push
   pl = pull
   psom = push origin master
-  plom = pull origin master
+  plom = pull --recurse-submodules origin master
   pall = !git remote | xargs -L1 git push --all
   
   ru = remote update
