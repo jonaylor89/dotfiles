@@ -47,3 +47,9 @@ format_on_save = 1
 [[layers]]
 name = "lang#markdown"
 
+[[layers]]
+name = "lang#dart"
+
+[[layers]]
+name = "lang#javascript"
+auto_fix = true
