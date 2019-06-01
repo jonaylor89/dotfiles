@@ -1,4 +1,4 @@
--> # Johannes' dotfiles <-
+# Johannes' dotfiles 
 
 1. vim
 2. SpaceVim
@@ -15,6 +15,8 @@
 13. VSCode
 14. hammerspoon
 15. polybar
+16. PyPI 
+17. IDEA 
 
 ------------------------
 

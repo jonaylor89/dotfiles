@@ -1,0 +1,7 @@
+
+[distutils]
+index-server=pypi
+
+[pypi]
+repository=https://upload.pypi.org/legacy
+username=jonaylor
