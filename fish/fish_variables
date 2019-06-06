@@ -8,6 +8,8 @@ SETUVAR _fish_abbr_bubu:brew\x20update\x20\x26\x26\x20brew\x20upgrade\x20\x26\x2
 SETUVAR _fish_abbr_cls:clear
 SETUVAR _fish_abbr_fetch:neofetch
 SETUVAR _fish_abbr_gls:gitlocalstats
+SETUVAR _fish_abbr_kube:kubectl
+SETUVAR _fish_abbr_kubectl:kube
 SETUVAR _fish_abbr_la:exa\x20\x2dabghl\x20\x2d\x2dgit
 SETUVAR _fish_abbr_ll:exa\x20\x2dbghl\x20\x2d\x2dgit
 SETUVAR _fish_abbr_lt:exa\x20\x2d\x2dtree
