@@ -17,7 +17,7 @@ else
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 fi
 
-# Download syntex highlighting
+# Download syntax highlighting
 if [ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ]
 then
     printf "[*] zsh autosuggestion already installed\n"
@@ -25,7 +25,7 @@ else
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 fi
 
-# Download and install shapship theme
+# Download and install spaceship theme
 if [ -d ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/spaceship-prompt ]
 then
     printf "[*] zsh spaceship theme is already installed\n"
@@ -33,6 +33,10 @@ else
     git clone https://github.com/denysdovhan/spaceship-prompt.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/spaceship-prompt"
     ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/spaceship.zsh-theme"
 fi
+
+# [!!!] Install oh my fish
+
+# [!!!] Install spacefish theme
 
 # Download and install Vundle
 if [ -d ~/.vim/bundle/Vundle.vim ]
