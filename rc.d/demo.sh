@@ -1,2 +1,2 @@
 
-echo "Welcome to the new setup"
+# echo "Welcome to the new setup"
