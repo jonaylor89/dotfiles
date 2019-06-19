@@ -30,8 +30,15 @@ window:
     y: 0
 
   # Window decorations
-  # Setting this to false will result in window without borders and title bar.
-  decorations: full
+  #
+  # Values for `decorations`:
+  #     - full: Borders and title bar
+  #     - none: Neither borders nor title bar
+  #
+  # Values for `decorations` (macOS only):
+  #     - transparent: Title bar, transparent background and title bar buttons
+  #     - buttonless: Title bar, transparent background, but no title bar buttons
+  decorations: none
 
 # Display tabs using this many cells (changes require restart)
 tabspaces: 4
@@ -93,12 +100,6 @@ font:
     x: 0
     y: 0
 
-  # Scale the font size based on the monitor's DPI. This will lead to bigger text on HiDPI
-  # screens and make reading text a little easier.
-  # On X11 it is possible to change the DPI for each instance of alacritty by using
-  # `WINIT_HIDPI_FACTOR=1.0 alacritty` to scale the font.
-  scale_with_dpi: true
-
   # OS X only: use thin stroke font rendering. Thin strokes are suitable
   # for retina displays, but for non-retina you probably want this set to
   # false.
@@ -107,10 +108,6 @@ font:
 # Should display the render timer
 debug:
   render_timer: false
-
-# Use custom cursor colors. If true, display the cursor in the cursor.foreground
-# and cursor.background colors, otherwise invert the colors of the cursor.
-custom_cursor_colors: false
 
 # Colors (Hyper)
 colors:
@@ -262,25 +259,26 @@ mouse:
   # scrolling for applications like `man`.
   #
   # To disable this completely, set `faux_scrollback_lines` to 0.
-  faux_scrollback_lines: 1
+  faux_scrolling_lines: 1
+
+  hide_when_typing: false
 
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
 
 dynamic_title: true
 
-hide_cursor_when_typing: false
+cursor:
+  # Whether the cursor should be a hollow block on window focus loss
+  unfocused_hollow: true
 
-# Style of the cursor
-#
-# Values for 'cursor_style':
-# - Block
-# - Underline
-# - Beam
-cursor_style: Beam
-
-# Whether the cursor should be a hollow block on window focus loss
-unfocused_hollow_cursor: true
+  # Style of the cursor
+  #
+  # Values for 'cursor.style':
+  # - Block
+  # - Underline
+  # - Beam
+  style: Beam
 
 # Live config reload (changes require restart)
 live_config_reload: true
