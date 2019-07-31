@@ -1,7 +1,4 @@
 
-
-set PATH $HOME/.local/bin /usr/local/bin /usr/sbin $HOME/bin $HOME/.cargo/bin $HOME/flutter/bin $PATH
-
 switch (uname)
   case Linux
     set PATH /usr/sbin $PATH
@@ -11,7 +8,11 @@ switch (uname)
     echo ""
 end
 
-set PATH $HOME/.local/bin /usr/sbin /usr/local/bin $HOME/bin $HOME/.cargo/bin $HOME/flutter/bin $PATH
+set GOROOT $HOME/go 
+
+set PATH $HOME/.local/bin /usr/sbin /usr/local/bin $HOME/bin $HOME/.cargo/bin $HOME/flutter/bin $HOME/.poetry/bin $GOROOT/bin $PATH
+
+set pipenv_fish_fancy yes
 
 export UBER_PATH="$HOME/Repos/dotfiles/" 
 

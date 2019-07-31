@@ -4,12 +4,17 @@
 #                                      #
 # - WELCOME                            #
 #                                      #
+# Requirements:                        #
+#   - git                              #
+#                                      #
 ########################################
 
 
 # Create nest for all configurations
 printf "\x1b[32x[+] Creating Repos directory\x1b[m\n\n"
 mkdir "$HOME/Repos"
+
+# [!!!] Check if git is installed
 
 # Download configurations and playbooks
 printf "\x1b[32m[+] Cloning configuration files\x1b[m\n\n"
