@@ -16,12 +16,35 @@
     "terminal.integrated.cursorStyle": "line",
     "terminal.integrated.fontFamily": "Anonymice Nerd Font Mono",
     "terminal.integrated.fontWeightBold": "normal",
-    "window.zoomLevel": -1,
-    "python.jediEnabled": false,
+    "window.zoomLevel": 0,
+    "python.languageServer": "microsoft",
     "editor.suggestSelection": "first",
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "python.formatting.provider": "black",
     "python.linting.mypyEnabled": true,
     "terminal.integrated.fontSize": 16,
-    "workbench.colorCustomizations": {}
+    "workbench.colorCustomizations": {},
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "gitlens.advanced.messages": {
+        "suppressLineUncommittedWarning": true
+    },
+    "[json]": {
+        "editor.defaultFormatter": "HookyQR.beautify"
+    },
+    "go.formatTool": "goimports",
+    "go.useLanguageServer": true,
+    "eslint.autoFixOnSave": true,
+    "eslint.alwaysShowStatus": true,
+    "eslint.packageManager": "yarn",
+    "merge-conflict.autoNavigateNextConflict.enabled": true,
+    "python.testing.pytestEnabled": true,
+    "vim.highlightedyank.enable": true,
+    "yaml.format.enable": true,
+    "git.autofetch": true,
+    "python.insidersChannel": "daily",
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
 }
