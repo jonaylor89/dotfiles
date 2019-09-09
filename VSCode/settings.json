@@ -17,7 +17,7 @@
     "terminal.integrated.fontFamily": "Anonymice Nerd Font Mono",
     "terminal.integrated.fontWeightBold": "normal",
     "window.zoomLevel": 0,
-    "python.jediEnabled": false,
+    "python.languageServer": "microsoft",
     "editor.suggestSelection": "first",
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "python.formatting.provider": "black",
@@ -25,5 +25,7 @@
     "terminal.integrated.fontSize": 16,
     "workbench.colorCustomizations": {},
     "go.formatTool": "goimports",
-    "go.useLanguageServer": true
+    "go.useLanguageServer": true,
+    "python.insidersChannel": "daily",
+    "git.autofetch": true
 }
