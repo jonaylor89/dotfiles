@@ -10,13 +10,13 @@ end
 
 set GOROOT $HOME/go 
 
-set PATH $HOME/.local/bin /usr/sbin /usr/local/bin $HOME/bin $HOME/.cargo/bin $HOME/flutter/bin $HOME/.poetry/bin $GOROOT/bin $PATH
+set PATH $HOME/.local/bin /usr/sbin /usr/local/bin $HOME/bin $HOME/.cargo/bin $HOME/flutter/bin $HOME/.poetry/bin $GOROOT/bin $HOME/anaconda3/bin $PATH
 
 set pipenv_fish_fancy yes
 
 export UBER_PATH="$HOME/Repos/dotfiles/" 
 
-wal -q -i ~/Pictures/wallpaper.jpg -n
+# wal -q -i ~/Pictures/wallpaper.jpg -n
 
 # tabtab source for serverless package
 # uninstall by removing these lines or running `tabtab uninstall serverless`
