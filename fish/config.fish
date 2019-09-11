@@ -31,4 +31,6 @@ export UBER_PATH="$HOME/Repos/dotfiles/"
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/johannes/google-cloud-sdk/path.fish.inc' ]; . '/Users/johannes/google-cloud-sdk/path.fish.inc'; end
 
-eval (starship init fish)
+if command -v starship
+  eval (starship init fish)
+end
