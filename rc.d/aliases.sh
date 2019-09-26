@@ -14,6 +14,7 @@ alias r="ranger"
 alias fetch="neofetch"
 alias gcal="gcalcli"
 alias agenda="gcal agenda"
+alias kube="kubectl"
 alias v="$EDITOR"
 alias e="$EDITOR"
 

@@ -12,3 +12,7 @@
         - name: Install packages
           include_role:
               name: pacman
+
+        - name: Install rust
+          include_role:
+            name: rust
