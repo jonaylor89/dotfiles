@@ -3,7 +3,7 @@
     "telemetry.enableCrashReporter": false,
     "files.autoSave": "afterDelay",
     "workbench.iconTheme": "material-icon-theme",
-    "workbench.colorTheme": "Visual Studio Dark",
+    "workbench.colorTheme": "Material Theme Ocean High Contrast",
     "vim.insertModeKeyBindings": [
         {
             "before": ["j", "k"],
@@ -16,10 +16,13 @@
     "terminal.integrated.cursorStyle": "line",
     "terminal.integrated.fontFamily": "Anonymice Nerd Font Mono",
     "terminal.integrated.fontWeightBold": "normal",
-    "window.zoomLevel": -1,
+    "window.zoomLevel": 1,
     "python.jediEnabled": false,
     "editor.suggestSelection": "first",
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "python.formatting.provider": "black",
-    "python.linting.mypyEnabled": true
+    "python.linting.mypyEnabled": true,
+    "workbench.activityBar.visible": true,
+    "window.menuBarVisibility": "default",
+    "editor.minimap.enabled": true
 }
