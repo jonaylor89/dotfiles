@@ -24,8 +24,7 @@
     "python.linting.mypyEnabled": true,
     "terminal.integrated.fontSize": 16,
     "workbench.colorCustomizations": {},
-    "python.insidersChannel": "daily",
-    "git.autofetch": true
+    "python.insidersChannel": "off",
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
@@ -45,8 +44,10 @@
     "vim.highlightedyank.enable": true,
     "yaml.format.enable": true,
     "git.autofetch": true,
-    "python.insidersChannel": "daily",
     "[html]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
-    }
+    },
+    "[yaml]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
 }
