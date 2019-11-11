@@ -6,3 +6,5 @@ alias al="sl -alf"
 alias gcal="gcalcli"
 
 alias rainbow="lolcat"
+
+alias kube="kubectl"
