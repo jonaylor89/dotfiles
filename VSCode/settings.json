@@ -16,7 +16,7 @@
     "terminal.integrated.cursorStyle": "line",
     "terminal.integrated.fontFamily": "Anonymice Nerd Font Mono",
     "terminal.integrated.fontWeightBold": "normal",
-    "window.zoomLevel": 1,
+    "window.zoomLevel": 0,
     "python.jediEnabled": false,
     "python.languageServer": "microsoft",
     "editor.suggestSelection": "first",
@@ -28,7 +28,7 @@
     "editor.minimap.enabled": true,
     "terminal.integrated.fontSize": 16,
     "workbench.colorCustomizations": {},
-    "python.insidersChannel": "daily",
+    "python.insidersChannel": "off",
     "git.autofetch": true,
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -48,14 +48,11 @@
     "python.testing.pytestEnabled": true,
     "vim.highlightedyank.enable": true,
     "yaml.format.enable": true,
-<<<<<<< HEAD
-    "git.autofetch": true,
-=======
->>>>>>> 6bcf0906019e0b039bd3376f4490ba9823c3dfcc
     "[html]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[yaml]": {
         "editor.defaultFormatter": "redhat.vscode-yaml"
     },
+    "editor.fontFamily": "Hasklig",
 }

@@ -1,16 +1,54 @@
-/* Example file enabling theme + some features */
+/********************************
+    Material Theme Imports 
+********************************/
 
-/* @import url(chrome/theme_color_variables.css); */
-/* @import url(chrome/theme_toolbars.css); */
-/* @import url(chrome/theme_sidebar.css); */
-/* @import url(chrome/theme_popups_and_menus.css); */
-/* @import url(chrome/status_inside_urlbar.css); */
-/*@import url(chrome/navigation_buttons_inside_urlbar.css);*/
-/* @import url(chrome/tab_close_button_always_on_hover.css); */
-/* @import url(chrome/tab_loading_progress_throbber.css); */
-/* @import url(chrome/button_effect_scale_onclick.css); */
-/* @import url(chrome/blank_page_background.css); */
-/* @import url(chrome/page_action_buttons_on_hover.css); */
-/* @import url(chrome/autohide_sidebar.css); */
-/* @import url(chrome/menubar_in_toolbar.css); */
-/* @import url(chrome/hide_toolbox_top_bottom_borders.css); */
+
+@import "global/variables.css";
+@import "global/global.css";
+@import "icons/icons.css";
+@import "tabbar/tabbar.css";
+@import "navbar/navbar.css";
+@import "personalbar/personalbar.css";
+@import "popup/popup.css";
+@import "urlbar/urlbar.css";
+
+
+/********************************
+    Personal Changes 
+********************************/
+
+/* Replace favicon on tabs with close button on hover */
+.tabbrowser-tab:not(:hover) .tab-close-button{ display:none; }
+.tabbrowser-tab:not([pinned]):hover .tab-close-button{ display:block !important; }
+
+.tabbrowser-tab:not([pinned]):hover  .tab-icon-image {
+  display: none !important;
+}
+
+.tabbrowser-tab:hover  .tab-throbber,
+.tabbrowser-tab:hover  .tab-icon-image,
+.tabbrowser-tab:hover .tab-sharing-icon-overlay,
+.tabbrowser-tab:hover  .tab-icon-overlay,
+.tabbrowser-tab:hover  .tab-label-container,
+.tabbrowser-tab:hover  .tab-icon-sound {
+  -moz-box-ordinal-group: 2 !important;
+}
+
+
+/* Reveal toolbar buttons when user hovers */
+:root:not([customizing]) #nav-bar toolbarbutton {
+  margin-left: -28px !important;
+  opacity: 0 !important;
+  transform: scale(.85, .85) !important;
+  pointer-events: none !important;
+  transition: all 100ms var(--animation-easing-function) !important;
+}
+
+:root:not([customizing]) :hover > #nav-bar toolbarbutton,
+:root:not([customizing]) #navigator-toolbox:focus-within #nav-bar toolbarbutton,
+:root:not([customizing]) :hover > #titlebar toolbarbutton {
+  transform: scale(1, 1) !important;
+  opacity:1 !important;
+  margin-left:0 !important;
+  pointer-events: auto !important;
+}
