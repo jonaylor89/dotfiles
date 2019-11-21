@@ -14,6 +14,10 @@ set PATH $HOME/.local/bin /usr/sbin /usr/local/bin $HOME/bin $HOME/.cargo/bin $H
 
 set pipenv_fish_fancy yes
 
+if command -v pyenv 1>/dev/null 2>&1
+  pyenv init - | source
+end
+
 export UBER_PATH="$HOME/Repos/dotfiles/" 
 
 # wal -q -i ~/Pictures/wallpaper.jpg -n
