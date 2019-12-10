@@ -17,3 +17,6 @@ fi
 if [ -e $HOME/.zshrc_local ]; then
   source $HOME/.zshrc_local
 fi
+
+# added by travis gem
+[ -f /Users/johannes/.travis/travis.sh ] && source /Users/johannes/.travis/travis.sh

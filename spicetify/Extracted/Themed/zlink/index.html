@@ -656,7 +656,7 @@
                       <button
                         class="nowplaying-add-button button button-icon-only button-add"
                         data-ta-id="nowplaying-add-button"
-                        data-bind="visible: showAddButton,
+                        data-bind="visible: showAddButton(),
                         click: logAddButton,
                         attr: {
                           disabled: thumbUpDisabled,
@@ -666,7 +666,7 @@
                           'data-tooltip-add': ADD_TO_YOUR_LIKED_SONGS,
                           'data-tooltip-remove': REMOVE_FROM_YOUR_LIKED_SONGS,
                           'aria-label': addLabel,
-                          'data-ta-visible': showAddButton
+                          'data-ta-visible': showAddButton()
                         }"
                         data-button="add"
                         data-interaction-target="save-remove-button"

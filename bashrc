@@ -32,3 +32,7 @@ fi
 if [ -e $HOME/.bashrc_local ]; then
   source $HOME/.bashrc_local
 fi
+
+# added by travis gem
+[ -f /Users/johannes/.travis/travis.sh ] && source /Users/johannes/.travis/travis.sh
+alias ic="ibmcloud"
