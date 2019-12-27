@@ -3,7 +3,7 @@ switch (uname)
   case Linux
     set PATH /usr/sbin $PATH
   case Darwin 
-    set PATH $HOME/dotfiles/widgets/Pecan $HOME/Library/Python/3.7/bin $HOME/.dat/releases/dat-13.13.0.macos-x64 $PATH
+    set PATH $HOME/dotfiles/widgets/Pecan $HOME/Library/Python/3.7/bin $HOME/.dat/releases/dat-13.13.0.macos-x64 /usr/local/Cellar/openvpn/2.4.8/sbin $PATH
   case '*'
     echo ""
 end
