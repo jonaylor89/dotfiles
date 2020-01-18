@@ -26,8 +26,8 @@ window:
   # Units are physical pixels; this is not DPI aware.
   # (change requires restart)
   padding:
-    x: 0
-    y: 0
+    x: 12
+    y: 14
 
   # Window decorations
   #

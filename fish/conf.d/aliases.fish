@@ -8,3 +8,4 @@ alias gcal="gcalcli"
 alias rainbow="lolcat"
 
 alias kube="kubectl"
+alias gcurl='curl --header "Authorization: Bearer (gcloud auth print-identity-token)"'

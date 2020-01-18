@@ -10,7 +10,7 @@ end
 
 set GOROOT $HOME/go 
 
-set PATH $HOME/.local/bin /usr/sbin /usr/local/bin $HOME/bin $HOME/.cargo/bin $HOME/flutter/bin $HOME/.poetry/bin $GOROOT/bin $HOME/anaconda3/bin $PATH
+set PATH $PATH $HOME/.local/bin /usr/sbin /usr/local/bin $HOME/bin $HOME/.cargo/bin $HOME/flutter/bin $HOME/.poetry/bin $GOROOT/bin $HOME/anaconda3/bin
 
 set pipenv_fish_fancy yes
 
@@ -38,3 +38,9 @@ if [ -f '/Users/johannes/google-cloud-sdk/path.fish.inc' ]; . '/Users/johannes/g
 if command -v starship > /dev/null
   eval (starship init fish)
 end
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+# eval /Users/johannes/anaconda3/bin/conda "shell.fish" "hook" $argv | source
+# <<< conda initialize <<<
+
