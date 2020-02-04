@@ -11,6 +11,7 @@
         }
     ],
     "editor.fontSize": 14,
+    "editor.fontLigatures": true,
     "git.enableSmartCommit": true,
     "terminal.external.osxExec": "Alacritty.app",
     "terminal.integrated.cursorStyle": "line",
@@ -258,7 +259,7 @@
     "[yaml]": {
         "editor.defaultFormatter": "redhat.vscode-yaml"
     },
-    "editor.fontFamily": "Hasklig",
+    "editor.fontFamily": "JetBrains Mono",
     "rust.mode": "legacy",
     "wal.tokenColorTheme": "Material Theme Ocean High Contrast",
     "editor.tokenColorCustomizations": {

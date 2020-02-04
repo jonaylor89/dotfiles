@@ -9,15 +9,64 @@ use_symbol_for_status = true
 
 # Disable the package module, hiding it from the prompt completely
 [package]
+symbol = " "
 disabled = true
-
-[battery]
-full_symbol = "🔋"
-charging_symbol = "⚡️"
-discharging_symbol = "💀"
 
 [hostname]
 ssh_only = false
 prefix = "⟪"
 suffix = "⟫"
 disabled = true
+
+[kubernetes]
+symbol = "⛵ "
+style = "dim green"
+disabled = false
+
+[aws]
+style = "bold blue"
+symbol = " "
+displayed_items = "region"
+disabled = true
+[aws.region_aliases]
+ap-southeast-2 = "au"
+us-east-1 = "va"
+
+[battery]
+full_symbol = ""
+charging_symbol = ""
+discharging_symbol = ""
+
+[conda]
+symbol = " "
+
+[git_branch]
+symbol = " "
+
+[golang]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[java]
+symbol = " "
+
+[memory_usage]
+symbol = " "
+
+[nodejs]
+symbol = " "
+
+[php]
+symbol = " "
+
+[python]
+symbol = " "
+
+[ruby]
+symbol = " "
+
+[rust]
+symbol = " "
+

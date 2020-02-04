@@ -14,9 +14,9 @@ set PATH $PATH $HOME/.local/bin /usr/sbin /usr/local/bin $HOME/bin $HOME/.cargo/
 
 set pipenv_fish_fancy yes
 
-if command -v pyenv 1>/dev/null 2>&1
-  pyenv init - | source
-end
+# if command -v pyenv 1>/dev/null 2>&1
+#   pyenv init - | source
+# end
 
 export UBER_PATH="$HOME/Repos/dotfiles/" 
 
