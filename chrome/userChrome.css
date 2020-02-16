@@ -6,14 +6,3 @@
 @import "personalbar/personalbar.css";
 @import "popup/popup.css";
 @import "urlbar/urlbar.css";
-
-/* Transparent tabbar 
- 
-#TabsToolbar,.tab-background-inner,#nav-bar,.theme-dark,.theme-light,slider,.CodeMirror,.devtools-toolbar,.message,.theme-body,.table-widget-empty-text {
-   -moz-appearance: -moz-mac-vibrancy-dark !important;
-}
-
-.theme-body {
-   background: transparent !important;
-} 
-*/
