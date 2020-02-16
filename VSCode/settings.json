@@ -3,7 +3,7 @@
     "telemetry.enableCrashReporter": false,
     "files.autoSave": "afterDelay",
     "workbench.iconTheme": "material-icon-theme",
-    "workbench.colorTheme": "Wal",
+    "workbench.colorTheme": "Material Theme Ocean High Contrast",
     "vim.insertModeKeyBindings": [
         {
             "before": ["j", "k"],
