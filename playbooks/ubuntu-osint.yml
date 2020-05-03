@@ -1,0 +1,12 @@
+
+- 
+  name: Ubuntu OSINT VM
+  hosts: localhost
+  tasks:
+      - name: Install apt packages
+        include_role:
+            name: apt
+
+      - name: Install snap packages
+        include_role: 
+          name: snap

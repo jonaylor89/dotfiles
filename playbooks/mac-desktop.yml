@@ -60,11 +60,15 @@
 
    - name: Window Manager 
      include_role:
-       name: chunkwm
+       name: yabai
 
    - name: Package Manager
      include_role:
        name: homebrew
+
+  - name: Python Package Manager
+     include_role:
+       name: pip
 
    - block:
       - name: check if homebrew bash is installed

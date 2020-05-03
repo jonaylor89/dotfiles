@@ -9,29 +9,29 @@
   include_role:
     name: geerlingguy.homebrew
 
-- name: Symlink chunkwm Config
+- name: Symlink yabai Config
   file:
-    src: "{{ ansible_env.HOME }}/Repos/dotfiles/chunkwm/chunkwmrc"
-    dest: "{{ ansible_env.HOME }}/.chunkwmrc"
+    src: "{{ ansible_env.HOME }}/Repos/dotfiles/yabairc"
+    dest: "{{ ansible_env.HOME }}/.yabairc"
     owner: "{{ ansible_user_id }}"
     group: "staff"
     state: link
 
 - name: +x chunkwmrc
   file:
-    dest: "{{ ansible_env.HOME }}/Repos/dotfiles/chunkwm/chunkwmrc"
+    dest: "{{ ansible_env.HOME }}/Repos/dotfiles/yabairc"
     mode: +x
 
 - name: Symlink skhd Config
   file:
-    src: "{{ ansible_env.HOME }}/Repos/dotfiles/chunkwm/skhdrc"
+    src: "{{ ansible_env.HOME }}/Repos/dotfiles/skhdrc"
     dest: "{{ ansible_env.HOME }}/.skhdrc"
     owner: "{{ ansible_user_id }}"
     group: "staff"
     state: link
 
 - name: Start chunkwm
-  command: brew services start chunkwm
+  command: brew services start yabai
 
 - name: Start skhd 
   command: brew services start skhd

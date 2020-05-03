@@ -19,6 +19,7 @@
     enable_guicolors = true
     # Disable statusline separator, if you want to use other value, please
     # install nerd fonts
+    guifont = "JetBrainsMono Nerd Font Regular:h14"
     statusline_separator = "curve"
     statusline_inactive_separator = "curve"
     buffer_index_type = 4
@@ -58,3 +59,5 @@ auto_fix = true
 [[layers]]
 name = "lang#swift"
 
+[[custom_plugins]]
+name = 'wakatime/vim-wakatime'

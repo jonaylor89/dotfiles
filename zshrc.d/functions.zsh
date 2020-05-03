@@ -7,3 +7,11 @@ function serve {
         python -m SimpleHTTPServer
     fi
 }
+
+function format {
+  black .
+}
+
+function gcurl {
+ curl -H "Authorization: Bearer $(gcloud auth application-default print-access-token)"
+}

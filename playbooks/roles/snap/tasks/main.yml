@@ -1,0 +1,23 @@
+
+- name: Update all packages to the latest version
+  apt:
+    upgrade: dist
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  apt:
+    update_cache: yes
+
+- name: Install a list of packages
+  apt:
+    pkg:
+    - firefox-trunk
+    - vim
+    - zsh
+    - vagrant
+    - terraform
+    - bitwarden
+    - protonvpn
+    - wireguard
+    - virtualbox
+    - tmux
+    - ffmpeg

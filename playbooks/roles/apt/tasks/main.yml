@@ -1,0 +1,27 @@
+
+# Install snaps
+- name: Install 
+  snap:
+    name:
+      - docker
+      - chromium
+      - vscodium
+      - go
+      - kotlin
+      - alacritty
+      - node
+      - figma-linux
+      - tor
+      - vlc
+
+# Install a snap with classic confinement
+# - name: Install "foo" with option --classic
+#   snap:
+#     name: foo
+#     classic: yes
+
+# # Install a snap with from a specific channel
+# - name: Install "foo" with option --channel=latest/edge
+#   snap:
+#     name: foo
+#     channel: latest/edge

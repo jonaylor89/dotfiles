@@ -1,0 +1,4 @@
+
+- name: Include python packages
+  include_role: 
+    name: geerlingguy.pip
