@@ -2,6 +2,15 @@
 - 
   name: Ubuntu Desktop Configuration
   hosts: localhost
+  vars:
+    - login_shell: /usr/local/bin/zsh
+    - dotfiles: jonaylor89/dotfiles
+  pre_tasks:
+    - name: Pull Configurations
+      file: 
+        path: '{{ ansible_env.HOME }}/Repos'
+        state: directory
+    # Create ssh keys for github
   tasks:
       - name: Install apt packages
         include_role:
@@ -15,10 +24,47 @@
         include_role:
           name: rust
 
+      - name: Python Package Manager
+        include_role:
+          name: pip
+
       - name: install starship.rs
         shell: curl -fsSL https://starship.rs/install.sh | bash
         args:
           warn: false
 
         
+      - name: Install oh-my-zsh
+        git: 
+          repo: https://github.com/robbyrussell/oh-my-zsh.git 
+          dest: '{{ ansible_env.HOME }}/.local/share/oh-my-zsh'
+          update: yes
+
+      - name: Install oh-my-fish
+        git: 
+          repo: https://github.com/oh-my-fish/oh-my-fish.git 
+          dest: '{{ ansible_env.HOME }}/.local/share/omf'
+          update: yes
+
+      - name: Install tmux plugin manager
+        git: 
+          repo: https://github.com/tmux-plugins/tpm.git 
+          dest: '{{ ansible_env.HOME }}/.local/share/tpm'
+          update: yes
+
+      - name: Install dein.vim
+        git: 
+          repo: https://github.com/Shougo/dein.vim.git 
+          dest: '{{ ansible_env.HOME }}/.cache/dein/repos/github.com/Shougo/dein.vim'
+          update: yes
             
+      - name: check if preferred login_shell is installed
+        stat: path={{ login_shell }}
+        register: login_shell_installed
+
+      - name: Set default shell
+        user: 
+          name: "{{ ansible_user_id }}" 
+          shell: "{{ login_shell }}"
+        when: login_shell_installed.stat.exists
+        become: yes
