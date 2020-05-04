@@ -1,13 +1,13 @@
 commands =
-  space: 'echo "$(~/bin/spaces.sh)"'
-  focus: 'echo "$(~/bin/switcher.py 2>/dev/null)"'
+  space: 'echo "$(./amar-bar.widget/scripts/spaces.sh)"'
+  focus: 'echo "$(./amar-bar.widget/scripts/switcher.sh 2>/dev/null)"'
 
 command: "echo " +
   "$(#{ commands.space }):::" +
   "$(#{ commands.focus })"
 
 # original (singular) command:
-command: 'echo "$(~/bin/spaces.sh)"'
+#command: 'echo "$(./amar-bar.widget/scripts/spaces.sh)"'
 
 refreshFrequency: 1000 # ms
 
