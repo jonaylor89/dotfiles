@@ -1,8 +1,0 @@
-
-homebrew_installed_packages: 
-  - 'chunkwm'
-  - 'skhd'
-
-homebrew_taps:
- - koekeishiya/formulae 
- - crisidev/chunkwm
