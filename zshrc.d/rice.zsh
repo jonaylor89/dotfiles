@@ -3,3 +3,5 @@
 if command -v wal &> /dev/null; then
     wal -q -i "$HOME/Pictures/wallpaper.png" -n
 fi
+
+eval "$(starship init zsh)"
