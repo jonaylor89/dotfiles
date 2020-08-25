@@ -40,6 +40,8 @@ window:
   #     - buttonless: Title bar, transparent background, but no title bar buttons
   decorations: none
 
+  dynamic_title: true
+
 # When true, bold text is drawn using the bright variant of colors.
 draw_bold_text_with_bright_colors: true
 
@@ -82,7 +84,7 @@ font:
     # style: Italic
 
   # Point size of the font
-  size: 14.0
+  size: 18.0
 
   # Offset is the extra space around each character. offset.y can be thought of
   # as modifying the linespacing, and offset.x as modifying the letter spacing.
@@ -244,7 +246,7 @@ colors:
 #
 # To completely disable the visual bell, set its duration to 0.
 #
-visual_bell:
+bell:
   animation: EaseOutExpo
   duration: 0
 
@@ -292,8 +294,6 @@ mouse:
 
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
-
-dynamic_title: true
 
 cursor:
   # Whether the cursor should be a hollow block on window focus loss

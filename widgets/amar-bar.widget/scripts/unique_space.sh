@@ -10,11 +10,13 @@ declare -a FILES=(wp sequences colors.sh colors.css colors.json)
 _space_id () {
     # (macOS)
 	# prefer newer wm
+  if /usr/local/bin/yabai -m query --spaces --space | jq .index 2>/dev/null; then
     if /usr/local/bin/chunkc tiling::query --desktop id 2>/dev/null; then
         if /usr/local/bin/kwmc query space active id 2>/dev/null; then
             echo 1
         fi
     fi
+  fi
 }
 
 _run_wal () {
@@ -73,7 +75,7 @@ change_wallpaper () {
 
     SPACE=$(_space_id)
 	(_run_wal "$FILE" && _cache $SPACE $FILE) >/dev/null 2>&1 &
-	osascript -e "tell application \"Finder\" to set desktop picture to POSIX file \"$FILE\""
+	# osascript -e "tell application \"Finder\" to set desktop picture to POSIX file \"$FILE\""
 }
 
 new_terminal () {

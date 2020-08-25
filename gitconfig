@@ -6,6 +6,12 @@
 [github]
   user = jonaylor89
 
+# [url "ssh://git@github.com/"]
+#   insteadOf = https://github.com/
+
+[url "ssh://git@gitlab.com/"]
+	insteadOf = https://gitlab.com/
+
 [alias]
   ci = commit
   cim = commit -m
@@ -35,3 +41,5 @@
 	required = true
 [diff "sopsdiffer"]
 	textconv = sops -d
+[pull]
+	rebase = false
