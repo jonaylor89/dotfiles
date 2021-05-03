@@ -37,6 +37,8 @@ yabai -m rule --add app="^Zoom$" space=5
 
 # unmanaged windows
 yabai -m rule --add app="^System Preferences$" manage=off
+yabai -m rule --add app="^Systemeinstellungen$" manage=off
+yabai -m rule --add app="^Simulator$" manage=off
 yabai -m rule --add app="^JetBrains Toolbox$" manage=off
 
 echo "yabai configuration loaded.."

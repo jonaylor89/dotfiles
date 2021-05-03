@@ -19,8 +19,8 @@
 
   ps = push
   pl = pull
-  psom = push origin master
-  plom = pull --recurse-submodules origin master
+  psom = push origin main
+  plom = pull --recurse-submodules origin main
   pall = !git remote | xargs -L1 git push --all
   
   ru = remote update
@@ -43,3 +43,5 @@
 	textconv = sops -d
 [pull]
 	rebase = false
+[init]
+	defaultBranch = main
