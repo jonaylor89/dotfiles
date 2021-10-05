@@ -1,5 +1,9 @@
 # Don't print a new line at the start of the prompt
 add_newline = true
+scan_timeout = 10
+
+# Use custom format
+format = """$all"""
 
 # Replace the "❯" symbol
 [character]
@@ -10,6 +14,23 @@ error_symbol = "✗"
 [package]
 symbol = " "
 disabled = true
+
+[hostname]
+ssh_only = false
+prefix = "⟪"
+suffix = "⟫"
+disabled = true
+
+[battery]
+full_symbol = ""
+charging_symbol = ""
+discharging_symbol = ""
+
+[gcloud]
+format = ""
+
+[aws]
+format = ""
 
 [git_branch]
 symbol = " "

@@ -1,6 +1,6 @@
 
 # All path locations
-export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$HOME/go/bin:$HOME/.cargo/bin:$HOME/flutter/bin:$HOME/Library/Python/3.9/bin:$HOME/google-cloud-sdk/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$HOME/go/bin:$HOME/.cargo/bin:$HOME/flutter/bin:$HOME/Library/Python/3.9/bin:$HOME/google-cloud-sdk/bin:$HOME/.pub-cache/bin:$PATH
 
 # Path to your oh-my-zsh installation.  
 export ZSH=$HOME/.oh-my-zsh
@@ -17,8 +17,8 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 export FZF_DEFAULT_COMMAND='fd'
 
 # The next line updates PATH for the Google Cloud SDK
-if [ -f "$HOME/Downloads/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/path.zsh.inc"; fi
+if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc"; fi
+if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
