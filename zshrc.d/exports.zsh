@@ -1,6 +1,6 @@
 
 # All path locations
-export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$HOME/go/bin:$HOME/.cargo/bin:$HOME/flutter/bin:$HOME/Library/Python/3.9/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$HOME/go/bin:$HOME/.cargo/bin:$HOME/flutter/bin:$HOME/Library/Python/3.9/bin:$HOME/.pub-cache/bin:$PATH
 
 # Path to your oh-my-zsh installation.  
 export ZSH=$HOME/.oh-my-zsh

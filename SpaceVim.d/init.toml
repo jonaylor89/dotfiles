@@ -60,7 +60,4 @@ auto_fix = true
 name = "lang#swift"
 
 [[custom_plugins]]
-name = 'wakatime/vim-wakatime'
-
-[[custom_plugins]]
 name = "ctrlpvim/ctrlp.vim"

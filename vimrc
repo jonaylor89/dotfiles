@@ -5,15 +5,15 @@ if &compatible
 endif
 
 " Required:
-set runtimepath+=/home/johannes/.cache/dein/repos/github.com/Shougo/dein.vim
+set runtimepath+=/Users/johannes/.cache/dein/repos/github.com/Shougo/dein.vim
 
 " Required:
-if dein#load_state('/home/johannes/.cache/dein')
-  call dein#begin('/home/johannes/.cache/dein')
+if dein#load_state('/Users/johannes/.cache/dein')
+  call dein#begin('/Users/johannes/.cache/dein')
 
   " Let dein manage dein
   " Required:
-  call dein#add('/home/johannes/.cache/dein/repos/github.com/Shougo/dein.vim')
+  call dein#add('/Users/johannes/.cache/dein/repos/github.com/Shougo/dein.vim')
 
   " Add or remove your plugins here like this:
   "call dein#add('Shougo/neosnippet.vim')
@@ -121,7 +121,7 @@ let g:VtrClearEmptyLines = 0
 let g:VtrAppendNewline = 1
 
 let g:completor_python_binary = '/usr/bin/python3'
-let g:completor_racer_binary = '/home/johannes/.cargo/bin/racer'
+let g:completor_racer_binary = '/Users/johannes/.cargo/bin/racer'
 let g:completor_clang_binary = '/usr/bin/clang'
 let g:completor_auto_trigger = 0
 

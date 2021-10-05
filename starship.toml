@@ -1,11 +1,15 @@
 # Don't print a new line at the start of the prompt
 add_newline = true
+scan_timeout = 10
+
+# Use custom format
+format = """$all"""
 
 # Replace the "❯" symbol
 [character]
 # symbol = "➜"
 error_symbol = "✗"
-use_symbol_for_status = true
+# use_symbol_for_status = true
 
 # Disable the package module, hiding it from the prompt completely
 [package]
@@ -18,27 +22,16 @@ prefix = "⟪"
 suffix = "⟫"
 disabled = true
 
-[kubernetes]
-symbol = "⛵ "
-style = "dimmed green"
-disabled = false
-
-[aws]
-style = "bold blue"
-symbol = " "
-displayed_items = "region"
-disabled = true
-[aws.region_aliases]
-ap-southeast-2 = "au"
-us-east-1 = "va"
-
 [battery]
 full_symbol = ""
 charging_symbol = ""
 discharging_symbol = ""
 
-[conda]
-symbol = " "
+[gcloud]
+format = ""
+
+[aws]
+format = ""
 
 [git_branch]
 symbol = " "

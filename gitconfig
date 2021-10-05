@@ -20,7 +20,9 @@
   ps = push
   pl = pull
   psom = push origin main
+  psod = push origin dev
   plom = pull --recurse-submodules origin main
+  plod = pull --recurse-submodules origin dev
   pall = !git remote | xargs -L1 git push --all
   
   ru = remote update
@@ -32,6 +34,7 @@
   tree = log --graph --decorate --pretty=oneline --abbrev-commit
   
   rinit = !sh -c "remote_and_mirror"
+	squash-all = "!f(){ git reset $(git commit-tree HEAD^{tree} -m \"${1:-A new start}\");};f"
 
     
 [filter "lfs"]
