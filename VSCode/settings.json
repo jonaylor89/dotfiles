@@ -2,8 +2,7 @@
     "telemetry.enableTelemetry": false,
     "telemetry.enableCrashReporter": false,
     "files.autoSave": "afterDelay",
-    "workbench.iconTheme": "material-icon-theme",
-    "workbench.colorTheme": "Community Material Theme Palenight High Contrast",
+    "workbench.colorTheme": "Material Theme Ocean",
     "vim.insertModeKeyBindings": [
         {
             "before": ["j", "k"],
@@ -17,7 +16,6 @@
     "terminal.integrated.cursorStyle": "line",
     "terminal.integrated.fontFamily": "Anonymice Nerd Font Mono",
     "terminal.integrated.fontWeightBold": "normal",
-    "window.zoomLevel": 0,
     "python.jediEnabled": false,
     "python.languageServer": "microsoft",
     "editor.suggestSelection": "first",
@@ -54,7 +52,7 @@
     "[yaml]": {
         "editor.defaultFormatter": "redhat.vscode-yaml"
     },
-    "editor.fontFamily": "JetBrains Mono",
+    "editor.fontFamily": "JetBrains Mono NL",
     "rust.mode": "legacy",
     "wal.tokenColorTheme": "Material Theme Ocean High Contrast",
     "[css]": {
@@ -65,4 +63,5 @@
     },
     "terminal.external.linuxExec": "alacritty",
     "terminal.integrated.shell.linux": "/usr/bin/zsh",
+    "workbench.iconTheme": "material-icon-theme",
 }

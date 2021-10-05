@@ -112,6 +112,7 @@ colorscheme wal
 
 let python_highlight_all=1
 let NERDTreeIgnore=['\.pyc$', '\~$', '\.out$', 'node_modules$', '__pycache__$']
+let g:snipMate = { 'snippet_version' : 1 }
 let g:rustfmt_autosave=1
 let g:airline_theme='murmur'
 let g:airline_powerline_fonts=1
