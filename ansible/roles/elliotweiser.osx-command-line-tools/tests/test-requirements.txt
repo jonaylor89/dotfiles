@@ -33,7 +33,7 @@ mccabe==0.6.1
 molecule==2.19.0
 monotonic==1.5
 more-itertools==5.0.0
-paramiko==2.4.2
+paramiko==2.10.1
 pathlib2==2.3.3
 pathspec==0.5.9
 pbr==4.1.0
