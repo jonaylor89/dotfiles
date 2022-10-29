@@ -1,8 +1,7 @@
 {
-    "telemetry.enableTelemetry": false,
-    "telemetry.enableCrashReporter": false,
+    "telemetry.telemetryLevel": "off",
     "files.autoSave": "afterDelay",
-    "workbench.colorTheme": "Material Theme Ocean",
+    "workbench.colorTheme": "Community Material Theme Palenight High Contrast",
     "vim.insertModeKeyBindings": [
         {
             "before": ["j", "k"],
@@ -16,52 +15,67 @@
     "terminal.integrated.cursorStyle": "line",
     "terminal.integrated.fontFamily": "Anonymice Nerd Font Mono",
     "terminal.integrated.fontWeightBold": "normal",
-    "python.jediEnabled": false,
-    "python.languageServer": "microsoft",
     "editor.suggestSelection": "first",
-    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-    "python.formatting.provider": "black",
-    "python.linting.mypyEnabled": true,
     "workbench.activityBar.visible": true,
-    "window.menuBarVisibility": "default",
     "editor.minimap.enabled": true,
     "terminal.integrated.fontSize": 16,
-    "python.insidersChannel": "off",
     "git.autofetch": true,
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "gitlens.advanced.messages": {
-        "suppressLineUncommittedWarning": true
+
     },
     "[json]": {
-        "editor.defaultFormatter": "HookyQR.beautify"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "go.formatTool": "goimports",
-    "go.useLanguageServer": true,
-    "eslint.autoFixOnSave": true,
     "eslint.alwaysShowStatus": true,
     "eslint.packageManager": "yarn",
     "merge-conflict.autoNavigateNextConflict.enabled": true,
     "python.testing.pytestEnabled": true,
     "vim.highlightedyank.enable": true,
-    "yaml.format.enable": true,
     "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "editor.fontFamily": "Dank Mono",
+    "editor.codeActionsOnSave": [
+        "source.formatDocument",
+        "source.fixAll.eslint"
+    ],
+    "terminal.external.linuxExec": "alacritty",
+    "workbench.startupEditor": "none",
+    "vim.vimrc.enable": true,
+    "todohighlight.isEnable": true,
+    "editor.inlineSuggest.enabled": true,
+    "editor.foldingImportsByDefault": true,
+    "vim.foldfix": true,
+    "files.associations": {
+        ".env": "shellscript"
+    },
+    "workbench.iconTheme": "material-icon-theme",
+    "window.commandCenter": true,
+    "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "[yaml]": {
-        "editor.defaultFormatter": "redhat.vscode-yaml"
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "editor.fontFamily": "JetBrains Mono NL",
-    "rust.mode": "legacy",
-    "wal.tokenColorTheme": "Material Theme Ocean High Contrast",
-    "[css]": {
-        "editor.defaultFormatter": "HookyQR.beautify"
+    "vsicons.dontShowNewVersionMessage": true,
+    "editor.stickyScroll.enabled": true,
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
+    "[dart]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.rulers": [
+            80
+        ],
+        "editor.selectionHighlight": false,
+        "editor.suggest.snippetsPreventQuickSuggestions": false,
+        "editor.suggestSelection": "first",
+        "editor.tabCompletion": "onlySnippets",
+        "editor.wordBasedSuggestions": false
     },
-    "terminal.external.linuxExec": "alacritty",
-    "terminal.integrated.shell.linux": "/usr/bin/zsh",
-    "workbench.iconTheme": "material-icon-theme",
+    "githubPullRequests.pullBranch": "never",
+    // "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+    // "githubPullRequests.pullBranch": "never",
 }

@@ -43,12 +43,10 @@
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  vi-mode
   sudo
   web-search
   zsh-autosuggestions
   zsh-syntax-highlighting
-  zsh-z
 )
 
 source $ZSH/oh-my-zsh.sh
