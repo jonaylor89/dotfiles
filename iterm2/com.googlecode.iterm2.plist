@@ -6,14 +6,6 @@
 	<true/>
 	<key>AlternateMouseScroll</key>
 	<true/>
-	<key>AppleAntiAliasingThreshold</key>
-	<integer>1</integer>
-	<key>AppleScrollAnimationEnabled</key>
-	<integer>0</integer>
-	<key>AppleSmoothFixedFontsSizeThreshold</key>
-	<integer>1</integer>
-	<key>AppleWindowTabbingMode</key>
-	<string>manual</string>
 	<key>Default Bookmark Guid</key>
 	<string>B863C4D7-6FD7-45DE-9DA6-FD717858EF12</string>
 	<key>DisableFullscreenTransparency</key>
@@ -21,6 +13,8 @@
 	<key>EnableDivisionView</key>
 	<false/>
 	<key>EnableRendezvous</key>
+	<false/>
+	<key>HapticFeedbackForEsc</key>
 	<false/>
 	<key>HideMenuBarInFullscreen</key>
 	<true/>
@@ -34,103 +28,6 @@
 	<integer>4</integer>
 	<key>JobName</key>
 	<false/>
-	<key>LoadPrefsFromCustomFolder</key>
-	<true/>
-	<key>NSNavLastRootDirectory</key>
-	<string>~/Repos/dotfiles</string>
-	<key>NSNavPanelExpandedSizeForOpenMode</key>
-	<string>{712, 448}</string>
-	<key>NSQuotedKeystrokeBinding</key>
-	<string></string>
-	<key>NSRepeatCountBinding</key>
-	<string></string>
-	<key>NSScrollAnimationEnabled</key>
-	<false/>
-	<key>NSScrollViewShouldScrollUnderTitlebar</key>
-	<false/>
-	<key>NSTableView Columns v2 KeyBingingTable</key>
-	<data>
-	YnBsaXN0MDDUAQIDBAUGNjdYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
-	AAGGoK4HCA8aGxwdHh8gJjAxMlUkbnVsbNIJCgsOWk5TLm9iamVjdHNWJGNsYXNzogwN
-	gAKACoAN0xAJChEVGVdOUy5rZXlzoxITFIADgASABaMWFxiABoAHgAiACVpJZGVudGlm
-	aWVyVVdpZHRoVkhpZGRlblEwI0BowAAAAAAACNIhIiMkWiRjbGFzc25hbWVYJGNsYXNz
-	ZXNcTlNEaWN0aW9uYXJ5oiMlWE5TT2JqZWN00xAJCicrGaMSExSAA4AEgAWjLC0YgAuA
-	DIAIgAlRMSNAdKGdsi0OVtIhIjM0Xk5TTXV0YWJsZUFycmF5ozM1JVdOU0FycmF5XxAP
-	TlNLZXllZEFyY2hpdmVy0Tg5VUFycmF5gAEACAARABoAIwAtADIANwBGAEwAUQBcAGMA
-	ZgBoAGoAbABzAHsAfwCBAIMAhQCJAIsAjQCPAJEAnACiAKkAqwC0ALUAugDFAM4A2wDe
-	AOcA7gDyAPQA9gD4APwA/gEAAQIBBAEGAQ8BFAEjAScBLwFBAUQBSgAAAAAAAAIBAAAA
-	AAAAADoAAAAAAAAAAAAAAAAAAAFM
-	</data>
-	<key>NSTableView Sort Ordering v2 KeyBingingTable</key>
-	<data>
-	YnBsaXN0MDDUAQIDBAUGFBVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
-	AAGGoKMHCA1VJG51bGzSCQoLDFpOUy5vYmplY3RzViRjbGFzc6CAAtIODxARWiRjbGFz
-	c25hbWVYJGNsYXNzZXNeTlNNdXRhYmxlQXJyYXmjEBITV05TQXJyYXlYTlNPYmplY3Rf
-	EA9OU0tleWVkQXJjaGl2ZXLRFhdVQXJyYXmAAQgRGiMtMjc7QUZRWFlbYGt0g4ePmKqt
-	swAAAAAAAAEBAAAAAAAAABgAAAAAAAAAAAAAAAAAAAC1
-	</data>
-	<key>NSTableView Supports v2 KeyBingingTable</key>
-	<true/>
-	<key>NSWindow Frame NSFontPanel</key>
-	<string>689 224 445 77 0 0 1440 900 </string>
-	<key>NSWindow Frame SUUpdateAlert</key>
-	<string>410 378 620 392 0 0 1440 878 </string>
-	<key>NSWindow Frame SharedPreferences</key>
-	<string>259 283 796 486 0 0 1440 900 </string>
-	<key>NSWindow Frame UKCrashReporter</key>
-	<string>725 20 695 840 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 0</key>
-	<string>20 24 1400 832 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 1</key>
-	<string>20 24 1400 832 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 10</key>
-	<string>1025 756 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 11</key>
-	<string>992 638 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 12</key>
-	<string>666 550 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 13</key>
-	<string>1067 350 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 14</key>
-	<string>974 446 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 15</key>
-	<string>1047 485 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 16</key>
-	<string>1073 571 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 17</key>
-	<string>545 664 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 18</key>
-	<string>377 581 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 19</key>
-	<string>767 377 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 2</key>
-	<string>727 24 690 832 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 20</key>
-	<string>407 697 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 21</key>
-	<string>994 278 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 22</key>
-	<string>372 642 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 23</key>
-	<string>40 259 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 24</key>
-	<string>1379 689 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 25</key>
-	<string>340 520 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 3</key>
-	<string>22 452 690 400 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 4</key>
-	<string>727 24 690 832 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 5</key>
-	<string>727 24 690 832 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 6</key>
-	<string>1134 621 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 7</key>
-	<string>1134 621 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 8</key>
-	<string>1384 525 0 0 0 0 1440 900 </string>
-	<key>NSWindow Frame iTerm Window 9</key>
-	<string>1025 756 0 0 0 0 1440 900 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -295,12 +192,16 @@
 			</dict>
 			<key>Background Image Location</key>
 			<string></string>
+			<key>Blend</key>
+			<real>0.49989243659420296</real>
 			<key>Blink Allowed</key>
 			<true/>
 			<key>Blinking Cursor</key>
 			<false/>
 			<key>Blur</key>
 			<true/>
+			<key>Blur Radius</key>
+			<real>18.670719747340428</real>
 			<key>Bold Color</key>
 			<dict>
 				<key>Blue Component</key>
@@ -672,7 +573,9 @@
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>AnonymiceNerdFontCompleteM- 18</string>
+			<string>Menlo-Regular 11</string>
+			<key>Open Toolbelt</key>
+			<false/>
 			<key>Option Key Sends</key>
 			<integer>0</integer>
 			<key>Prompt Before Closing 2</key>
@@ -720,7 +623,7 @@
 			<key>Terminal Type</key>
 			<string>xterm-256color</string>
 			<key>Transparency</key>
-			<real>0.16710818527918783</real>
+			<real>0.73706330496003891</real>
 			<key>Unlimited Scrollback</key>
 			<false/>
 			<key>Use Bold Font</key>
@@ -743,16 +646,6 @@
 			<string>/Users/johannes</string>
 		</dict>
 	</array>
-	<key>NoSyncHaveRequestedFullDiskAccess</key>
-	<true/>
-	<key>NoSyncHaveWarnedAboutPasteConfirmationChange</key>
-	<true/>
-	<key>NoSyncInstallationId</key>
-	<string>125AB423-5E7E-434B-84F9-60344C00E0EE</string>
-	<key>NoSyncPermissionToShowTip</key>
-	<false/>
-	<key>NoSyncTimeOfFirstLaunchOfVersionWithTip</key>
-	<real>556580012.37237597</real>
 	<key>OnlyWhenMoreTabs</key>
 	<false/>
 	<key>PointerActions</key>
@@ -788,25 +681,11 @@
 			<string>kNextWindowPointerAction</string>
 		</dict>
 	</dict>
-	<key>PrefsCustomFolder</key>
-	<string>/Users/johannes/Repos/dotfiles/iterm2</string>
 	<key>PromptOnQuit</key>
 	<false/>
-	<key>SUAutomaticallyUpdate</key>
-	<true/>
-	<key>SUEnableAutomaticChecks</key>
-	<true/>
-	<key>SUFeedAlternateAppNameKey</key>
-	<string>iTerm</string>
-	<key>SUFeedURL</key>
-	<string>https://iterm2.com/appcasts/final.xml?shard=6</string>
-	<key>SUHasLaunchedBefore</key>
-	<true/>
-	<key>SULastCheckTime</key>
-	<date>2019-06-01T15:22:26Z</date>
-	<key>SUSendProfileInfo</key>
-	<false/>
 	<key>ShowPaneTitles</key>
+	<false/>
+	<key>SoundForEsc</key>
 	<false/>
 	<key>TabStyle</key>
 	<integer>1</integer>
@@ -814,23 +693,19 @@
 	<integer>1</integer>
 	<key>TabViewType</key>
 	<integer>0</integer>
-	<key>UKCrashReporterLastCrashReportDate</key>
-	<real>1557328640</real>
 	<key>URLHandlersByGuid</key>
 	<dict/>
 	<key>UseBorder</key>
+	<false/>
+	<key>VisualIndicatorForEsc</key>
 	<false/>
 	<key>WindowNumber</key>
 	<false/>
 	<key>WordCharacters</key>
 	<string>/-+\~_.</string>
-	<key>iTerm Version</key>
-	<string>3.2.9</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>0</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>
 	<false/>
-	<key>moveToApplicationsFolderAlertSuppress</key>
-	<true/>
 </dict>
 </plist>

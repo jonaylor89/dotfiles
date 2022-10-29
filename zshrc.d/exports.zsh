@@ -2,6 +2,8 @@
 # All path locations
 export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$HOME/go/bin:$HOME/.cargo/bin:$HOME/flutter/bin:$HOME/Library/Python/3.9/bin:$HOME/google-cloud-sdk/bin:$HOME/.pub-cache/bin:$PATH
 
+export PATH=$PATH:/Users/johannes/.spicetify
+
 # Path to your oh-my-zsh installation.  
 export ZSH=$HOME/.oh-my-zsh
 
@@ -22,3 +24,10 @@ if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export PROTOCOL_DIR=$HOME/Repos/audius-protocol
+
+export LOGNAME=ubuntu

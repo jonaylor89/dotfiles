@@ -22,6 +22,9 @@ window:
     columns: 75
     lines: 25
 
+
+  opacity: 0.75
+
   # Adds this many blank pixels of padding around the window
   # Units are physical pixels; this is not DPI aware.
   # (change requires restart)
@@ -250,7 +253,6 @@ bell:
   duration: 0
 
 # Background opacity
-background_opacity: 0.75
 
 # Mouse bindings
 #
