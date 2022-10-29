@@ -2,6 +2,8 @@
 # All path locations
 export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$HOME/go/bin:$HOME/.cargo/bin:$HOME/flutter/bin:$HOME/Library/Python/3.9/bin:$HOME/google-cloud-sdk/bin:$HOME/.pub-cache/bin:$PATH
 
+export PATH=$PATH:/opt/homebrew/bin
+
 export PATH=$PATH:/Users/johannes/.spicetify
 
 # Path to your oh-my-zsh installation.  
