@@ -2,6 +2,13 @@ local dap = require'dap'
 local dap_go = require'dap-go'
 local dap_ui = require'dapui'
 
+dap.adapters.lldb = {
+  type = 'executable',
+  command = '/usr/bin/lldb', -- adjust as needed, must be absolute path
+  name = 'lldb'
+}
+dap.configurations.rust = dap.configurations.lldb
+
 vim.keymap.set("n", "<F1>", function() dap.step_into() end)
 vim.keymap.set("n", "<F2>", function() dap.step_over() end)
 vim.keymap.set("n", "<F3>", function() dap.step_out() end)

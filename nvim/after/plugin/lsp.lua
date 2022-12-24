@@ -1,4 +1,5 @@
 local lsp = require('lsp-zero')
+local rt = require("rust-tools")
 
 lsp.preset('recommended')
 
@@ -7,7 +8,7 @@ lsp.ensure_installed({
 	'eslint',
 	'sumneko_lua',
 	'rust_analyzer',
-    'gopls',
+  'gopls',
 })
 
 lsp.on_attach(function(client, bufnr)
@@ -26,4 +27,33 @@ lsp.on_attach(function(client, bufnr)
 	vim.keymap.set("n", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
 end)
 
+local rust_lsp = lsp.build_options('rust_analyzer', {})
+
 lsp.setup()
+
+-- Initialize rust_analyzer with rust-tools
+rt.setup({ server = rust_lsp })
+
+rt.setup({
+  server = {
+    on_attach = function(_, bufnr)
+      -- Hover actions
+      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+      -- Code action groups
+      vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+    end,
+  },
+})
+
+require("flutter-tools").setup{
+  lsp = {
+    color = { -- show the derived colours for dart variables
+      enabled = true, -- whether or not to highlight color variables at all, only supported on flutter >= 2.10
+      background = true, -- highlight the background
+      foreground = false, -- highlight the foreground
+      virtual_text = true, -- show the highlight using virtual text
+      virtual_text_str = "■", -- the virtual text character to highlight
+    },
+  }
+} -- use defaults
+
