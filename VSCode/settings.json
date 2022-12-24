@@ -76,6 +76,7 @@
         "editor.wordBasedSuggestions": false
     },
     "githubPullRequests.pullBranch": "never",
+    "window.zoomLevel": 1,
     // "typescript.tsserver.experimental.enableProjectDiagnostics": true,
     // "githubPullRequests.pullBranch": "never",
 }

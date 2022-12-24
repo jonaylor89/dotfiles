@@ -33,6 +33,8 @@ yabai -m rule --add app="^System Preferences$" manage=off
 yabai -m rule --add app="^Systemeinstellungen$" manage=off
 yabai -m rule --add app="^Simulator$" manage=off
 yabai -m rule --add app="^JetBrains Toolbox$" manage=off
+yabai -m rule --add app="^Neat$" manage=off
+yabai -m rule --add app="^FaceTime$" manage=off
 
 echo "yabai configuration loaded.."
 
