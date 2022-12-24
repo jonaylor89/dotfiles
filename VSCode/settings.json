@@ -21,7 +21,7 @@
     "terminal.integrated.fontSize": 16,
     "git.autofetch": true,
     "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "vscode.typescript-language-features"
 
     },
     "[json]": {
@@ -53,10 +53,10 @@
     "workbench.iconTheme": "material-icon-theme",
     "window.commandCenter": true,
     "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "vsicons.dontShowNewVersionMessage": true,
     "editor.stickyScroll.enabled": true,
@@ -75,7 +75,8 @@
         "editor.tabCompletion": "onlySnippets",
         "editor.wordBasedSuggestions": false
     },
-    "githubPullRequests.pullBranch": "never",
+    "rust-analyzer.trace.extension": true,
+    "typescript.updateImportsOnFileMove.enabled": "always"
     // "typescript.tsserver.experimental.enableProjectDiagnostics": true,
     // "githubPullRequests.pullBranch": "never",
 }

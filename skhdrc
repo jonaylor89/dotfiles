@@ -128,8 +128,6 @@ alt - y : yabai -m space --mirror y-axis
 alt - x : yabai -m space --mirror x-axis
 
 # toggle desktop offset
-alt - a : yabai -m space --toggle padding; yabai -m space --toggle gap
-
 # toggle window parent zoom
 alt - d : yabai -m window --toggle zoom-parent
 
@@ -143,7 +141,7 @@ shift + alt - f : yabai -m window --toggle native-fullscreen
 shift + alt - b : yabai -m window --toggle border
 
 # toggle window split type
-alt - e : yabai -m window --toggle split
+alt - l : yabai -m window --toggle split
 
 # float / unfloat window and center on screen
 alt - t : yabai -m window --toggle float;\

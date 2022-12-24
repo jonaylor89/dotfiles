@@ -1,0 +1,51 @@
+{
+ "collection_info": {
+  "namespace": "geerlingguy",
+  "name": "mac",
+  "version": "2.1.1",
+  "authors": [
+   "geerlingguy"
+  ],
+  "readme": "README.md",
+  "tags": [
+   "mac",
+   "macos",
+   "osx",
+   "homebrew",
+   "brew",
+   "workstation",
+   "dev",
+   "mas",
+   "appstore",
+   "apps",
+   "configure",
+   "development",
+   "apple",
+   "ios",
+   "macbook",
+   "imac",
+   "macmini",
+   "server"
+  ],
+  "description": "Collection of macOS automation tools for Ansible.",
+  "license": [
+   "MIT"
+  ],
+  "license_file": null,
+  "dependencies": {
+   "community.general": ">=3.0.0"
+  },
+  "repository": "https://github.com/geerlingguy/ansible-collection-mac",
+  "documentation": "https://github.com/geerlingguy/ansible-collection-mac",
+  "homepage": "https://www.jeffgeerling.com",
+  "issues": "https://github.com/geerlingguy/ansible-collection-mac/issues"
+ },
+ "file_manifest_file": {
+  "name": "FILES.json",
+  "ftype": "file",
+  "chksum_type": "sha256",
+  "chksum_sha256": "50ccdc11cb4d98c8bf0158b485742c61d1fec7e374f238173b30657ac646a88b",
+  "format": 1
+ },
+ "format": 1
+}

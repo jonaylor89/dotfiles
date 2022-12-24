@@ -5,6 +5,7 @@ export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$HOME/go/bin:$HOME/.cargo/
 export PATH=$PATH:/opt/homebrew/bin
 
 export PATH=$PATH:/Users/johannes/.spicetify
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 # Path to your oh-my-zsh installation.  
 export ZSH=$HOME/.oh-my-zsh
