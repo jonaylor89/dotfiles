@@ -144,8 +144,8 @@ nnoremap <S-Down> <C-E>
 
 " Insert mode mappings ----------------------{{{
 inoremap jk <esc>
-inoremap ( ()<left>
-inoremap { {}<left>
+" inoremap ( ()<left>
+" inoremap { {}<left>
 
 " Use TAB to complete when typing words, else inserts TABs as usual.  Uses
 " dictionary, source files, and completor to find matching words to complete.

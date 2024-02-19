@@ -1,14 +1,12 @@
 {
     "telemetry.telemetryLevel": "off",
     "files.autoSave": "afterDelay",
-    "workbench.colorTheme": "Community Material Theme Palenight High Contrast",
     "vim.insertModeKeyBindings": [
         {
             "before": ["j", "k"],
             "after": ["<Esc>"]
         }
     ],
-    "editor.fontSize": 14,
     "editor.fontLigatures": true,
     "git.enableSmartCommit": true,
     "terminal.external.osxExec": "Alacritty.app",
@@ -16,7 +14,6 @@
     "terminal.integrated.fontFamily": "Anonymice Nerd Font Mono",
     "terminal.integrated.fontWeightBold": "normal",
     "editor.suggestSelection": "first",
-    "workbench.activityBar.visible": true,
     "editor.minimap.enabled": true,
     "terminal.integrated.fontSize": 16,
     "git.autofetch": true,
@@ -25,7 +22,7 @@
 
     },
     "[json]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "vscode.json-language-features"
     },
     "eslint.alwaysShowStatus": true,
     "eslint.packageManager": "yarn",
@@ -35,7 +32,7 @@
     "[html]": {
         "editor.defaultFormatter": "vscode.html-language-features"
     },
-    "editor.fontFamily": "Dank Mono",
+    "editor.fontFamily": "Jetbrains Mono",
     "editor.codeActionsOnSave": [
         "source.formatDocument",
         "source.fixAll.eslint"
@@ -78,6 +75,16 @@
     "rust-analyzer.trace.extension": true,
     "typescript.updateImportsOnFileMove.enabled": "always",
     "githubPullRequests.pullBranch": "never",
+    "redhat.telemetry.enabled": false,
+    "workbench.colorTheme": "Material Theme Darker High Contrast",
+    "github.copilot.enable": {
+        "*": true,
+        "yaml": true,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false
+    },
+    "extensions.ignoreRecommendations": true,
     "window.zoomLevel": 1,
     // "typescript.tsserver.experimental.enableProjectDiagnostics": true,
     // "githubPullRequests.pullBranch": "never",

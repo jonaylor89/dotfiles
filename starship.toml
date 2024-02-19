@@ -26,8 +26,12 @@ full_symbol = ""
 charging_symbol = ""
 discharging_symbol = ""
 
+[docker_context]
+disabled = true
+
 [gcloud]
 format = ""
+disabled = true
 
 [aws]
 format = ""

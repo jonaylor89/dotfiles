@@ -5,9 +5,9 @@ alias tmuxconf="vim ~/.tmux.conf"
 alias vimrc="vim ~/.vimrc"
 
 # abbr
-alias la="exa -abghl --git"
-alias ll="exa -bghl --git"
-alias lt="exa --tree"
+alias la="eza -abghl --git"
+alias ll="eza -bghl --git"
+alias lt="eza --tree"
 alias cls="clear"
 alias rmd="rm -rf"
 alias r="ranger"
