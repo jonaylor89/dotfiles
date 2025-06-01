@@ -13,7 +13,7 @@ if [ -d $HOME/Repos/dotfiles/rc.d ]; then
   done
 fi
 
-if [ -e $HOME/.zshrc_local ]; then
+if [ -f $HOME/.zshrc_local ]; then
   source $HOME/.zshrc_local
 fi
 
@@ -36,21 +36,29 @@ if [ -f "$HOME/Repos/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/Repos
 ## [/Completion]
 
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/johannes/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/johannes/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/johannes/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/johannes/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /opt/homebrew/bin/terraform terraform
+
+. "$HOME/.cargo/env"
+
+# pnpm
+export PNPM_HOME="/Users/johannes/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+. "/Users/johannes/.deno/env"
+
+# Added by Windsurf
+export PATH="/Users/johannes/.codeium/windsurf/bin:$PATH"
+
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"

@@ -24,6 +24,8 @@
   plom = pull --recurse-submodules origin main
   plod = pull --recurse-submodules origin dev
   pall = !git remote | xargs -L1 git push --all
+
+  co = checkout
   
   ru = remote update
   ra = remote add
