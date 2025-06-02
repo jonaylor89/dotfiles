@@ -54,3 +54,6 @@ unset __conda_setup
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+. "/Users/johannes/.deno/env"
+# Added by Windsurf
+export PATH="/Users/johannes/.codeium/windsurf/bin:$PATH"
