@@ -13,12 +13,15 @@ import sys
 
 import yaml
 
-from voluptuous import All, Any, MultipleInvalid, PREVENT_EXTRA
-from voluptuous import Required, Schema, Invalid
+from voluptuous import Any, MultipleInvalid, PREVENT_EXTRA, Schema
 from voluptuous.humanize import humanize_error
 
 
 IGNORE_NO_MAINTAINERS = [
+    'docs/docsite/rst/filter_guide.rst',
+    'docs/docsite/rst/filter_guide_abstract_informations.rst',
+    'docs/docsite/rst/filter_guide_paths.rst',
+    'docs/docsite/rst/filter_guide_selecting_json_data.rst',
     'plugins/cache/memcached.py',
     'plugins/cache/redis.py',
     'plugins/callback/cgroup_memory_recap.py',
@@ -187,7 +190,7 @@ def main():
     try:
         for file, filedata in (botmeta.get('files') or {}).items():
             file = convert_macros(file, macros)
-            filedata = dict((k, convert_macros(v, macros)) for k, v in filedata.items())
+            filedata = {k: convert_macros(v, macros) for k, v in filedata.items()}
             files[file] = filedata
             for k, v in filedata.items():
                 if k in LIST_ENTRIES:
@@ -198,7 +201,7 @@ def main():
 
     # Scan all files
     unmatched = set(files)
-    for dirs in ('plugins', 'tests', 'changelogs'):
+    for dirs in ('docs/docsite/rst', 'plugins', 'tests', 'changelogs'):
         for dirpath, dirnames, filenames in os.walk(dirs):
             for file in sorted(filenames):
                 if file.endswith('.pyc'):

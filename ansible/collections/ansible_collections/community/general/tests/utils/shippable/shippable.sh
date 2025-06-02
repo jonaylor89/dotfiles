@@ -65,16 +65,7 @@ else
     retry pip install "https://github.com/ansible/ansible/archive/stable-${ansible_version}.tar.gz" --disable-pip-version-check
 fi
 
-if [ "${SHIPPABLE_BUILD_ID:-}" ]; then
-    export ANSIBLE_COLLECTIONS_PATHS="${HOME}/.ansible"
-    SHIPPABLE_RESULT_DIR="$(pwd)/shippable"
-    TEST_DIR="${ANSIBLE_COLLECTIONS_PATHS}/ansible_collections/community/general"
-    mkdir -p "${TEST_DIR}"
-    cp -aT "${SHIPPABLE_BUILD_DIR}" "${TEST_DIR}"
-    cd "${TEST_DIR}"
-else
-    export ANSIBLE_COLLECTIONS_PATHS="${PWD}/../../../"
-fi
+export ANSIBLE_COLLECTIONS_PATHS="${PWD}/../../../"
 
 if [ "${test}" == "sanity/extra" ]; then
     retry pip install junit-xml --disable-pip-version-check
@@ -85,18 +76,15 @@ if [ "${script}" != "sanity" ] || [ "${test}" == "sanity/extra" ]; then
     # Nothing further should be added to this list.
     # This is to prevent modules or plugins in this collection having a runtime dependency on other collections.
     retry git clone --depth=1 --single-branch https://github.com/ansible-collections/community.internal_test_tools.git "${ANSIBLE_COLLECTIONS_PATHS}/ansible_collections/community/internal_test_tools"
+    retry git clone --depth=1 --single-branch https://github.com/ansible-collections/community.docker.git "${ANSIBLE_COLLECTIONS_PATHS}/ansible_collections/community/docker"
     # NOTE: we're installing with git to work around Galaxy being a huge PITA (https://github.com/ansible/galaxy/issues/2429)
     # retry ansible-galaxy -vvv collection install community.internal_test_tools
 fi
 
 if [ "${script}" != "sanity" ] && [ "${script}" != "units" ] && [ "${test}" != "sanity/extra" ]; then
-    CRYPTO_BRANCH=main
-    if [ "${script}" == "linux" ] && [[ "${test}" =~ "ubuntu1604/" ]]; then
-        CRYPTO_BRANCH=stable-1
-    fi
     # To prevent Python dependencies on other collections only install other collections for integration tests
     retry git clone --depth=1 --single-branch https://github.com/ansible-collections/ansible.posix.git "${ANSIBLE_COLLECTIONS_PATHS}/ansible_collections/ansible/posix"
-    retry git clone --depth=1 --branch "${CRYPTO_BRANCH}" --single-branch https://github.com/ansible-collections/community.crypto.git "${ANSIBLE_COLLECTIONS_PATHS}/ansible_collections/community/crypto"
+    retry git clone --depth=1 --single-branch https://github.com/ansible-collections/community.crypto.git "${ANSIBLE_COLLECTIONS_PATHS}/ansible_collections/community/crypto"
     # NOTE: we're installing with git to work around Galaxy being a huge PITA (https://github.com/ansible/galaxy/issues/2429)
     # retry ansible-galaxy -vvv collection install ansible.posix
     # retry ansible-galaxy -vvv collection install community.crypto

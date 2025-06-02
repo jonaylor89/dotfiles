@@ -1,322 +1,319 @@
-# Copyright (c) 2018, Scott Buchanan <sbuchanan@ri.pn>
-# Copyright (c) 2016, Andrew Zenk <azenk@umn.edu> (test_lastpass.py used as starting point)
+# Copyright (c) 2022 Ansible Project
 # GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
+
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
+import operator
+import itertools
 import json
-import datetime
+import pytest
 
-try:
-    from urllib.parse import urlparse
-except ImportError:
-    from urlparse import urlparse
+from .onepassword_common import MOCK_ENTRIES
 
-from argparse import ArgumentParser
-
-
-from ansible_collections.community.general.tests.unit.compat import unittest
-from ansible_collections.community.general.tests.unit.compat.mock import patch
-from ansible.errors import AnsibleError
-from ansible_collections.community.general.plugins.lookup.onepassword import OnePass, LookupModule
-from ansible_collections.community.general.plugins.lookup.onepassword_raw import LookupModule as OnePasswordRawLookup
+from ansible.errors import AnsibleLookupError, AnsibleOptionsError
+from ansible.plugins.loader import lookup_loader
+from ansible_collections.community.general.plugins.lookup.onepassword import (
+    OnePassCLIv1,
+    OnePassCLIv2,
+)
 
 
-# Intentionally excludes metadata leaf nodes that would exist in real output if not relevant.
-MOCK_ENTRIES = [
-    {
-        'vault_name': 'Acme "Quot\'d" Servers',
-        'queries': [
-            '0123456789',
-            'Mock "Quot\'d" Server'
-        ],
-        'output': {
-            'uuid': '0123456789',
-            'vaultUuid': '2468',
-            'overview': {
-                'title': 'Mock "Quot\'d" Server'
-            },
-            'details': {
-                'sections': [{
-                    'title': '',
-                    'fields': [
-                        {'t': 'username', 'v': 'jamesbond'},
-                        {'t': 'password', 'v': 't0pS3cret'},
-                        {'t': 'notes', 'v': 'Test note with\nmultiple lines and trailing space.\n\n'},
-                        {'t': 'tricksy "quot\'d" field\\', 'v': '"quot\'d" value'}
-                    ]
-                }]
-            }
-        }
-    },
-    {
-        'vault_name': 'Acme Logins',
-        'queries': [
-            '9876543210',
-            'Mock Website',
-            'acme.com'
-        ],
-        'output': {
-            'uuid': '9876543210',
-            'vaultUuid': '1357',
-            'overview': {
-                'title': 'Mock Website',
-                'URLs': [
-                    {'l': 'website', 'u': 'https://acme.com/login'}
-                ]
-            },
-            'details': {
-                'sections': [{
-                    'title': '',
-                    'fields': [
-                        {'t': 'password', 'v': 't0pS3cret'}
-                    ]
-                }]
-            }
-        }
-    },
-    {
-        'vault_name': 'Acme Logins',
-        'queries': [
-            '864201357'
-        ],
-        'output': {
-            'uuid': '864201357',
-            'vaultUuid': '1357',
-            'overview': {
-                'title': 'Mock Something'
-            },
-            'details': {
-                'fields': [
-                    {
-                        'value': 'jbond@mi6.gov.uk',
-                        'name': 'emailAddress'
-                    },
-                    {
-                        'name': 'password',
-                        'value': 'vauxhall'
-                    },
-                    {},
-                ]
-            }
-        }
-    },
+OP_VERSION_FIXTURES = [
+    "opv1",
+    "opv2"
 ]
 
 
-def get_mock_query_generator(require_field=None):
-    def _process_field(field, section_title=None):
-        field_name = field.get('name', field.get('t', ''))
-        field_value = field.get('value', field.get('v', ''))
+@pytest.mark.parametrize(
+    ("args", "rc", "expected_call_args", "expected_call_kwargs", "expected"),
+    (
+        ([], 0, ["get", "account"], {"ignore_errors": True}, True,),
+        ([], 1, ["get", "account"], {"ignore_errors": True}, False,),
+        (["acme"], 1, ["get", "account", "--account", "acme.1password.com"], {"ignore_errors": True}, False,),
+    )
+)
+def test_assert_logged_in_v1(mocker, args, rc, expected_call_args, expected_call_kwargs, expected):
+    mocker.patch.object(OnePassCLIv1, "_run", return_value=[rc, "", ""])
 
-        if require_field is None or field_name == require_field:
-            return entry, query, section_title, field_name, field_value
+    op_cli = OnePassCLIv1(*args)
+    result = op_cli.assert_logged_in()
 
-    for entry in MOCK_ENTRIES:
-        for query in entry['queries']:
-            for field in entry['output']['details'].get('fields', []):
-                fixture = _process_field(field)
-                if fixture:
-                    yield fixture
-            for section in entry['output']['details'].get('sections', []):
-                for field in section['fields']:
-                    fixture = _process_field(field, section['title'])
-                    if fixture:
-                        yield fixture
+    op_cli._run.assert_called_with(expected_call_args, **expected_call_kwargs)
+    assert result == expected
 
 
-def get_one_mock_query(require_field=None):
-    generator = get_mock_query_generator(require_field)
-    return next(generator)
+def test_full_signin_v1(mocker):
+    mocker.patch.object(OnePassCLIv1, "_run", return_value=[0, "", ""])
+
+    op_cli = OnePassCLIv1(
+        subdomain="acme",
+        username="bob@acme.com",
+        secret_key="SECRET",
+        master_password="ONEKEYTORULETHEMALL",
+    )
+    result = op_cli.full_signin()
+
+    op_cli._run.assert_called_with([
+        "signin",
+        "acme.1password.com",
+        b"bob@acme.com",
+        b"SECRET",
+        "--raw",
+    ], command_input=b"ONEKEYTORULETHEMALL")
+    assert result == [0, "", ""]
 
 
-class MockOnePass(OnePass):
+@pytest.mark.parametrize(
+    ("args", "out", "expected_call_args", "expected_call_kwargs", "expected"),
+    (
+        ([], "list of accounts", ["account", "get"], {"ignore_errors": True}, True,),
+        (["acme"], "list of accounts", ["account", "get", "--account", "acme.1password.com"], {"ignore_errors": True}, True,),
+        ([], "", ["account", "list"], {}, False,),
+    )
+)
+def test_assert_logged_in_v2(mocker, args, out, expected_call_args, expected_call_kwargs, expected):
+    mocker.patch.object(OnePassCLIv2, "_run", return_value=[0, out, ""])
+    op_cli = OnePassCLIv2(*args)
+    result = op_cli.assert_logged_in()
 
-    _mock_logged_out = False
-    _mock_timed_out = False
-
-    def _lookup_mock_entry(self, key, vault=None):
-        for entry in MOCK_ENTRIES:
-            if vault is not None and vault.lower() != entry['vault_name'].lower() and vault.lower() != entry['output']['vaultUuid'].lower():
-                continue
-
-            match_fields = [
-                entry['output']['uuid'],
-                entry['output']['overview']['title']
-            ]
-
-            # Note that exactly how 1Password matches on domains in non-trivial cases is neither documented
-            # nor obvious, so this may not precisely match the real behavior.
-            urls = entry['output']['overview'].get('URLs')
-            if urls is not None:
-                match_fields += [urlparse(url['u']).netloc for url in urls]
-
-            if key in match_fields:
-                return entry['output']
-
-    def _run(self, args, expected_rc=0, command_input=None, ignore_errors=False):
-        parser = ArgumentParser()
-
-        command_parser = parser.add_subparsers(dest='command')
-
-        get_parser = command_parser.add_parser('get')
-        get_options = ArgumentParser(add_help=False)
-        get_options.add_argument('--vault')
-        get_type_parser = get_parser.add_subparsers(dest='object_type')
-        get_type_parser.add_parser('account', parents=[get_options])
-        get_item_parser = get_type_parser.add_parser('item', parents=[get_options])
-        get_item_parser.add_argument('item_id')
-
-        args = parser.parse_args(args)
-
-        def mock_exit(output='', error='', rc=0):
-            if rc != expected_rc:
-                raise AnsibleError(error)
-            if error != '':
-                now = datetime.date.today()
-                error = '[LOG] {0} (ERROR) {1}'.format(now.strftime('%Y/%m/%d %H:$M:$S'), error)
-            return rc, output, error
-
-        if args.command == 'get':
-            if self._mock_logged_out:
-                return mock_exit(error='You are not currently signed in. Please run `op signin --help` for instructions', rc=1)
-
-            if self._mock_timed_out:
-                return mock_exit(error='401: Authentication required.', rc=1)
-
-            if args.object_type == 'item':
-                mock_entry = self._lookup_mock_entry(args.item_id, args.vault)
-
-                if mock_entry is None:
-                    return mock_exit(error='Item {0} not found'.format(args.item_id))
-
-                return mock_exit(output=json.dumps(mock_entry))
-
-            if args.object_type == 'account':
-                # Since we don't actually ever use this output, don't bother mocking output.
-                return mock_exit()
-
-        raise AnsibleError('Unsupported command string passed to OnePass mock: {0}'.format(args))
+    op_cli._run.assert_called_with(expected_call_args, **expected_call_kwargs)
+    assert result == expected
 
 
-class LoggedOutMockOnePass(MockOnePass):
-
-    _mock_logged_out = True
-
-
-class TimedOutMockOnePass(MockOnePass):
-
-    _mock_timed_out = True
+def test_assert_logged_in_v2_connect():
+    op_cli = OnePassCLIv2(connect_host="http://localhost:8080", connect_token="foobar")
+    result = op_cli.assert_logged_in()
+    assert result
 
 
-class TestOnePass(unittest.TestCase):
+def test_full_signin_v2(mocker):
+    mocker.patch.object(OnePassCLIv2, "_run", return_value=[0, "", ""])
 
-    def test_onepassword_cli_path(self):
-        op = MockOnePass(path='/dev/null')
-        self.assertEqual('/dev/null', op.cli_path)
+    op_cli = OnePassCLIv2(
+        subdomain="acme",
+        username="bob@acme.com",
+        secret_key="SECRET",
+        master_password="ONEKEYTORULETHEMALL",
+    )
+    result = op_cli.full_signin()
 
-    def test_onepassword_logged_in(self):
-        op = MockOnePass()
-        try:
-            op.assert_logged_in()
-        except Exception:
-            self.fail()
+    op_cli._run.assert_called_with(
+        [
+            "account", "add", "--raw",
+            "--address", "acme.1password.com",
+            "--email", b"bob@acme.com",
+            "--signin",
+        ],
+        command_input=b"ONEKEYTORULETHEMALL",
+        environment_update={'OP_SECRET_KEY': 'SECRET'},
+    )
+    assert result == [0, "", ""]
 
-    def test_onepassword_logged_out(self):
-        op = LoggedOutMockOnePass()
-        with self.assertRaises(AnsibleError):
-            op.assert_logged_in()
 
-    def test_onepassword_timed_out(self):
-        op = TimedOutMockOnePass()
-        with self.assertRaises(AnsibleError):
-            op.assert_logged_in()
+@pytest.mark.parametrize(
+    ("version", "version_class"),
+    (
+        ("1.17.2", OnePassCLIv1),
+        ("2.27.4", OnePassCLIv2),
+    )
+)
+def test_op_correct_cli_class(fake_op, version, version_class):
+    op = fake_op(version)
+    assert op._cli.version == version
+    assert isinstance(op._cli, version_class)
 
-    def test_onepassword_get(self):
-        op = MockOnePass()
-        op.logged_in = True
-        query_generator = get_mock_query_generator()
-        for dummy, query, dummy, field_name, field_value in query_generator:
-            self.assertEqual(field_value, op.get_field(query, field_name))
 
-    def test_onepassword_get_raw(self):
-        op = MockOnePass()
-        op.logged_in = True
-        for entry in MOCK_ENTRIES:
-            for query in entry['queries']:
-                self.assertEqual(json.dumps(entry['output']), op.get_raw(query))
+def test_op_unsupported_cli_version(fake_op):
+    with pytest.raises(AnsibleLookupError, match="is unsupported"):
+        fake_op("99.77.77")
 
-    def test_onepassword_get_not_found(self):
-        op = MockOnePass()
-        op.logged_in = True
-        self.assertEqual('', op.get_field('a fake query', 'a fake field'))
 
-    def test_onepassword_get_with_section(self):
-        op = MockOnePass()
-        op.logged_in = True
-        dummy, query, section_title, field_name, field_value = get_one_mock_query()
-        self.assertEqual(field_value, op.get_field(query, field_name, section=section_title))
+@pytest.mark.parametrize("op_fixture", OP_VERSION_FIXTURES)
+def test_op_set_token_with_config(op_fixture, mocker, request):
+    op = request.getfixturevalue(op_fixture)
+    token = "F5417F77529B41B595D7F9D6F76EC057"
+    mocker.patch("os.path.isfile", return_value=True)
+    mocker.patch.object(op._cli, "signin", return_value=(0, token + "\n", ""))
 
-    def test_onepassword_get_with_vault(self):
-        op = MockOnePass()
-        op.logged_in = True
-        entry, query, dummy, field_name, field_value = get_one_mock_query()
-        for vault_query in [entry['vault_name'], entry['output']['vaultUuid']]:
-            self.assertEqual(field_value, op.get_field(query, field_name, vault=vault_query))
+    op.set_token()
 
-    def test_onepassword_get_with_wrong_vault(self):
-        op = MockOnePass()
-        op.logged_in = True
-        dummy, query, dummy, field_name, dummy = get_one_mock_query()
-        self.assertEqual('', op.get_field(query, field_name, vault='a fake vault'))
+    assert op.token == token
 
-    def test_onepassword_get_diff_case(self):
-        op = MockOnePass()
-        op.logged_in = True
-        entry, query, section_title, field_name, field_value = get_one_mock_query()
-        self.assertEqual(
-            field_value,
-            op.get_field(
-                query,
-                field_name.upper(),
-                vault=entry['vault_name'].upper(),
-                section=section_title.upper()
-            )
+
+@pytest.mark.parametrize(
+    ("op_fixture", "message"),
+    [
+        (op, value)
+        for op in OP_VERSION_FIXTURES
+        for value in
+        (
+            "Missing required parameters",
+            "The operation is unauthorized",
         )
+    ]
+)
+def test_op_set_token_with_config_missing_args(op_fixture, message, request, mocker):
+    op = request.getfixturevalue(op_fixture)
+    mocker.patch("os.path.isfile", return_value=True)
+    mocker.patch.object(op._cli, "signin", return_value=(99, "", ""), side_effect=AnsibleLookupError(message))
+    mocker.patch.object(op._cli, "full_signin", return_value=(0, "", ""))
+
+    with pytest.raises(AnsibleLookupError, match=message):
+        op.set_token()
+
+    op._cli.full_signin.assert_not_called()
 
 
-@patch('ansible_collections.community.general.plugins.lookup.onepassword.OnePass', MockOnePass)
-class TestLookupModule(unittest.TestCase):
+@pytest.mark.parametrize("op_fixture", OP_VERSION_FIXTURES)
+def test_op_set_token_with_config_full_signin(op_fixture, request, mocker):
+    op = request.getfixturevalue(op_fixture)
+    mocker.patch("os.path.isfile", return_value=True)
+    mocker.patch.object(op._cli, "signin", return_value=(99, "", ""), side_effect=AnsibleLookupError("Raised intentionally"))
+    mocker.patch.object(op._cli, "full_signin", return_value=(0, "", ""))
 
-    def test_onepassword_plugin_multiple(self):
-        lookup_plugin = LookupModule()
+    op.set_token()
 
-        entry = MOCK_ENTRIES[0]
-        field = entry['output']['details']['sections'][0]['fields'][0]
+    op._cli.full_signin.assert_called()
 
-        self.assertEqual(
-            [field['v']] * len(entry['queries']),
-            lookup_plugin.run(entry['queries'], field=field['t'])
+
+@pytest.mark.parametrize("op_fixture", OP_VERSION_FIXTURES)
+def test_op_set_token_without_config(op_fixture, request, mocker):
+    op = request.getfixturevalue(op_fixture)
+    token = "B988E8A2680A4A348962751A96861FA1"
+    mocker.patch("os.path.isfile", return_value=False)
+    mocker.patch.object(op._cli, "signin", return_value=(99, "", ""))
+    mocker.patch.object(op._cli, "full_signin", return_value=(0, token + "\n", ""))
+
+    op.set_token()
+
+    op._cli.signin.assert_not_called()
+    assert op.token == token
+
+
+@pytest.mark.parametrize(
+    ("op_fixture", "login_status"),
+    [(op, value) for op in OP_VERSION_FIXTURES for value in [False, True]]
+)
+def test_op_assert_logged_in(mocker, login_status, op_fixture, request):
+    op = request.getfixturevalue(op_fixture)
+    mocker.patch.object(op._cli, "assert_logged_in", return_value=login_status)
+    mocker.patch.object(op, "set_token")
+
+    op.assert_logged_in()
+
+    op._cli.assert_logged_in.assert_called_once()
+    assert op.logged_in == login_status
+
+    if not login_status:
+        op.set_token.assert_called_once()
+
+
+@pytest.mark.parametrize("op_fixture", OP_VERSION_FIXTURES)
+def test_op_get_raw_v1(mocker, op_fixture, request):
+    op = request.getfixturevalue(op_fixture)
+    mocker.patch.object(op._cli, "get_raw", return_value=[99, "RAW OUTPUT", ""])
+
+    result = op.get_raw("some item")
+
+    assert result == "RAW OUTPUT"
+    op._cli.get_raw.assert_called_once()
+
+
+@pytest.mark.parametrize(
+    ("op_fixture", "output", "expected"),
+    (
+        list(itertools.chain([op], d))
+        for op in OP_VERSION_FIXTURES
+        for d in [
+            ("RAW OUTPUT", "RAW OUTPUT"),
+            (None, ""),
+            ("", ""),
+        ]
+    )
+)
+def test_op_get_field(mocker, op_fixture, output, expected, request):
+    op = request.getfixturevalue(op_fixture)
+    mocker.patch.object(op, "get_raw", return_value=output)
+    mocker.patch.object(op._cli, "_parse_field", return_value=output)
+
+    result = op.get_field("some item", "some field")
+
+    assert result == expected
+
+
+# This test sometimes fails on older Python versions because the gathered tests mismatch.
+# Sort the fixture data to make this reliable
+# https://github.com/pytest-dev/pytest-xdist/issues/432
+@pytest.mark.parametrize(
+    ("cli_class", "vault", "queries", "kwargs", "output", "expected"),
+    (
+        (_cli_class, item["vault_name"], item["queries"], item.get("kwargs", {}), item["output"], item["expected"])
+        for _cli_class in sorted(MOCK_ENTRIES, key=operator.attrgetter("__name__"))
+        for item in MOCK_ENTRIES[_cli_class]
+    )
+)
+def test_op_lookup(mocker, cli_class, vault, queries, kwargs, output, expected):
+    mocker.patch("ansible_collections.community.general.plugins.lookup.onepassword.OnePass._get_cli_class", cli_class)
+    mocker.patch("ansible_collections.community.general.plugins.lookup.onepassword.OnePass.assert_logged_in", return_value=True)
+    mocker.patch("ansible_collections.community.general.plugins.lookup.onepassword.OnePassCLIBase._run", return_value=(0, json.dumps(output), ""))
+
+    op_lookup = lookup_loader.get("community.general.onepassword")
+    result = op_lookup.run(queries, vault=vault, **kwargs)
+
+    assert result == expected
+
+
+@pytest.mark.parametrize("op_fixture", OP_VERSION_FIXTURES)
+def test_signin(op_fixture, request):
+    op = request.getfixturevalue(op_fixture)
+    op._cli.master_password = "master_pass"
+    op._cli.signin()
+    op._cli._run.assert_called_once_with(['signin', '--raw'], command_input=b"master_pass")
+
+
+def test_op_doc(mocker):
+    document_contents = "Document Contents\n"
+
+    mocker.patch("ansible_collections.community.general.plugins.lookup.onepassword.OnePass.assert_logged_in", return_value=True)
+    mocker.patch("ansible_collections.community.general.plugins.lookup.onepassword.OnePassCLIBase._run", return_value=(0, document_contents, ""))
+
+    op_lookup = lookup_loader.get("community.general.onepassword_doc")
+    result = op_lookup.run(["Private key doc"])
+
+    assert result == [document_contents]
+
+
+@pytest.mark.parametrize(
+    ("plugin", "connect_host", "connect_token"),
+    [
+        (plugin, connect_host, connect_token)
+        for plugin in ("community.general.onepassword", "community.general.onepassword_raw")
+        for (connect_host, connect_token) in
+        (
+            ("http://localhost", None),
+            (None, "foobar"),
         )
+    ]
+)
+def test_op_connect_partial_args(plugin, connect_host, connect_token, mocker):
+    op_lookup = lookup_loader.get(plugin)
 
-    def test_onepassword_plugin_default_field(self):
-        lookup_plugin = LookupModule()
+    mocker.patch("ansible_collections.community.general.plugins.lookup.onepassword.OnePass._get_cli_class", OnePassCLIv2)
 
-        dummy, query, dummy, dummy, field_value = get_one_mock_query('password')
-        self.assertEqual([field_value], lookup_plugin.run([query]))
+    with pytest.raises(AnsibleOptionsError):
+        op_lookup.run("login", vault_name="test vault", connect_host=connect_host, connect_token=connect_token)
 
 
-@patch('ansible_collections.community.general.plugins.lookup.onepassword_raw.OnePass', MockOnePass)
-class TestOnePasswordRawLookup(unittest.TestCase):
-
-    def test_onepassword_raw_plugin_multiple(self):
-        raw_lookup_plugin = OnePasswordRawLookup()
-
-        entry = MOCK_ENTRIES[0]
-        raw_value = entry['output']
-
-        self.assertEqual(
-            [raw_value] * len(entry['queries']),
-            raw_lookup_plugin.run(entry['queries'])
-        )
+@pytest.mark.parametrize(
+    ("kwargs"),
+    (
+        {"connect_host": "http://localhost", "connect_token": "foobar"},
+        {"service_account_token": "foobar"},
+    )
+)
+def test_opv1_unsupported_features(kwargs):
+    op_cli = OnePassCLIv1(**kwargs)
+    with pytest.raises(AnsibleLookupError):
+        op_cli.full_signin()

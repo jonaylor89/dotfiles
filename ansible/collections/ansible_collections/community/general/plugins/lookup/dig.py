@@ -21,22 +21,27 @@ DOCUMENTATION = '''
       - In addition to (default) A record, it is also possible to specify a different record type that should be queried.
         This can be done by either passing-in additional parameter of format qtype=TYPE to the dig lookup, or by appending /TYPE to the FQDN being queried.
       - If multiple values are associated with the requested record, the results will be returned as a comma-separated list.
-        In such cases you may want to pass option wantlist=True to the plugin, which will result in the record values being returned as a list
-        over which you can iterate later on.
+        In such cases you may want to pass option C(wantlist=true) to the lookup call, or alternatively use C(query) instead of C(lookup),
+        which will result in the record values being returned as a list over which you can iterate later on.
       - By default, the lookup will rely on system-wide configured DNS servers for performing the query.
         It is also possible to explicitly specify DNS servers to query using the @DNS_SERVER_1,DNS_SERVER_2,...,DNS_SERVER_N notation.
         This needs to be passed-in as an additional parameter to the lookup
     options:
       _terms:
         description: Domain(s) to query.
+        type: list
+        elements: str
       qtype:
         description:
             - Record type to query.
-            - C(DLV) is deprecated and will be removed in community.general 6.0.0.
+            - V(DLV) has been removed in community.general 6.0.0.
+            - V(CAA) has been added in community.general 6.3.0.
+        type: str
         default: 'A'
-        choices: [A, ALL, AAAA, CNAME, DNAME, DLV, DNSKEY, DS, HINFO, LOC, MX, NAPTR, NS, NSEC3PARAM, PTR, RP, RRSIG, SOA, SPF, SRV, SSHFP, TLSA, TXT]
+        choices: [A, ALL, AAAA, CAA, CNAME, DNAME, DNSKEY, DS, HINFO, LOC, MX, NAPTR, NS, NSEC3PARAM, PTR, RP, RRSIG, SOA, SPF, SRV, SSHFP, TLSA, TXT]
       flat:
         description: If 0 each record is returned as a dictionary, otherwise a string.
+        type: int
         default: 1
       retry_servfail:
         description: Retry a nameserver if it returns SERVFAIL.
@@ -46,12 +51,35 @@ DOCUMENTATION = '''
       fail_on_error:
         description:
           - Abort execution on lookup errors.
-          - The default for this option will likely change to C(true) in the future.
-            The current default, C(false), is used for backwards compatibility, and will result in empty strings
-            or the string C(NXDOMAIN) in the result in case of errors.
+          - The default for this option will likely change to V(true) in the future.
+            The current default, V(false), is used for backwards compatibility, and will result in empty strings
+            or the string V(NXDOMAIN) in the result in case of errors.
         default: false
         type: bool
         version_added: 5.4.0
+      real_empty:
+        description:
+          - Return empty result without empty strings, and return empty list instead of V(NXDOMAIN).
+          - The default for this option will likely change to V(true) in the future.
+          - This option will be forced to V(true) if multiple domains to be queried are specified.
+        default: false
+        type: bool
+        version_added: 6.0.0
+      class:
+        description:
+          - "Class."
+        type: str
+        default: 'IN'
+      tcp:
+        description: Use TCP to lookup DNS records.
+        default: false
+        type: bool
+        version_added: 7.5.0
+      port:
+        description: Use port as target port when looking up DNS records.
+        default: 53
+        type: int
+        version_added: 9.5.0
     notes:
       - ALL is not a record per-se, merely the listed fields are available for any record results you retrieve in the form of a dictionary.
       - While the 'dig' lookup plugin supports anything which dnspython supports out of the box, only a subset can be converted into a dictionary.
@@ -67,7 +95,7 @@ EXAMPLES = """
 
 - name: "The TXT record for example.org."
   ansible.builtin.debug:
-    msg: "{{ lookup('community.general.dig', 'example.org.', 'qtype=TXT') }}"
+    msg: "{{ lookup('community.general.dig', 'example.org.', qtype='TXT') }}"
 
 - name: "The TXT record for example.org, alternative syntax."
   ansible.builtin.debug:
@@ -76,24 +104,39 @@ EXAMPLES = """
 - name: use in a loop
   ansible.builtin.debug:
     msg: "MX record for gmail.com {{ item }}"
-  with_items: "{{ lookup('community.general.dig', 'gmail.com./MX', wantlist=True) }}"
+  with_items: "{{ lookup('community.general.dig', 'gmail.com./MX', wantlist=true) }}"
+
+- name: Lookup multiple names at once
+  ansible.builtin.debug:
+    msg: "A record found {{ item }}"
+  loop: "{{ query('community.general.dig', 'example.org.', 'example.com.', 'gmail.com.') }}"
+
+- name: Lookup multiple names at once (from list variable)
+  ansible.builtin.debug:
+    msg: "A record found {{ item }}"
+  loop: "{{ query('community.general.dig', *hosts) }}"
+  vars:
+    hosts:
+      - example.org.
+      - example.com.
+      - gmail.com.
 
 - ansible.builtin.debug:
     msg: "Reverse DNS for 192.0.2.5 is {{ lookup('community.general.dig', '192.0.2.5/PTR') }}"
 - ansible.builtin.debug:
     msg: "Reverse DNS for 192.0.2.5 is {{ lookup('community.general.dig', '5.2.0.192.in-addr.arpa./PTR') }}"
 - ansible.builtin.debug:
-    msg: "Reverse DNS for 192.0.2.5 is {{ lookup('community.general.dig', '5.2.0.192.in-addr.arpa.', 'qtype=PTR') }}"
+    msg: "Reverse DNS for 192.0.2.5 is {{ lookup('community.general.dig', '5.2.0.192.in-addr.arpa.', qtype='PTR') }}"
 - ansible.builtin.debug:
     msg: "Querying 198.51.100.23 for IPv4 address for example.com. produces {{ lookup('dig', 'example.com', '@198.51.100.23') }}"
 
 - ansible.builtin.debug:
     msg: "XMPP service for gmail.com. is available at {{ item.target }} on port {{ item.port }}"
-  with_items: "{{ lookup('community.general.dig', '_xmpp-server._tcp.gmail.com./SRV', 'flat=0', wantlist=True) }}"
+  with_items: "{{ lookup('community.general.dig', '_xmpp-server._tcp.gmail.com./SRV', flat=0, wantlist=true) }}"
 
 - name: Retry nameservers that return SERVFAIL
   ansible.builtin.debug:
-    msg: "{{ lookup('community.general.dig', 'example.org./A', 'retry_servfail=True') }}"
+    msg: "{{ lookup('community.general.dig', 'example.org./A', retry_servfail=true) }}"
 """
 
 RETURN = """
@@ -113,15 +156,18 @@ RETURN = """
        AAAA:
            description:
                - address
+       CAA:
+           description:
+               - flags
+               - tag
+               - value
+           version_added: 6.3.0
        CNAME:
            description:
                - target
        DNAME:
            description:
                - target
-       DLV:
-            description:
-                - algorithm, digest_type, key_tag, digest
        DNSKEY:
             description:
                 - flags, algorithm, protocol, key
@@ -185,7 +231,7 @@ try:
     import dns.resolver
     import dns.reversename
     import dns.rdataclass
-    from dns.rdatatype import (A, AAAA, CNAME, DLV, DNAME, DNSKEY, DS, HINFO, LOC,
+    from dns.rdatatype import (A, AAAA, CAA, CNAME, DNAME, DNSKEY, DS, HINFO, LOC,
                                MX, NAPTR, NS, NSEC3PARAM, PTR, RP, SOA, SPF, SRV, SSHFP, TLSA, TXT)
     HAVE_DNS = True
 except ImportError:
@@ -205,9 +251,9 @@ def make_rdata_dict(rdata):
     supported_types = {
         A: ['address'],
         AAAA: ['address'],
+        CAA: ['flags', 'tag', 'value'],
         CNAME: ['target'],
         DNAME: ['target'],
-        DLV: ['algorithm', 'digest_type', 'key_tag', 'digest'],
         DNSKEY: ['flags', 'algorithm', 'protocol', 'key'],
         DS: ['algorithm', 'digest_type', 'key_tag', 'digest'],
         HINFO: ['cpu', 'os'],
@@ -218,7 +264,7 @@ def make_rdata_dict(rdata):
         NSEC3PARAM: ['algorithm', 'flags', 'iterations', 'salt'],
         PTR: ['target'],
         RP: ['mbox', 'txt'],
-        # RRSIG: ['algorithm', 'labels', 'original_ttl', 'expiration', 'inception', 'signature'],
+        # RRSIG: ['type_covered', 'algorithm', 'labels', 'original_ttl', 'expiration', 'inception', 'key_tag', 'signer', 'signature'],
         SOA: ['mname', 'rname', 'serial', 'refresh', 'retry', 'expire', 'minimum'],
         SPF: ['strings'],
         SRV: ['priority', 'weight', 'port', 'target'],
@@ -237,10 +283,10 @@ def make_rdata_dict(rdata):
             if isinstance(val, dns.name.Name):
                 val = dns.name.Name.to_text(val)
 
-            if rdata.rdtype == DLV and f == 'digest':
-                val = dns.rdata._hexify(rdata.digest).replace(' ', '')
             if rdata.rdtype == DS and f == 'digest':
                 val = dns.rdata._hexify(rdata.digest).replace(' ', '')
+            if rdata.rdtype == DNSKEY and f == 'algorithm':
+                val = int(val)
             if rdata.rdtype == DNSKEY and f == 'key':
                 val = dns.rdata._base64ify(rdata.key).replace(' ', '')
             if rdata.rdtype == NSEC3PARAM and f == 'salt':
@@ -278,26 +324,34 @@ class LookupModule(LookupBase):
 
             ... flat=0                                      # returns a dict; default is 1 == string
         '''
-
         if HAVE_DNS is False:
             raise AnsibleError("The dig lookup requires the python 'dnspython' library and it is not installed")
+
+        self.set_options(var_options=variables, direct=kwargs)
 
         # Create Resolver object so that we can set NS if necessary
         myres = dns.resolver.Resolver(configure=True)
         edns_size = 4096
         myres.use_edns(0, ednsflags=dns.flags.DO, payload=edns_size)
 
-        domain = None
-        qtype = 'A'
-        flat = True
-        fail_on_error = False
-        rdclass = dns.rdataclass.from_text('IN')
+        domains = []
+        nameservers = []
+        qtype = self.get_option('qtype')
+        flat = self.get_option('flat')
+        fail_on_error = self.get_option('fail_on_error')
+        real_empty = self.get_option('real_empty')
+        tcp = self.get_option('tcp')
+        port = self.get_option('port')
+        try:
+            rdclass = dns.rdataclass.from_text(self.get_option('class'))
+        except Exception as e:
+            raise AnsibleError("dns lookup illegal CLASS: %s" % to_native(e))
+        myres.retry_servfail = self.get_option('retry_servfail')
 
         for t in terms:
             if t.startswith('@'):       # e.g. "@10.0.1.2,192.0.2.1" is ok.
                 nsset = t[1:].split(',')
                 for ns in nsset:
-                    nameservers = []
                     # Check if we have a valid IP address. If so, use that, otherwise
                     # try to resolve name to address using system's resolver. If that
                     # fails we bail out.
@@ -310,11 +364,10 @@ class LookupModule(LookupBase):
                             nameservers.append(nsaddr)
                         except Exception as e:
                             raise AnsibleError("dns lookup NS: %s" % to_native(e))
-                    myres.nameservers = nameservers
                 continue
             if '=' in t:
                 try:
-                    opt, arg = t.split('=')
+                    opt, arg = t.split('=', 1)
                 except Exception:
                     pass
 
@@ -331,71 +384,86 @@ class LookupModule(LookupBase):
                     myres.retry_servfail = boolean(arg)
                 elif opt == 'fail_on_error':
                     fail_on_error = boolean(arg)
+                elif opt == 'real_empty':
+                    real_empty = boolean(arg)
+                elif opt == 'tcp':
+                    tcp = boolean(arg)
 
                 continue
 
             if '/' in t:
                 try:
                     domain, qtype = t.split('/')
+                    domains.append(domain)
                 except Exception:
-                    domain = t
+                    domains.append(t)
             else:
-                domain = t
+                domains.append(t)
 
         # print "--- domain = {0} qtype={1} rdclass={2}".format(domain, qtype, rdclass)
 
-        ret = []
-
-        if qtype.upper() == 'DLV':
-            display.deprecated('The DLV record type has been decommissioned in 2017 and support for'
-                               ' it will be removed from community.general 6.0.0',
-                               version='6.0.0', collection_name='community.general')
+        if port:
+            myres.port = port
+        if len(nameservers) > 0:
+            myres.nameservers = nameservers
 
         if qtype.upper() == 'PTR':
+            reversed_domains = []
+            for domain in domains:
+                try:
+                    n = dns.reversename.from_address(domain)
+                    reversed_domains.append(n.to_text())
+                except dns.exception.SyntaxError:
+                    pass
+                except Exception as e:
+                    raise AnsibleError("dns.reversename unhandled exception %s" % to_native(e))
+            domains = reversed_domains
+
+        if len(domains) > 1:
+            real_empty = True
+
+        ret = []
+
+        for domain in domains:
             try:
-                n = dns.reversename.from_address(domain)
-                domain = n.to_text()
-            except dns.exception.SyntaxError:
-                pass
-            except Exception as e:
-                raise AnsibleError("dns.reversename unhandled exception %s" % to_native(e))
+                answers = myres.query(domain, qtype, rdclass=rdclass, tcp=tcp)
+                for rdata in answers:
+                    s = rdata.to_text()
+                    if qtype.upper() == 'TXT':
+                        s = s[1:-1]  # Strip outside quotes on TXT rdata
 
-        try:
-            answers = myres.query(domain, qtype, rdclass=rdclass)
-            for rdata in answers:
-                s = rdata.to_text()
-                if qtype.upper() == 'TXT':
-                    s = s[1:-1]  # Strip outside quotes on TXT rdata
+                    if flat:
+                        ret.append(s)
+                    else:
+                        try:
+                            rd = make_rdata_dict(rdata)
+                            rd['owner'] = answers.canonical_name.to_text()
+                            rd['type'] = dns.rdatatype.to_text(rdata.rdtype)
+                            rd['ttl'] = answers.rrset.ttl
+                            rd['class'] = dns.rdataclass.to_text(rdata.rdclass)
 
-                if flat:
-                    ret.append(s)
-                else:
-                    try:
-                        rd = make_rdata_dict(rdata)
-                        rd['owner'] = answers.canonical_name.to_text()
-                        rd['type'] = dns.rdatatype.to_text(rdata.rdtype)
-                        rd['ttl'] = answers.rrset.ttl
-                        rd['class'] = dns.rdataclass.to_text(rdata.rdclass)
+                            ret.append(rd)
+                        except Exception as err:
+                            if fail_on_error:
+                                raise AnsibleError("Lookup failed: %s" % str(err))
+                            ret.append(str(err))
 
-                        ret.append(rd)
-                    except Exception as err:
-                        if fail_on_error:
-                            raise AnsibleError("Lookup failed: %s" % str(err))
-                        ret.append(str(err))
-
-        except dns.resolver.NXDOMAIN as err:
-            if fail_on_error:
-                raise AnsibleError("Lookup failed: %s" % str(err))
-            ret.append('NXDOMAIN')
-        except dns.resolver.NoAnswer as err:
-            if fail_on_error:
-                raise AnsibleError("Lookup failed: %s" % str(err))
-            ret.append("")
-        except dns.resolver.Timeout as err:
-            if fail_on_error:
-                raise AnsibleError("Lookup failed: %s" % str(err))
-            ret.append('')
-        except dns.exception.DNSException as err:
-            raise AnsibleError("dns.resolver unhandled exception %s" % to_native(err))
+            except dns.resolver.NXDOMAIN as err:
+                if fail_on_error:
+                    raise AnsibleError("Lookup failed: %s" % str(err))
+                if not real_empty:
+                    ret.append('NXDOMAIN')
+            except dns.resolver.NoAnswer as err:
+                if fail_on_error:
+                    raise AnsibleError("Lookup failed: %s" % str(err))
+                if not real_empty:
+                    ret.append("")
+            except dns.resolver.Timeout as err:
+                if fail_on_error:
+                    raise AnsibleError("Lookup failed: %s" % str(err))
+                if not real_empty:
+                    ret.append("")
+            except dns.exception.DNSException as err:
+                raise AnsibleError("dns.resolver unhandled exception %s" % to_native(err))
 
         return ret

@@ -2,7 +2,7 @@
  "collection_info": {
   "namespace": "community",
   "name": "general",
-  "version": "5.8.0",
+  "version": "9.5.0",
   "authors": [
    "Ansible (https://github.com/ansible)"
   ],
@@ -10,7 +10,7 @@
   "tags": [
    "community"
   ],
-  "description": null,
+  "description": "The community.general collection is a part of the Ansible package and includes many modules and plugins supported by Ansible community which are not part of more specialized community collections.",
   "license": [],
   "license_file": "COPYING",
   "dependencies": {},
@@ -23,7 +23,7 @@
   "name": "FILES.json",
   "ftype": "file",
   "chksum_type": "sha256",
-  "chksum_sha256": "b6d9b5e5c2629a60eec28370725cc758c7be0e390696caffe58265f14c7a44f0",
+  "chksum_sha256": "d180092b740a074f1b2ea7b8b66cc53d752177244f61df3c6a4df7b106f31fc1",
   "format": 1
  },
  "format": 1

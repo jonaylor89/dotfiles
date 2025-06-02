@@ -14,7 +14,7 @@ DOCUMENTATION = '''
     short_description: Post task results to a Nagios server through nrdp
     description:
         - This callback send playbook result to Nagios.
-        - Nagios shall use NRDP to recive passive events.
+        - Nagios shall use NRDP to receive passive events.
         - The passive check is sent to a dedicated host/service for Ansible.
     options:
         url:
@@ -66,9 +66,6 @@ DOCUMENTATION = '''
                   key: servicename
             type: string
 '''
-
-import os
-import json
 
 from ansible.module_utils.six.moves.urllib.parse import urlencode
 from ansible.module_utils.common.text.converters import to_bytes

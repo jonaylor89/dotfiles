@@ -69,7 +69,6 @@ from ansible.utils.display import Display
 from traceback import format_exception
 import json
 import sys
-import os
 
 display = Display()
 
@@ -207,7 +206,7 @@ class ManifoldApiClient(object):
 
 class LookupModule(LookupBase):
 
-    def run(self, terms, variables=None, api_token=None, project=None, team=None):
+    def run(self, terms, variables=None, **kwargs):
         """
         :param terms: a list of resources lookups to run.
         :param variables: ansible variables active at the time of the lookup
@@ -217,10 +216,11 @@ class LookupModule(LookupBase):
         :return: a dictionary of resources credentials
         """
 
-        if not api_token:
-            api_token = os.getenv('MANIFOLD_API_TOKEN')
-        if not api_token:
-            raise AnsibleError('API token is required. Please set api_token parameter or MANIFOLD_API_TOKEN env var')
+        self.set_options(var_options=variables, direct=kwargs)
+
+        api_token = self.get_option('api_token')
+        project = self.get_option('project')
+        team = self.get_option('team')
 
         try:
             labels = terms

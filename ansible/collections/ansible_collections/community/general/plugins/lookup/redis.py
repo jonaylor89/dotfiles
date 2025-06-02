@@ -19,8 +19,11 @@ DOCUMENTATION = '''
     options:
       _terms:
         description: list of keys to query
+        type: list
+        elements: string
       host:
         description: location of Redis host
+        type: string
         default: '127.0.0.1'
         env:
           - name: ANSIBLE_REDIS_HOST
@@ -72,8 +75,6 @@ _raw:
   type: list
   elements: str
 """
-
-import os
 
 HAVE_REDIS = False
 try:
