@@ -36,6 +36,10 @@ yabai -m rule --add app="^JetBrains Toolbox$" manage=off
 yabai -m rule --add app="^Neat$" manage=off
 yabai -m rule --add app="^FaceTime$" manage=off
 yabai -m rule --add app="^Loom$" manage=off
+yabai -m rule --add app="^Messages$" manage=off
+yabai -m rule --add app="^Signal$" manage=off
+yabai -m rule --add app="^Telegram$" manage=off
+yabai -m rule --add app="^WhatsApp$" manage=off
 
 echo "yabai configuration loaded.."
 
