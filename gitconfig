@@ -37,6 +37,8 @@
   
   squash-all = "!f(){ git reset $(git commit-tree HEAD^{tree} -m \"${1:-A new start}\");};f"
 
+  yesterday = "log --since='yesterday.midnight' --until='midnight' --all --no-merges --oneline --author=jonaylor89@gmail.com"
+
     
 [filter "lfs"]
 	clean = git-lfs clean -- %f

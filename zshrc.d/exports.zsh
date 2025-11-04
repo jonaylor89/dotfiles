@@ -13,7 +13,7 @@ export ZSH=$HOME/.oh-my-zsh
 # Terminal Things
 export LANG="en_US.UTF-8"
 export TERM=xterm-256color
-export EDITOR=vim
+export EDITOR=hx
 
 # ssh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
@@ -30,7 +30,3 @@ if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-clou
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-export PROTOCOL_DIR=$HOME/Repos/audius-protocol
-
-export LOGNAME=ubuntu

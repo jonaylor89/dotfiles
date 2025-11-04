@@ -1,7 +1,7 @@
 #!/usr/bin/env fish
 
 alias r='ranger'
-alias fetch="neofetch"
+alias fetch="fastfetch"
 alias al="sl -alf"
 alias gcal="gcalcli"
 
