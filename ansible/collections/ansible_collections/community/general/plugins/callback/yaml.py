@@ -11,7 +11,7 @@ DOCUMENTATION = '''
     author: Unknown (!UNKNOWN)
     name: yaml
     type: stdout
-    short_description: yaml-ized Ansible screen output
+    short_description: YAML-ized Ansible screen output
     description:
         - Ansible output that can be quite a bit easier to read than the
           default JSON formatting.
@@ -19,18 +19,26 @@ DOCUMENTATION = '''
       - default_callback
     requirements:
       - set as stdout in configuration
+    seealso:
+      - plugin: ansible.builtin.default
+        plugin_type: callback
+        description: >
+          There is a parameter O(ansible.builtin.default#callback:result_format) in P(ansible.builtin.default#callback)
+          that allows you to change the output format to YAML.
+    notes:
+      - >
+        With ansible-core 2.13 or newer, you can instead specify V(yaml) for the parameter O(ansible.builtin.default#callback:result_format)
+        in P(ansible.builtin.default#callback).
 '''
 
 import yaml
 import json
 import re
 import string
-import sys
 
-from ansible.module_utils.common.text.converters import to_bytes, to_text
-from ansible.module_utils.six import string_types
+from ansible.module_utils.common.text.converters import to_text
 from ansible.parsing.yaml.dumper import AnsibleDumper
-from ansible.plugins.callback import CallbackBase, strip_internal_keys, module_response_deepcopy
+from ansible.plugins.callback import strip_internal_keys, module_response_deepcopy
 from ansible.plugins.callback.default import CallbackModule as Default
 
 

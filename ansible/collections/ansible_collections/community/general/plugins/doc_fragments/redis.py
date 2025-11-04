@@ -46,9 +46,19 @@ options:
     default: true
   ca_certs:
     description:
-      - Path to root certificates file. If not set and I(tls) is
-        set to C(true), certifi ca-certificates will be used.
+      - Path to root certificates file. If not set and O(tls) is
+        set to V(true), certifi ca-certificates will be used.
     type: str
+  client_cert_file:
+    description:
+      - Path to the client certificate file.
+    type: str
+    version_added: 9.3.0
+  client_key_file:
+    description:
+      - Path to the client private key file.
+    type: str
+    version_added: 9.3.0
 requirements: [ "redis", "certifi" ]
 
 notes:

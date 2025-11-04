@@ -11,10 +11,24 @@ import re
 import sys
 import datetime
 import time
+import traceback
 
-from ansible.module_utils.basic import env_fallback
+from ansible.module_utils.basic import env_fallback, missing_required_lib
 from ansible.module_utils.urls import fetch_url
 from ansible.module_utils.six.moves.urllib.parse import urlencode
+
+from ansible_collections.community.general.plugins.module_utils.datetime import (
+    now,
+)
+
+SCALEWAY_SECRET_IMP_ERR = None
+try:
+    from passlib.hash import argon2
+    HAS_SCALEWAY_SECRET_PACKAGE = True
+except Exception:
+    argon2 = None
+    SCALEWAY_SECRET_IMP_ERR = traceback.format_exc()
+    HAS_SCALEWAY_SECRET_PACKAGE = False
 
 
 def scaleway_argument_spec():
@@ -37,11 +51,11 @@ def scaleway_waitable_resource_argument_spec():
 
 
 def payload_from_object(scw_object):
-    return dict(
-        (k, v)
+    return {
+        k: v
         for k, v in scw_object.items()
         if k != 'id' and v is not None
-    )
+    }
 
 
 class ScalewayException(Exception):
@@ -74,10 +88,49 @@ def parse_pagination_link(header):
 
 
 def filter_sensitive_attributes(container, attributes):
+    '''
+    WARNING: This function is effectively private, **do not use it**!
+    It will be removed or renamed once changing its name no longer triggers a pylint bug.
+    '''
     for attr in attributes:
         container[attr] = "SENSITIVE_VALUE"
 
     return container
+
+
+class SecretVariables(object):
+    @staticmethod
+    def ensure_scaleway_secret_package(module):
+        if not HAS_SCALEWAY_SECRET_PACKAGE:
+            module.fail_json(
+                msg=missing_required_lib("passlib[argon2]", url='https://passlib.readthedocs.io/en/stable/'),
+                exception=SCALEWAY_SECRET_IMP_ERR
+            )
+
+    @staticmethod
+    def dict_to_list(source_dict):
+        return [
+            dict(key=var[0], value=var[1])
+            for var in source_dict.items()
+        ]
+
+    @staticmethod
+    def list_to_dict(source_list, hashed=False):
+        key_value = 'hashed_value' if hashed else 'value'
+        return {var['key']: var[key_value] for var in source_list}
+
+    @classmethod
+    def decode(cls, secrets_list, values_list):
+        secrets_dict = cls.list_to_dict(secrets_list, hashed=True)
+        values_dict = cls.list_to_dict(values_list, hashed=False)
+        for key in values_dict:
+            if key in secrets_dict:
+                if argon2.verify(values_dict[key], secrets_dict[key]):
+                    secrets_dict[key] = values_dict[key]
+                else:
+                    secrets_dict[key] = secrets_dict[key]
+
+        return cls.dict_to_list(secrets_dict)
 
 
 def resource_attributes_should_be_changed(target, wished, verifiable_mutable_attributes, mutable_attributes):
@@ -87,7 +140,7 @@ def resource_attributes_should_be_changed(target, wished, verifiable_mutable_att
             diff[attr] = wished[attr]
 
     if diff:
-        return dict((attr, wished[attr]) for attr in mutable_attributes)
+        return {attr: wished[attr] for attr in mutable_attributes}
     else:
         return diff
 
@@ -251,13 +304,13 @@ class Scaleway(object):
         wait_timeout = self.module.params["wait_timeout"]
         wait_sleep_time = self.module.params["wait_sleep_time"]
 
-        # Prevent requesting the ressource status too soon
+        # Prevent requesting the resource status too soon
         time.sleep(wait_sleep_time)
 
-        start = datetime.datetime.utcnow()
+        start = now()
         end = start + datetime.timedelta(seconds=wait_timeout)
 
-        while datetime.datetime.utcnow() < end:
+        while now() < end:
             self.module.debug("We are going to wait for the resource to finish its transition")
 
             state = self.fetch_state(resource)

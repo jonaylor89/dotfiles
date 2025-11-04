@@ -20,6 +20,7 @@ DOCUMENTATION = r'''
     options:
         plugin:
             description: Token that ensures this is a source file for the 'lxd' plugin.
+            type: string
             required: true
             choices: [ 'community.general.lxd' ]
         url:
@@ -27,8 +28,8 @@ DOCUMENTATION = r'''
             - The unix domain socket path or the https URL for the lxd server.
             - Sockets in filesystem have to start with C(unix:).
             - Mostly C(unix:/var/lib/lxd/unix.socket) or C(unix:/var/snap/lxd/common/lxd/unix.socket).
+            type: string
             default: unix:/var/snap/lxd/common/lxd/unix.socket
-            type: str
         client_key:
             description:
             - The client certificate key file path.
@@ -41,23 +42,42 @@ DOCUMENTATION = r'''
             aliases: [ cert_file ]
             default: $HOME/.config/lxc/client.crt
             type: path
+        server_cert:
+            description:
+            - The server certificate file path.
+            type: path
+            version_added: 8.0.0
+        server_check_hostname:
+            description:
+            - This option controls if the server's hostname is checked as part of the HTTPS connection verification.
+              This can be useful to disable, if for example, the server certificate provided (see O(server_cert) option)
+              does not cover a name matching the one used to communicate with the server. Such mismatch is common as LXD
+              generates self-signed server certificates by default.
+            type: bool
+            default: true
+            version_added: 8.0.0
         trust_password:
             description:
             - The client trusted password.
             - You need to set this password on the lxd server before
                 running this module using the following command
                 C(lxc config set core.trust_password <some random password>)
-                See U(https://www.stgraber.org/2016/04/18/lxd-api-direct-interaction/).
-            - If I(trust_password) is set, this module send a request for authentication before sending any requests.
+                See U(https://documentation.ubuntu.com/lxd/en/latest/authentication/#adding-client-certificates-using-a-trust-password).
+            - If O(trust_password) is set, this module send a request for authentication before sending any requests.
             type: str
         state:
             description: Filter the instance according to the current status.
             type: str
             default: none
             choices: [ 'STOPPED', 'STARTING', 'RUNNING', 'none' ]
+        project:
+            description: Filter the instance according to the given project.
+            type: str
+            default: default
+            version_added: 6.2.0
         type_filter:
             description:
-            - Filter the instances by type C(virtual-machine), C(container) or C(both).
+            - Filter the instances by type V(virtual-machine), V(container) or V(both).
             - The first version of the inventory only supported containers.
             type: str
             default: container
@@ -65,18 +85,18 @@ DOCUMENTATION = r'''
             version_added: 4.2.0
         prefered_instance_network_interface:
             description:
-            - If an instance has multiple network interfaces, select which one is the prefered as pattern.
+            - If an instance has multiple network interfaces, select which one is the preferred as pattern.
             - Combined with the first number that can be found e.g. 'eth' + 0.
-            - The option has been renamed from I(prefered_container_network_interface) to I(prefered_instance_network_interface) in community.general 3.8.0.
-              The old name still works as an alias.
+            - The option has been renamed from O(prefered_container_network_interface) to O(prefered_instance_network_interface)
+              in community.general 3.8.0. The old name still works as an alias.
             type: str
             default: eth
             aliases:
               - prefered_container_network_interface
         prefered_instance_network_family:
             description:
-            - If an instance has multiple network interfaces, which one is the prefered by family.
-            - Specify C(inet) for IPv4 and C(inet6) for IPv6.
+            - If an instance has multiple network interfaces, which one is the preferred by family.
+            - Specify V(inet) for IPv4 and V(inet6) for IPv6.
             type: str
             default: inet
             choices: [ 'inet', 'inet6' ]
@@ -140,20 +160,23 @@ groupby:
   vlan666:
     type: vlanid
     attribute: 666
+  projectInternals:
+    type: project
+    attribute: internals
 '''
 
-import binascii
 import json
 import re
 import time
 import os
-import socket
 from ansible.plugins.inventory import BaseInventoryPlugin
 from ansible.module_utils.common.text.converters import to_native, to_text
 from ansible.module_utils.common.dict_transformations import dict_merge
 from ansible.module_utils.six import raise_from
 from ansible.errors import AnsibleError, AnsibleParserError
+from ansible.module_utils.six.moves.urllib.parse import urlencode
 from ansible_collections.community.general.plugins.module_utils.lxd import LXDClient, LXDClientException
+from ansible_collections.community.general.plugins.plugin_utils.unsafe import make_unsafe
 
 try:
     import ipaddress
@@ -279,7 +302,7 @@ class InventoryModule(BaseInventoryPlugin):
         urls = (url for url in url_list if self.validate_url(url))
         for url in urls:
             try:
-                socket_connection = LXDClient(url, self.client_key, self.client_cert, self.debug)
+                socket_connection = LXDClient(url, self.client_key, self.client_cert, self.debug, self.server_cert, self.server_check_hostname)
                 return socket_connection
             except LXDClientException as err:
                 error_storage[url] = err
@@ -330,7 +353,15 @@ class InventoryModule(BaseInventoryPlugin):
         #        "status_code": 200,
         #        "type": "sync"
         #      }
-        instances = self.socket.do('GET', '/1.0/instances')
+        url = '/1.0/instances'
+        if self.project:
+            url = url + '?{0}'.format(urlencode(dict(project=self.project)))
+
+        instances = self.socket.do('GET', url)
+
+        if self.project:
+            return [m.split('/')[3].split('?')[0] for m in instances['metadata']]
+
         return [m.split('/')[3] for m in instances['metadata']]
 
     def _get_config(self, branch, name):
@@ -344,22 +375,24 @@ class InventoryModule(BaseInventoryPlugin):
         Kwargs:
             None
         Source:
-            https://github.com/lxc/lxd/blob/master/doc/rest-api.md
+            https://documentation.ubuntu.com/lxd/en/latest/rest-api/
         Raises:
             None
         Returns:
             dict(config): Config of the instance"""
         config = {}
         if isinstance(branch, (tuple, list)):
-            config[name] = {branch[1]: self.socket.do('GET', '/1.0/{0}/{1}/{2}'.format(to_native(branch[0]), to_native(name), to_native(branch[1])))}
+            config[name] = {branch[1]: self.socket.do(
+                'GET', '/1.0/{0}/{1}/{2}?{3}'.format(to_native(branch[0]), to_native(name), to_native(branch[1]), urlencode(dict(project=self.project))))}
         else:
-            config[name] = {branch: self.socket.do('GET', '/1.0/{0}/{1}'.format(to_native(branch), to_native(name)))}
+            config[name] = {branch: self.socket.do(
+                'GET', '/1.0/{0}/{1}?{2}'.format(to_native(branch), to_native(name), urlencode(dict(project=self.project))))}
         return config
 
     def get_instance_data(self, names):
         """Create Inventory of the instance
 
-        Iterate through the different branches of the instances and collect Informations.
+        Iterate through the different branches of the instances and collect Information.
 
         Args:
             list(names): List of instance names
@@ -381,7 +414,7 @@ class InventoryModule(BaseInventoryPlugin):
     def get_network_data(self, names):
         """Create Inventory of the instance
 
-        Iterate through the different branches of the instances and collect Informations.
+        Iterate through the different branches of the instances and collect Information.
 
         Args:
             list(names): List of instance names
@@ -434,12 +467,12 @@ class InventoryModule(BaseInventoryPlugin):
         return network_configuration
 
     def get_prefered_instance_network_interface(self, instance_name):
-        """Helper to get the prefered interface of thr instance
+        """Helper to get the preferred interface of thr instance
 
-        Helper to get the prefered interface provide by neme pattern from 'prefered_instance_network_interface'.
+        Helper to get the preferred interface provide by neme pattern from 'prefered_instance_network_interface'.
 
         Args:
-            str(containe_name): name of instance
+            str(instance_name): name of instance
         Kwargs:
             None
         Raises:
@@ -464,7 +497,7 @@ class InventoryModule(BaseInventoryPlugin):
         Helper to get the VLAN_ID from the instance
 
         Args:
-            str(containe_name): name of instance
+            str(instance_name): name of instance
         Kwargs:
             None
         Raises:
@@ -546,7 +579,7 @@ class InventoryModule(BaseInventoryPlugin):
             else:
                 path[instance_name][key] = value
         except KeyError as err:
-            raise AnsibleParserError("Unable to store Informations: {0}".format(to_native(err)))
+            raise AnsibleParserError("Unable to store Information: {0}".format(to_native(err)))
 
     def extract_information_from_instance_configs(self):
         """Process configuration information
@@ -583,6 +616,8 @@ class InventoryModule(BaseInventoryPlugin):
             self._set_data_entry(instance_name, 'network_interfaces', self.extract_network_information_from_instance_config(instance_name))
             self._set_data_entry(instance_name, 'preferred_interface', self.get_prefered_instance_network_interface(instance_name))
             self._set_data_entry(instance_name, 'vlan_ids', self.get_instance_vlans(instance_name))
+            self._set_data_entry(instance_name, 'project', self._get_data_entry(
+                'instances/{0}/instances/metadata/project'.format(instance_name)))
 
     def build_inventory_network(self, instance_name):
         """Add the network interfaces of the instance to the inventory
@@ -637,7 +672,7 @@ class InventoryModule(BaseInventoryPlugin):
 
         if self._get_data_entry('inventory/{0}/network_interfaces'.format(instance_name)):  # instance have network interfaces
             self.inventory.set_variable(instance_name, 'ansible_connection', 'ssh')
-            self.inventory.set_variable(instance_name, 'ansible_host', interface_selection(instance_name))
+            self.inventory.set_variable(instance_name, 'ansible_host', make_unsafe(interface_selection(instance_name)))
         else:
             self.inventory.set_variable(instance_name, 'ansible_connection', 'local')
 
@@ -663,29 +698,39 @@ class InventoryModule(BaseInventoryPlugin):
                 if self.filter.lower() != instance_state:
                     continue
             # add instance
+            instance_name = make_unsafe(instance_name)
             self.inventory.add_host(instance_name)
-            # add network informations
+            # add network information
             self.build_inventory_network(instance_name)
             # add os
             v = self._get_data_entry('inventory/{0}/os'.format(instance_name))
             if v:
-                self.inventory.set_variable(instance_name, 'ansible_lxd_os', v.lower())
+                self.inventory.set_variable(instance_name, 'ansible_lxd_os', make_unsafe(v.lower()))
             # add release
             v = self._get_data_entry('inventory/{0}/release'.format(instance_name))
             if v:
-                self.inventory.set_variable(instance_name, 'ansible_lxd_release', v.lower())
+                self.inventory.set_variable(
+                    instance_name, 'ansible_lxd_release', make_unsafe(v.lower()))
             # add profile
-            self.inventory.set_variable(instance_name, 'ansible_lxd_profile', self._get_data_entry('inventory/{0}/profile'.format(instance_name)))
+            self.inventory.set_variable(
+                instance_name, 'ansible_lxd_profile', make_unsafe(self._get_data_entry('inventory/{0}/profile'.format(instance_name))))
             # add state
-            self.inventory.set_variable(instance_name, 'ansible_lxd_state', instance_state)
+            self.inventory.set_variable(
+                instance_name, 'ansible_lxd_state', make_unsafe(instance_state))
             # add type
-            self.inventory.set_variable(instance_name, 'ansible_lxd_type', self._get_data_entry('inventory/{0}/type'.format(instance_name)))
+            self.inventory.set_variable(
+                instance_name, 'ansible_lxd_type', make_unsafe(self._get_data_entry('inventory/{0}/type'.format(instance_name))))
             # add location information
             if self._get_data_entry('inventory/{0}/location'.format(instance_name)) != "none":  # wrong type by lxd 'none' != 'None'
-                self.inventory.set_variable(instance_name, 'ansible_lxd_location', self._get_data_entry('inventory/{0}/location'.format(instance_name)))
+                self.inventory.set_variable(
+                    instance_name, 'ansible_lxd_location', make_unsafe(self._get_data_entry('inventory/{0}/location'.format(instance_name))))
             # add VLAN_ID information
             if self._get_data_entry('inventory/{0}/vlan_ids'.format(instance_name)):
-                self.inventory.set_variable(instance_name, 'ansible_lxd_vlan_ids', self._get_data_entry('inventory/{0}/vlan_ids'.format(instance_name)))
+                self.inventory.set_variable(
+                    instance_name, 'ansible_lxd_vlan_ids', make_unsafe(self._get_data_entry('inventory/{0}/vlan_ids'.format(instance_name))))
+            # add project
+            self.inventory.set_variable(
+                instance_name, 'ansible_lxd_project', make_unsafe(self._get_data_entry('inventory/{0}/project'.format(instance_name))))
 
     def build_inventory_groups_location(self, group_name):
         """create group by attribute: location
@@ -760,6 +805,28 @@ class InventoryModule(BaseInventoryPlugin):
                         except ValueError:
                             # Ignore invalid IP addresses returned by lxd
                             pass
+
+    def build_inventory_groups_project(self, group_name):
+        """create group by attribute: project
+
+        Args:
+            str(group_name): Group name
+        Kwargs:
+            None
+        Raises:
+            None
+        Returns:
+            None"""
+        # maybe we just want to expand one group
+        if group_name not in self.inventory.groups:
+            self.inventory.add_group(group_name)
+
+        gen_instances = [
+            instance_name for instance_name in self.inventory.hosts
+            if 'ansible_lxd_project' in self.inventory.get_host(instance_name).get_vars()]
+        for instance_name in gen_instances:
+            if self.groupby[group_name].get('attribute').lower() == self.inventory.get_host(instance_name).get_vars().get('ansible_lxd_project'):
+                self.inventory.add_child(group_name, instance_name)
 
     def build_inventory_groups_os(self, group_name):
         """create group by attribute: os
@@ -899,6 +966,7 @@ class InventoryModule(BaseInventoryPlugin):
                 * 'profile'
                 * 'vlanid'
                 * 'type'
+                * 'project'
 
             Args:
                 str(group_name): Group name
@@ -926,6 +994,8 @@ class InventoryModule(BaseInventoryPlugin):
                 self.build_inventory_groups_vlanid(group_name)
             elif self.groupby[group_name].get('type') == 'type':
                 self.build_inventory_groups_type(group_name)
+            elif self.groupby[group_name].get('type') == 'project':
+                self.build_inventory_groups_project(group_name)
             else:
                 raise AnsibleParserError('Unknown group type: {0}'.format(to_native(group_name)))
 
@@ -933,7 +1003,7 @@ class InventoryModule(BaseInventoryPlugin):
             for group_name in self.groupby:
                 if not group_name.isalnum():
                     raise AnsibleParserError('Invalid character(s) in groupname: {0}'.format(to_native(group_name)))
-                group_type(group_name)
+                group_type(make_unsafe(group_name))
 
     def build_inventory(self):
         """Build dynamic inventory
@@ -1032,6 +1102,9 @@ class InventoryModule(BaseInventoryPlugin):
         try:
             self.client_key = self.get_option('client_key')
             self.client_cert = self.get_option('client_cert')
+            self.server_cert = self.get_option('server_cert')
+            self.server_check_hostname = self.get_option('server_check_hostname')
+            self.project = self.get_option('project')
             self.debug = self.DEBUG
             self.data = {}  # store for inventory-data
             self.groupby = self.get_option('groupby')

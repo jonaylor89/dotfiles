@@ -20,12 +20,15 @@ DOCUMENTATION = '''
       remote_addr:
         description:
             - The path of the chroot you want to access.
+        type: string
         default: inventory_hostname
         vars:
+            - name: inventory_hostname
             - name: ansible_host
       executable:
         description:
             - User specified executable shell
+        type: string
         ini:
           - section: defaults
             key: executable
@@ -37,6 +40,7 @@ DOCUMENTATION = '''
       chroot_exe:
         description:
             - User specified chroot binary
+        type: string
         ini:
           - section: chroot_connection
             key: exe
@@ -45,7 +49,41 @@ DOCUMENTATION = '''
         vars:
           - name: ansible_chroot_exe
         default: chroot
+      disable_root_check:
+        description:
+            - Do not check that the user is not root.
+        ini:
+          - section: chroot_connection
+            key: disable_root_check
+        env:
+          - name: ANSIBLE_CHROOT_DISABLE_ROOT_CHECK
+        vars:
+          - name: ansible_chroot_disable_root_check
+        default: false
+        type: bool
+        version_added: 7.3.0
 '''
+
+EXAMPLES = r"""
+# Plugin requires root privileges for chroot, -E preserves your env (and location of ~/.ansible):
+# sudo -E ansible-playbook ...
+#
+# Static inventory file
+# [chroots]
+# /path/to/debootstrap
+# /path/to/feboostrap
+# /path/to/lxc-image
+# /path/to/chroot
+
+# playbook
+---
+- hosts: chroots
+  connection: community.general.chroot
+  tasks:
+    - debug:
+        msg: "This is coming from chroot environment"
+
+"""
 
 import os
 import os.path
@@ -80,11 +118,7 @@ class Connection(ConnectionBase):
 
         self.chroot = self._play_context.remote_addr
 
-        if os.geteuid() != 0:
-            raise AnsibleError("chroot connection requires running as root")
-
-        # we're running as root on the local system so do some
-        # trivial checks for ensuring 'host' is actually a chroot'able dir
+        # do some trivial checks for ensuring 'host' is actually a chroot'able dir
         if not os.path.isdir(self.chroot):
             raise AnsibleError("%s is not a directory" % self.chroot)
 
@@ -98,6 +132,11 @@ class Connection(ConnectionBase):
 
     def _connect(self):
         """ connect to the chroot """
+        if not self.get_option('disable_root_check') and os.geteuid() != 0:
+            raise AnsibleError(
+                "chroot connection requires running as root. "
+                "You can override this check with the `disable_root_check` option.")
+
         if os.path.isabs(self.get_option('chroot_exe')):
             self.chroot_cmd = self.get_option('chroot_exe')
         else:

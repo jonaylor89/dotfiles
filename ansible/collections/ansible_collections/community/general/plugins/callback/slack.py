@@ -18,11 +18,11 @@ DOCUMENTATION = '''
     short_description: Sends play events to a Slack channel
     description:
         - This is an ansible callback plugin that sends status updates to a Slack channel during playbook execution.
-        - Before 2.4 only environment variables were available for configuring this plugin
     options:
       webhook_url:
         required: true
-        description: Slack Webhook URL
+        description: Slack Webhook URL.
+        type: str
         env:
           - name: SLACK_WEBHOOK_URL
         ini:
@@ -31,6 +31,7 @@ DOCUMENTATION = '''
       channel:
         default: "#ansible"
         description: Slack room to post in.
+        type: str
         env:
           - name: SLACK_CHANNEL
         ini:
@@ -38,6 +39,7 @@ DOCUMENTATION = '''
             key: channel
       username:
         description: Username to post as.
+        type: str
         env:
           - name: SLACK_USERNAME
         default: ansible
@@ -45,7 +47,7 @@ DOCUMENTATION = '''
           - section: callback_slack
             key: username
       validate_certs:
-        description: validate the SSL certificate of the Slack server. (For HTTPS URLs)
+        description: Validate the SSL certificate of the Slack server for HTTPS URLs.
         env:
           - name: SLACK_VALIDATE_CERTS
         ini:

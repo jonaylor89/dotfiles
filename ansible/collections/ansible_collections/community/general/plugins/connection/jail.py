@@ -20,13 +20,16 @@ DOCUMENTATION = '''
       remote_addr:
         description:
             - Path to the jail
+        type: string
         default: inventory_hostname
         vars:
+            - name: inventory_hostname
             - name: ansible_host
             - name: ansible_jail_host
       remote_user:
         description:
             - User to execute as inside the jail
+        type: string
         vars:
             - name: ansible_user
             - name: ansible_jail_user

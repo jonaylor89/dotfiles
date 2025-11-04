@@ -8,7 +8,7 @@
     path: "{{ remote_tmp_dir }}/*.txt"
     dest: "{{ remote_tmp_dir }}/archive_remove_source_files.{{ format }}"
     format: "{{ format }}"
-    remove: yes
+    remove: true
   register: archive_remove_source_files
 
 - name: Verify archive exists - remove source files ({{ format }})
@@ -20,21 +20,28 @@
   assert:
     that:
       - archive_remove_source_files is changed
-      - "{{ archive_remove_source_files.archived | length }} == 3"
+      - "archive_remove_source_files.archived | length == 3"
 
 - name: Remove Archive - remove source files ({{ format }})
   file:
     path: "{{ remote_tmp_dir }}/archive_remove_source_files.{{ format }}"
     state: absent
 
-- name: Assert that source files were removed - remove source files ({{ format }})
-  assert:
-    that:
-      - "'{{ remote_tmp_dir }}/{{ item }}' is not exists"
+- name: Remove source files in check mode ({{ format }})
+  file:
+    path: "{{ remote_tmp_dir }}/{{ item }}"
+    state: absent
+  check_mode: true
   with_items:
     - foo.txt
     - bar.txt
     - empty.txt
+  register: remove_files
+
+- name: Assert that source files were removed - remove source files ({{ format }})
+  assert:
+    that:
+      - remove_files is not changed
 
 - name: Copy source files - remove source directory ({{ format }})
   copy:
@@ -64,7 +71,7 @@
     path: "{{ remote_tmp_dir }}/tmpdir"
     dest: "{{ remote_tmp_dir }}/archive_remove_source_directory.{{ format }}"
     format: "{{ format }}"
-    remove: yes
+    remove: true
   register: archive_remove_source_directory
 
 - name: Verify archive exists - remove source directory ({{ format }})
@@ -76,17 +83,24 @@
   assert:
     that:
       - archive_remove_source_directory is changed
-      - "{{ archive_remove_source_directory.archived | length }} == 3"
+      - "archive_remove_source_directory.archived | length == 3"
 
 - name: Remove archive - remove source directory ({{ format }})
   file:
     path: "{{ remote_tmp_dir }}/archive_remove_source_directory.{{ format }}"
     state: absent
 
+- name: Remove source source directory in check mode ({{ format }})
+  file:
+    path: "{{ remote_tmp_dir }}/tmpdir"
+    state: absent
+  check_mode: true
+  register: remove_dir
+
 - name: Verify source directory was removed - remove source directory ({{ format }})
   assert:
     that:
-      - "'{{ remote_tmp_dir }}/tmpdir' is not exists"
+      - remove_dir is not changed
 
 - name: Create temporary directory - remove source excluding path ({{ format }})
   file:
@@ -107,7 +121,7 @@
     path: "{{ remote_tmp_dir }}/tmpdir/*"
     dest: "{{ remote_tmp_dir }}/archive_remove_source_excluding_path.{{ format }}"
     format: "{{ format }}"
-    remove: yes
+    remove: true
     exclude_path: "{{ remote_tmp_dir }}/tmpdir/empty.txt"
   register: archive_remove_source_excluding_path
 
@@ -120,7 +134,7 @@
   assert:
     that:
       - archive_remove_source_excluding_path is changed
-      - "{{ archive_remove_source_excluding_path.archived | length }} == 2"
+      - "archive_remove_source_excluding_path.archived | length == 2"
 
 - name: Remove archive - remove source excluding path ({{ format }})
   file:
@@ -150,7 +164,7 @@
       - "{{ remote_tmp_dir }}/tmpdir/sub/*"
     dest: "{{ remote_tmp_dir }}/archive_remove_source_excluding_sub_path.{{ format }}"
     format: "{{ format }}"
-    remove: yes
+    remove: true
     exclude_path: "{{ remote_tmp_dir }}/tmpdir/sub/subfile.txt"
   register: archive_remove_source_excluding_sub_path
 
@@ -185,7 +199,7 @@
     path: "{{ remote_tmp_dir }}/tmpdir/"
     dest: "{{ remote_tmp_dir }}/archive_remove_source_nested_paths.{{ format }}"
     format: "{{ format }}"
-    remove: yes
+    remove: true
   register: archive_remove_nested_paths
 
 - name: Verify archive exists - remove source with nested paths ({{ format }})

@@ -14,9 +14,10 @@ options:
     headers:
         description:
           - A dictionary of additional headers to be sent to POST and PUT requests.
-          - Is needed for some modules
+          - Is needed for some modules.
         type: dict
         required: false
+        default: {}
     utm_host:
         description:
           - The REST Endpoint of the Sophos UTM.
@@ -29,8 +30,9 @@ options:
         default: 4444
     utm_token:
         description:
-          - "The token used to identify at the REST-API. See U(https://www.sophos.com/en-us/medialibrary/\
-            PDFs/documentation/UTMonAWS/Sophos-UTM-RESTful-API.pdf?la=en), Chapter 2.4.2."
+          - "The token used to identify at the REST-API. See
+            U(https://www.sophos.com/en-us/medialibrary/PDFs/documentation/UTMonAWS/Sophos-UTM-RESTful-API.pdf?la=en),
+            Chapter 2.4.2."
         type: str
         required: true
     utm_protocol:
@@ -47,8 +49,8 @@ options:
     state:
         description:
           - The desired state of the object.
-          - C(present) will create or update an object
-          - C(absent) will delete an object if it was present
+          - V(present) will create or update an object.
+          - V(absent) will delete an object if it was present.
         type: str
         choices: [ absent, present ]
         default: present

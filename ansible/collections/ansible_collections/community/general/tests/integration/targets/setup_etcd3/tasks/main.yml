@@ -50,7 +50,7 @@
       state: present
 
   # Check if re-installing etcd3 is required
-  - name: Check if etcd3ctl exists for re-use.
+  - name: Check if etcd3ctl exists for reuse.
     shell: "ETCDCTL_API=3 {{ etcd3_path }}/etcdctl --endpoints=localhost:2379 get foo"
     args:
       executable: /bin/bash
@@ -86,7 +86,7 @@
       unarchive:
         src: "{{ etcd3_download_url }}"
         dest: "{{ etcd3_download_location }}"
-        remote_src: yes
+        remote_src: true
 
     # Running etcd3 and kill afterwards if it wasn't running before.
     - name: Run etcd3

@@ -17,19 +17,23 @@ DOCUMENTATION = '''
     options :
       _command:
         description: Cyberark CLI utility.
+        type: string
         env:
           - name: AIM_CLIPASSWORDSDK_CMD
         default: '/opt/CARKaim/sdk/clipasswordsdk'
       appid:
         description: Defines the unique ID of the application that is issuing the password request.
+        type: string
         required: true
       query:
         description: Describes the filter criteria for the password retrieval.
+        type: string
         required: true
       output:
         description:
           - Specifies the desired output fields separated by commas.
           - "They could be: Password, PassProps.<property>, PasswordChangeInProcess"
+        type: string
         default: 'password'
       _extra:
         description: for extra_params values please check parameters for clipasswordsdk in CyberArk's "Credential Provider and ASCP Implementation Guide"
@@ -80,7 +84,6 @@ from subprocess import Popen
 
 from ansible.errors import AnsibleError
 from ansible.plugins.lookup import LookupBase
-from ansible.parsing.splitter import parse_kv
 from ansible.module_utils.common.text.converters import to_bytes, to_text, to_native
 from ansible.utils.display import Display
 
@@ -174,7 +177,6 @@ class LookupModule(LookupBase):
     """
 
     def run(self, terms, variables=None, **kwargs):
-
         display.vvvv("%s" % terms)
         if isinstance(terms, list):
             return_values = []

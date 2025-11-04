@@ -6,7 +6,8 @@
 - name: bail out for non-supported platforms
   meta: end_play
   when:
-    - (ansible_os_family != "RedHat" or ansible_distribution_major_version|int < 7)
+    - (ansible_os_family != "RedHat" or ansible_distribution_major_version|int < 8)  # TODO: bump back to 7
+    - (ansible_distribution != 'CentOS' or ansible_distribution_major_version|int < 8)  # TODO: remove
     - ansible_os_family != "Debian"
 
 - name: install perl development package for Red Hat family
@@ -15,7 +16,7 @@
       - perl-devel
       - perl-App-cpanminus
     state: present
-  become: yes
+  become: true
   when: ansible_os_family == "RedHat"
 
 - name: install perl development package for Debian family
@@ -23,13 +24,13 @@
     name:
       - cpanminus
     state: present
-  become: yes
+  become: true
   when: ansible_os_family == "Debian"
 
 - name: install a Perl package
   cpanm:
     name: JSON
-    notest: yes
+    notest: true
   register: install_perl_package_result
 
 - name: assert package is installed
@@ -41,7 +42,7 @@
 - name: install same Perl package
   cpanm:
     name: JSON
-    notest: yes
+    notest: true
   register: install_same_perl_package_result
 
 - name: assert same package is installed
@@ -54,7 +55,7 @@
   cpanm:
     name: JSON
     version: "@4.01"
-    notest: yes
+    notest: true
     mode: new
   register: install_perl_package_with_version_op_result
 
