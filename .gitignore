@@ -1,7 +1,71 @@
-node_modules
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
 
-*.Cicero
-*.retry
-
+# Temporary files
 tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Machine-specific overrides (by design)
+*_local
+*.local
+.zshrc_local
+.bashrc_local
+.profile_local
+
+# Editor artifacts
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Language-specific
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+.Python
+*.so
+*.dylib
+
+# Build artifacts
+*.o
+*.a
+*.out
+dist/
+build/
+
+# Secrets (should never be committed)
+.env
+.env.local
+*.key
+*.pem
+*.p12
+credentials.json
+secrets.yaml
+
+# Ansible (deprecated - using simple shell scripts now)
+ansible/
+*.retry
+*.Cicero
+
+# Shell history (in case accidentally placed here)
+.bash_history
+.zsh_history
+
+# Cache directories
+.cache/
+cache/
+
+# AI
+.claude/

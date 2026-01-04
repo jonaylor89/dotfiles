@@ -1,8 +1,0 @@
-download_url: https://galaxy.ansible.com/api/v3/plugin/ansible/content/published/collections/artifacts/geerlingguy-mac-4.0.2.tar.gz
-format_version: 1.0.0
-name: mac
-namespace: geerlingguy
-server: https://galaxy.ansible.com/api/
-signatures: []
-version: 4.0.2
-version_url: /api/v3/plugin/ansible/content/published/collections/index/geerlingguy/mac/versions/4.0.2/

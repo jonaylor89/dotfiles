@@ -1,7 +1,0 @@
----
-- name: Deploy public site
-  hosts: localhost
-  vars_files:
-    - config.yml
-  roles:
-    - role: static_site
