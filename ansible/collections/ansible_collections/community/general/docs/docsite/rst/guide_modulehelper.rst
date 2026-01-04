@@ -38,7 +38,6 @@ But bear in mind that it does not showcase all of MH's features:
             ),
             supports_check_mode=True,
         )
-        use_old_vardict = False
 
         def __run__(self):
             self.vars.original_message = ''
@@ -76,13 +75,14 @@ section above, but there are more elements that will take part in it.
     from ansible_collections.community.general.plugins.module_utils.module_helper import ModuleHelper
 
     class MyTest(ModuleHelper):
+        # behavior for module paramaters ONLY, see below for further information
         output_params = ()
         change_params = ()
         diff_params = ()
-        facts_name = None
         facts_params = ()
-        use_old_vardict = True
-        mute_vardict_deprecation = False
+
+        facts_name = None   # used if generating facts, from parameters or otherwise
+
         module = dict(
             argument_spec=dict(...),
             # ...
@@ -202,27 +202,14 @@ By using ``self.vars``, you get a central mechanism to access the parameters but
 As described in :ref:`ansible_collections.community.general.docsite.guide_vardict`, variables in ``VarDict`` have metadata associated to them.
 One of the attributes in that metadata marks the variable for output, and MH makes use of that to generate the module's return values.
 
-.. important::
+.. note::
 
-    The ``VarDict`` feature described was introduced in community.general 7.1.0, but there was a first
-    implementation of it embedded within ``ModuleHelper``.
-    That older implementation is now deprecated and will be removed in community.general 11.0.0.
-    After community.general 7.1.0, MH modules generate a deprecation message about *using the old VarDict*.
-    There are two ways to prevent that from happening:
+    The ``VarDict`` class was introduced in community.general 7.1.0, as part of ``ModuleHelper`` itself.
+    However, it has been factored out to become an utility on its own, described in :ref:`ansible_collections.community.general.docsite.guide_vardict`,
+    and the older implementation was removed in community.general 11.0.0.
 
-        #.  Set ``mute_vardict_deprecation = True`` and the deprecation will be silenced. If the module still uses the old ``VarDict``,
-            it will not be able to update to community.general 11.0.0 (Spring 2026) upon its release.
-        #.  Set ``use_old_vardict = False`` to make the MH module use the new ``VarDict`` immediatelly.
-            The new ``VarDict`` and its use is documented and this is the recommended way to handle this.
-
-    .. code-block:: python
-
-        class MyTest(ModuleHelper):
-            use_old_vardict = False
-            mute_vardict_deprecation = True
-            ...
-
-    These two settings are mutually exclusive, but that is not enforced and the behavior when setting both is not specified.
+    Some code might still refer to the class variables ``use_old_vardict`` and ``mute_vardict_deprecation``, used for the transtition to the new
+    implementation but from community.general 11.0.0 onwards they are no longer used and can be safely removed from the code.
 
 Contrary to new variables created in ``VarDict``, module parameters are not set for output by default.
 If you want to include some module parameters in the output, list them in the ``output_params`` class variable.
@@ -233,6 +220,11 @@ If you want to include some module parameters in the output, list them in the ``
         output_params = ('state', 'name')
         ...
 
+.. important::
+
+    The variable names listed in ``output_params`` **must be module parameters**, as in parameters listed in the module's ``argument_spec``.
+    Names not found in ``argument_spec`` are silently ignored.
+
 Another neat feature provided by MH by using ``VarDict`` is the automatic tracking of changes when setting the metadata ``change=True``.
 Again, to enable this feature for module parameters, you must list them in the ``change_params`` class variable.
 
@@ -242,6 +234,11 @@ Again, to enable this feature for module parameters, you must list them in the `
         # example from community.general.xfconf
         change_params = ('value', )
         ...
+
+.. important::
+
+    The variable names listed in ``change_params`` **must be module parameters**, as in parameters listed in the module's ``argument_spec``.
+    Names not found in ``argument_spec`` are silently ignored.
 
 .. seealso::
 
@@ -259,6 +256,11 @@ With that, MH will automatically generate the diff output for variables that hav
     def __run__(self):
         # example from community.general.gio_mime
         self.vars.set_meta("handler", initial_value=gio_mime_get(self.runner, self.vars.mime_type), diff=True, change=True)
+
+.. important::
+
+    The variable names listed in ``diff_params`` **must be module parameters**, as in parameters listed in the module's ``argument_spec``.
+    Names not found in ``argument_spec`` are silently ignored.
 
 Moreover, if a module is set to return *facts* instead of return values, then again use the metadata ``fact=True`` and ``fact_params`` for module parameters.
 Additionally, you must specify ``facts_name``, as in:
@@ -282,6 +284,11 @@ That generates an Ansible fact like:
     - name: Print volume facts
       debug:
         msg: Volume fact is {{ ansible_facts.volume_facts.volume }}
+
+.. important::
+
+    The variable names listed in ``fact_params`` **must be module parameters**, as in parameters listed in the module's ``argument_spec``.
+    Names not found in ``argument_spec`` are silently ignored.
 
 .. important::
 
@@ -346,6 +353,8 @@ However, you can set output variables specifically for that exception, if you so
 
 .. code-block:: python
 
+    from ansible_collections.community.general.plugins.module_utils.module_helper import ModuleHelperException
+
     def __init_module__(self):
         if not complex_validation():
             self.do_raise("Validation failed!")
@@ -354,10 +363,15 @@ However, you can set output variables specifically for that exception, if you so
         awesomeness = calculate_awesomeness()
         if awesomeness > 1000:
             self.do_raise("Over awesome, I cannot handle it!", update_output={"awesomeness": awesomeness})
+            # which is just a convenience shortcut for
+            raise ModuleHelperException("...", update_output={...})
 
 All exceptions derived from ``Exception`` are captured and translated into a ``fail_json()`` call.
 However, if you do want to call ``self.module.fail_json()`` yourself it will work,
 just keep in mind that there will be no automatic handling of output variables in that case.
+
+Behind the curtains, all ``do_raise()`` does is to raise a ``ModuleHelperException``.
+If you want to create specialized error handling for your code, the best way is to extend that clas and raise it when needed.
 
 .. _ansible_collections.community.general.docsite.guide_modulehelper.statemh:
 
@@ -377,7 +391,6 @@ By using ``StateModuleHelper`` you can make your code like the excerpt from the 
         module = dict(
             ...
         )
-        use_old_vardict = False
 
         def __init_module__(self):
             self.runner = gconftool2_runner(self.module, check_rc=True)
@@ -460,6 +473,11 @@ Additionally, MH will also delegate:
 
 - ``diff_mode`` to ``self.module._diff``
 - ``verbosity`` to ``self.module._verbosity``
+
+Starting in community.general 10.3.0, MH will also delegate the method ``debug`` to ``self.module``.
+If any existing module already has a ``debug`` attribute defined, a warning message will be generated,
+requesting it to be renamed. Upon the release of community.general 12.0.0, the delegation will be
+preemptive and will override any existing method or property in the subclasses.
 
 Decorators
 """"""""""

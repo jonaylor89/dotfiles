@@ -7,7 +7,7 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-DOCUMENTATION = """
+DOCUMENTATION = r"""
 module: django_command
 author:
   - Alexei Znamensky (@russoz)
@@ -36,7 +36,7 @@ options:
       - List of extra arguments passed to the django admin command.
 """
 
-EXAMPLES = """
+EXAMPLES = r"""
 - name: Check the project
   community.general.django_command:
     command: check
@@ -50,11 +50,17 @@ EXAMPLES = """
     venv: /home/joedoe/project/fancysite/venv
 """
 
-RETURN = """
+RETURN = r"""
 run_info:
   description: Command-line execution information.
   type: dict
   returned: success and O(verbosity) >= 3
+version:
+  description: Version of Django.
+  type: str
+  returned: always
+  sample: 5.1.2
+  version_added: 10.0.0
 """
 
 import shlex

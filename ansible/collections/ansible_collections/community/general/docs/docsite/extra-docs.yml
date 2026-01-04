@@ -8,9 +8,10 @@ sections:
     toctree:
       - filter_guide
       - test_guide
-  - title: Cloud Guides
+  - title: Technology Guides
     toctree:
       - guide_alicloud
+      - guide_iocage
       - guide_online
       - guide_packet
       - guide_scaleway
@@ -20,3 +21,4 @@ sections:
       - guide_vardict
       - guide_cmdrunner
       - guide_modulehelper
+      - guide_uthelper

@@ -7,13 +7,13 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-DOCUMENTATION = '''
+DOCUMENTATION = r"""
 module: gitlab_milestone
 short_description: Creates/updates/deletes GitLab Milestones belonging to project or group
 version_added: 8.3.0
 description:
-  - When a milestone does not exist, it will be created.
-  - When a milestone does exist, its value will be updated when the values are different.
+  - When a milestone does not exist, it is created.
+  - When a milestone does exist, its value is updated when the values are different.
   - Milestones can be purged.
 author:
   - "Gabriele Pongelli (@gpongelli)"
@@ -83,10 +83,10 @@ options:
           - Milestone's description.
         type: str
         default: null
-'''
+"""
 
 
-EXAMPLES = '''
+EXAMPLES = r"""
 # same project's task can be executed for group
 - name: Create one milestone
   community.general.gitlab_milestone:
@@ -169,9 +169,9 @@ EXAMPLES = '''
     milestones:
       - title: milestone-abc123
       - title: milestone-two
-'''
+"""
 
-RETURN = '''
+RETURN = r"""
 milestones:
   description: Four lists of the milestones which were added, updated, removed or exist.
   returned: success
@@ -181,27 +181,27 @@ milestones:
       description: A list of milestones which were created.
       returned: always
       type: list
-      sample: ['abcd', 'milestone-one']
+      sample: ["abcd", "milestone-one"]
     untouched:
       description: A list of milestones which exist.
       returned: always
       type: list
-      sample: ['defg', 'new-milestone']
+      sample: ["defg", "new-milestone"]
     removed:
       description: A list of milestones which were deleted.
       returned: always
       type: list
-      sample: ['defg', 'new-milestone']
+      sample: ["defg", "new-milestone"]
     updated:
       description: A list pre-existing milestones whose values have been set.
       returned: always
       type: list
-      sample: ['defg', 'new-milestone']
+      sample: ["defg", "new-milestone"]
 milestones_obj:
   description: API object.
   returned: success
   type: dict
-'''
+"""
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.api import basic_auth_argument_spec

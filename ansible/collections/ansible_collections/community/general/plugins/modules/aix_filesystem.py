@@ -9,15 +9,13 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-DOCUMENTATION = r'''
----
+DOCUMENTATION = r"""
 author:
   - Kairo Araujo (@kairoaraujo)
 module: aix_filesystem
 short_description: Configure LVM and NFS file systems for AIX
 description:
-  - This module creates, removes, mount and unmount LVM and NFS file system for
-    AIX using C(/etc/filesystems).
+  - This module creates, removes, mount and unmount LVM and NFS file system for AIX using C(/etc/filesystems).
   - For LVM file systems is possible to resize a file system.
 extends_documentation_fragment:
   - community.general.attributes
@@ -49,7 +47,7 @@ options:
     description:
       - Logical volume (LV) device name or remote export device to create a NFS file system.
       - It is used to create a file system on an already existing logical volume or the exported NFS file system.
-      - If not mentioned a new logical volume name will be created following AIX standards (LVM).
+      - If not mentioned a new logical volume name is created following AIX standards (LVM).
     type: str
   fs_type:
     description:
@@ -60,7 +58,7 @@ options:
     description:
       - Set file system permissions. V(rw) (read-write) or V(ro) (read-only).
     type: str
-    choices: [ ro, rw ]
+    choices: [ro, rw]
     default: rw
   mount_group:
     description:
@@ -83,15 +81,14 @@ options:
   size:
     description:
       - Specifies the file system size.
-      - For already V(present) it will be resized.
-      - 512-byte blocks, Megabytes or Gigabytes. If the value has M specified
-        it will be in Megabytes. If the value has G specified it will be in
-        Gigabytes.
-      - If no M or G the value will be 512-byte blocks.
-      - If "+" is specified in begin of value, the value will be added.
-      - If "-" is specified in begin of value, the value will be removed.
-      - If "+" or "-" is not specified, the total value will be the specified.
-      - Size will respects the LVM AIX standards.
+      - For already present it resizes the filesystem.
+      - 512-byte blocks, megabytes or gigabytes. If the value has M specified it is in megabytes. If the value has G specified
+        it is in gigabytes.
+      - If no M or G the value is 512-byte blocks.
+      - If V(+) is specified in begin of value, the value is added.
+      - If V(-) is specified in begin of value, the value is removed.
+      - If neither V(+) nor V(-) is specified, then the total value is the specified.
+      - Size respects the LVM AIX standards.
     type: str
   state:
     description:
@@ -101,7 +98,7 @@ options:
       - V(mounted) checks if the file system is mounted or mount the file system.
       - V(unmounted) check if the file system is unmounted or unmount the file system.
     type: str
-    choices: [ absent, mounted, present, unmounted ]
+    choices: [absent, mounted, present, unmounted]
     default: present
   vg:
     description:
@@ -109,9 +106,9 @@ options:
     type: str
 notes:
   - For more O(attributes), please check "crfs" AIX manual.
-'''
+"""
 
-EXAMPLES = r'''
+EXAMPLES = r"""
 - name: Create filesystem in a previously defined logical volume.
   community.general.aix_filesystem:
     device: testlv
@@ -166,9 +163,9 @@ EXAMPLES = r'''
     filesystem: /newfs
     rm_mount_point: true
     state: absent
-'''
+"""
 
-RETURN = r'''
+RETURN = r"""
 changed:
   description: Return changed for aix_filesystems actions as true or false.
   returned: always
@@ -177,7 +174,7 @@ msg:
   description: Return message regarding the action.
   returned: always
   type: str
-'''
+"""
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.general.plugins.module_utils._mount import ismount

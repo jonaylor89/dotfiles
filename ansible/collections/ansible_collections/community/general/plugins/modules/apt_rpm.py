@@ -11,8 +11,7 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-DOCUMENTATION = '''
----
+DOCUMENTATION = r"""
 module: apt_rpm
 short_description: APT-RPM package manager
 description:
@@ -28,19 +27,17 @@ options:
   package:
     description:
       - List of packages to install, upgrade, or remove.
-      - Since community.general 8.0.0, may include paths to local C(.rpm) files
-        if O(state=installed) or O(state=present), requires C(rpm) python
-        module.
-    aliases: [ name, pkg ]
+      - Since community.general 8.0.0, may include paths to local C(.rpm) files if O(state=installed) or O(state=present),
+        requires C(rpm) Python module.
+    aliases: [name, pkg]
     type: list
     elements: str
   state:
     description:
       - Indicates the desired package state.
-      - Please note that V(present) and V(installed) are equivalent to V(latest) right now.
-        This will change in the future. To simply ensure that a package is installed, without upgrading
-        it, use the V(present_not_latest) state.
       - The states V(latest) and V(present_not_latest) have been added in community.general 8.6.0.
+      - Please note before community.general 11.0.0, V(present) and V(installed) were equivalent to V(latest). This changed
+        in community.general 11.0.0. Now they are equivalent to V(present_not_latest).
     choices:
       - absent
       - present
@@ -52,14 +49,15 @@ options:
     type: str
   update_cache:
     description:
-      - Run the equivalent of C(apt-get update) before the operation. Can be run as part of the package installation or as a separate step.
+      - Run the equivalent of C(apt-get update) before the operation. Can be run as part of the package installation or as
+        a separate step.
       - Default is not to update the cache.
     type: bool
     default: false
   clean:
     description:
-      - Run the equivalent of C(apt-get clean) to clear out the local repository of retrieved package files. It removes everything but
-        the lock file from C(/var/cache/apt/archives/) and C(/var/cache/apt/archives/partial/).
+      - Run the equivalent of C(apt-get clean) to clear out the local repository of retrieved package files. It removes everything
+        but the lock file from C(/var/cache/apt/archives/) and C(/var/cache/apt/archives/partial/).
       - Can be run as part of the package installation (clean runs before install) or as a separate step.
     type: bool
     default: false
@@ -77,13 +75,12 @@ options:
     default: false
     version_added: 6.5.0
 requirements:
-  - C(rpm) python package (rpm bindings), optional. Required if O(package)
-    option includes local files.
+  - C(rpm) Python package (rpm bindings), optional. Required if O(package) option includes local files.
 author:
-- Evgenii Terechkov (@evgkrsk)
-'''
+  - Evgenii Terechkov (@evgkrsk)
+"""
 
-EXAMPLES = '''
+EXAMPLES = r"""
 - name: Install package foo
   community.general.apt_rpm:
     pkg: foo
@@ -122,7 +119,7 @@ EXAMPLES = '''
     update_cache: true
     dist_upgrade: true
     update_kernel: true
-'''
+"""
 
 import os
 import re
@@ -310,17 +307,6 @@ def main():
         module.fail_json(msg="cannot find /usr/bin/apt-get and/or /usr/bin/rpm")
 
     p = module.params
-    if p['state'] in ['installed', 'present']:
-        module.deprecate(
-            'state=%s currently behaves unexpectedly by always upgrading to the latest version if'
-            ' the package is already installed. This behavior is deprecated and will change in'
-            ' community.general 11.0.0. You can use state=latest to explicitly request this behavior'
-            ' or state=present_not_latest to explicitly request the behavior that state=%s will have'
-            ' in community.general 11.0.0, namely that the package will not be upgraded if it is'
-            ' already installed.' % (p['state'], p['state']),
-            version='11.0.0',
-            collection_name='community.general',
-        )
 
     modified = False
     output = ""
@@ -344,7 +330,7 @@ def main():
 
     packages = p['package']
     if p['state'] in ['installed', 'present', 'present_not_latest', 'latest']:
-        (m, out) = install_packages(module, packages, allow_upgrade=p['state'] != 'present_not_latest')
+        (m, out) = install_packages(module, packages, allow_upgrade=p['state'] == 'latest')
         modified = modified or m
         output += out
 

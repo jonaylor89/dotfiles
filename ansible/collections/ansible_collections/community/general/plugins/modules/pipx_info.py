@@ -9,46 +9,44 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = """
----
+DOCUMENTATION = r"""
 module: pipx_info
 short_description: Rretrieves information about applications installed with pipx
 version_added: 5.6.0
 description:
-- Retrieve details about Python applications installed in isolated virtualenvs using pipx.
+  - Retrieve details about Python applications installed in isolated virtualenvs using pipx.
 extends_documentation_fragment:
-- community.general.attributes
-- community.general.attributes.info_module
-- community.general.pipx
+  - community.general.attributes
+  - community.general.attributes.info_module
+  - community.general.pipx
 options:
   name:
     description:
-    - Name of an application installed with C(pipx).
+      - Name of an application installed with C(pipx).
     type: str
   include_deps:
     description:
-    - Include dependent packages in the output.
+      - Include dependent packages in the output.
     type: bool
     default: false
   include_injected:
     description:
-    - Include injected packages in the output.
+      - Include injected packages in the output.
     type: bool
     default: false
   include_raw:
     description:
-    - Returns the raw output of C(pipx list --json).
-    - The raw output is not affected by O(include_deps) or O(include_injected).
+      - Returns the raw output of C(pipx list --json).
+      - The raw output is not affected by O(include_deps) or O(include_injected).
     type: bool
     default: false
   global:
     version_added: 9.3.0
 author:
-- "Alexei Znamensky (@russoz)"
+  - "Alexei Znamensky (@russoz)"
 """
 
-EXAMPLES = """
----
+EXAMPLES = r"""
 - name: retrieve all installed applications
   community.general.pipx_info: {}
 
@@ -68,10 +66,9 @@ EXAMPLES = """
     include_deps: true
 """
 
-RETURN = """
----
+RETURN = r"""
 application:
-  description: The list of installed applications
+  description: The list of installed applications.
   returned: success
   type: list
   elements: dict
@@ -98,6 +95,15 @@ application:
       type: dict
       sample:
         licenses: "0.6.1"
+    pinned:
+      description:
+        - Whether the installed application is pinned or not.
+        - When using C(pipx<=1.6.0), this returns C(null).
+      returned: success
+      type: bool
+      sample:
+        pinned: true
+      version_added: 10.0.0
 
 raw_output:
   description: The raw output of the C(pipx list) command, when O(include_raw=true). Used for debugging.
@@ -110,12 +116,18 @@ cmd:
   type: list
   elements: str
   sample: ["/usr/bin/python3.10", "-m", "pipx", "list", "--include-injected", "--json"]
+
+version:
+  description: Version of pipx.
+  type: str
+  returned: always
+  sample: "1.7.1"
+  version_added: 10.1.0
 """
 
-import json
-
 from ansible_collections.community.general.plugins.module_utils.module_helper import ModuleHelper
-from ansible_collections.community.general.plugins.module_utils.pipx import pipx_runner, pipx_common_argspec
+from ansible_collections.community.general.plugins.module_utils.pipx import pipx_runner, pipx_common_argspec, make_process_dict
+from ansible_collections.community.general.plugins.module_utils.version import LooseVersion
 
 from ansible.module_utils.facts.compat import ansible_facts
 
@@ -133,7 +145,6 @@ class PipXInfo(ModuleHelper):
         argument_spec=argument_spec,
         supports_check_mode=True,
     )
-    use_old_vardict = False
 
     def __init_module__(self):
         if self.vars.executable:
@@ -142,42 +153,28 @@ class PipXInfo(ModuleHelper):
             facts = ansible_facts(self.module, gather_subset=['python'])
             self.command = [facts['python']['executable'], '-m', 'pipx']
         self.runner = pipx_runner(self.module, self.command)
+        with self.runner("version") as ctx:
+            rc, out, err = ctx.run()
+            self.vars.version = out.strip()
 
-        # self.vars.set('application', self._retrieve_installed(), change=True, diff=True)
+        if LooseVersion(self.vars.version) < LooseVersion("1.7.0"):
+            self.do_raise("The pipx tool must be at least at version 1.7.0")
 
     def __run__(self):
-        def process_list(rc, out, err):
-            if not out:
-                return []
-
-            results = []
-            raw_data = json.loads(out)
+        output_process = make_process_dict(self.vars.include_injected, self.vars.include_deps)
+        with self.runner('_list global', output_process=output_process) as ctx:
+            applications, raw_data = ctx.run()
             if self.vars.include_raw:
                 self.vars.raw_output = raw_data
 
             if self.vars.name:
-                if self.vars.name in raw_data['venvs']:
-                    data = {self.vars.name: raw_data['venvs'][self.vars.name]}
-                else:
-                    data = {}
+                self.vars.application = [
+                    v
+                    for k, v in applications.items()
+                    if k == self.vars.name
+                ]
             else:
-                data = raw_data['venvs']
-
-            for venv_name, venv in data.items():
-                entry = {
-                    'name': venv_name,
-                    'version': venv['metadata']['main_package']['package_version']
-                }
-                if self.vars.include_injected:
-                    entry['injected'] = {k: v['package_version'] for k, v in venv['metadata']['injected_packages'].items()}
-                if self.vars.include_deps:
-                    entry['dependencies'] = list(venv['metadata']['main_package']['app_paths_of_dependencies'])
-                results.append(entry)
-
-            return results
-
-        with self.runner('_list global', output_process=process_list) as ctx:
-            self.vars.application = ctx.run(_list=1)
+                self.vars.application = list(applications.values())
             self._capture_results(ctx)
 
     def _capture_results(self, ctx):

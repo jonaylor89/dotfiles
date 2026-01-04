@@ -9,13 +9,12 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-DOCUMENTATION = '''
----
+DOCUMENTATION = r"""
 module: gitlab_group
 short_description: Creates/updates/deletes GitLab Groups
 description:
-  - When the group does not exist in GitLab, it will be created.
-  - When the group does exist and state=absent, the group will be deleted.
+  - When the group does not exist in GitLab, it is created.
+  - When the group does exist and O(state=absent), the group is deleted.
 author:
   - Werner Dijkerman (@dj-wasabi)
   - Guillaume Martinez (@Lunik)
@@ -97,13 +96,13 @@ options:
     type: str
   parent:
     description:
-      - Allow to create subgroups
-      - Id or Full path of parent group in the form of group/name
+      - Allow to create subgroups.
+      - ID or Full path of parent group in the form of group/name.
     type: str
   path:
     description:
-      - The path of the group you want to create, this will be api_url/group_path
-      - If not supplied, the group_name will be used.
+      - The path of the group you want to create, this is O(api_url)/O(path).
+      - If not supplied, O(name) is used.
     type: str
   prevent_forking_outside_group:
     description:
@@ -130,7 +129,7 @@ options:
   service_access_tokens_expiration_enforced:
     description:
       - Service account token expiration.
-      - Changes will not affect existing token expiration dates.
+      - Changes do not affect existing token expiration dates.
       - Only available for top level groups.
     type: bool
     version_added: 9.5.0
@@ -146,7 +145,7 @@ options:
     version_added: 3.7.0
   state:
     description:
-      - create or delete group.
+      - Create or delete group.
       - Possible values are present and absent.
     default: present
     type: str
@@ -164,7 +163,7 @@ options:
     version_added: 9.5.0
   visibility:
     description:
-      - Default visibility of the group
+      - Default visibility of the group.
     choices: ["private", "internal", "public"]
     default: private
     type: str
@@ -176,9 +175,9 @@ options:
     choices: ["enabled", "private", "disabled"]
     type: str
     version_added: 9.5.0
-'''
+"""
 
-EXAMPLES = '''
+EXAMPLES = r"""
 - name: "Delete GitLab Group"
   community.general.gitlab_group:
     api_url: https://gitlab.example.com/
@@ -221,31 +220,31 @@ EXAMPLES = '''
     project_creation_level: noone
     auto_devops_enabled: false
     subgroup_creation_level: maintainer
-'''
+"""
 
-RETURN = '''
+RETURN = r"""
 msg:
-  description: Success or failure message
+  description: Success or failure message.
   returned: always
   type: str
   sample: "Success"
 
 result:
-  description: json parsed response from the server
+  description: JSON-parsed response from the server.
   returned: always
   type: dict
 
 error:
-  description: the error message returned by the GitLab API
+  description: The error message returned by the GitLab API.
   returned: failed
   type: str
   sample: "400: path is already in use"
 
 group:
-  description: API object
+  description: API object.
   returned: always
   type: dict
-'''
+"""
 
 from ansible.module_utils.api import basic_auth_argument_spec
 from ansible.module_utils.basic import AnsibleModule

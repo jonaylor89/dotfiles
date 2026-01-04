@@ -11,7 +11,6 @@ __metaclass__ = type
 
 
 DOCUMENTATION = r"""
----
 module: cargo
 short_description: Manage Rust packages with cargo
 version_added: 4.3.0
@@ -29,7 +28,7 @@ options:
   executable:
     description:
       - Path to the C(cargo) installed in the system.
-      - If not specified, the module will look C(cargo) in E(PATH).
+      - If not specified, the module looks for C(cargo) in E(PATH).
     type: path
     version_added: 7.5.0
   name:
@@ -39,16 +38,12 @@ options:
     elements: str
     required: true
   path:
-    description:
-      ->
-      The base path where to install the Rust packages. Cargo automatically appends
-      V(/bin). In other words, V(/usr/local) will become V(/usr/local/bin).
+    description: The base path where to install the Rust packages. Cargo automatically appends V(/bin). In other words, V(/usr/local)
+      becomes V(/usr/local/bin).
     type: path
   version:
-    description:
-      ->
-      The version to install. If O(name) contains multiple values, the module will
-      try to install all of them in this version.
+    description: The version to install. If O(name) contains multiple values, the module tries to install all of them in this
+      version.
     type: str
     required: false
   locked:
@@ -65,7 +60,7 @@ options:
     required: false
     type: str
     default: present
-    choices: [ "present", "absent", "latest" ]
+    choices: ["present", "absent", "latest"]
   directory:
     description:
       - Path to the source directory to install the Rust package from.
@@ -73,8 +68,17 @@ options:
     type: path
     required: false
     version_added: 9.1.0
+  features:
+    description:
+      - List of features to activate.
+      - This is only used when installing packages.
+    type: list
+    elements: str
+    required: false
+    default: []
+    version_added: 11.0.0
 requirements:
-    - cargo installed
+  - cargo installed
 """
 
 EXAMPLES = r"""
@@ -111,6 +115,12 @@ EXAMPLES = r"""
   community.general.cargo:
     name: ludusavi
     directory: /path/to/ludusavi/source
+
+- name: Install "serpl" Rust package with ast_grep feature
+  community.general.cargo:
+    name: serpl
+    features:
+      - ast_grep
 """
 
 import json
@@ -130,6 +140,7 @@ class Cargo(object):
         self.version = kwargs["version"]
         self.locked = kwargs["locked"]
         self.directory = kwargs["directory"]
+        self.features = kwargs["features"]
 
     @property
     def path(self):
@@ -181,6 +192,8 @@ class Cargo(object):
         if self.directory:
             cmd.append("--path")
             cmd.append(self.directory)
+        if self.features:
+            cmd += ["--features", ",".join(self.features)]
         return self._exec(cmd)
 
     def is_outdated(self, name):
@@ -241,6 +254,7 @@ def main():
         version=dict(default=None, type="str"),
         locked=dict(default=False, type="bool"),
         directory=dict(default=None, type="path"),
+        features=dict(default=[], required=False, type="list", elements="str"),
     )
     module = AnsibleModule(argument_spec=arg_spec, supports_check_mode=True)
 

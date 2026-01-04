@@ -1,0 +1,34 @@
+{
+ "collection_info": {
+  "namespace": "linode",
+  "name": "cloud",
+  "version": "0.41.1",
+  "authors": [
+   "Luke Murphy (@decentral1se)",
+   "Charles Kenney (@charliekenney23)",
+   "Phillip Campbell (@phillc)",
+   "Lena Garber (@lbgarber)"
+  ],
+  "readme": "README.md",
+  "tags": [
+   "linode",
+   "cloud"
+  ],
+  "description": "Linode ansible collection",
+  "license": [],
+  "license_file": "COPYING",
+  "dependencies": {},
+  "repository": "https://github.com/linode/ansible_linode",
+  "documentation": "https://github.com/linode/ansible_linode/blob/v0.41.1/README.md",
+  "homepage": "https://github.com/linode/ansible_linode",
+  "issues": "https://github.com/linode/ansible_linode/issues"
+ },
+ "file_manifest_file": {
+  "name": "FILES.json",
+  "ftype": "file",
+  "chksum_type": "sha256",
+  "chksum_sha256": "3e9ce844bafed5fa3afe41fcc636821a57415e582861478967bf396d7f781ca9",
+  "format": 1
+ },
+ "format": 1
+}

@@ -8,8 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = r'''
----
+DOCUMENTATION = r"""
 module: ipa_getkeytab
 short_description: Manage keytab file in FreeIPA
 version_added: 9.5.0
@@ -68,21 +67,22 @@ options:
   retrieve_mode:
     description:
       - Retrieve an existing key from the server instead of generating a new one.
-      - This is incompatible with the O(password), and will work only against a IPA server more recent than version 3.3.
+      - This is incompatible with the O(password), and works only against a IPA server more recent than version 3.3.
       - The user requesting the keytab must have access to the keys for this operation to succeed.
-      - Be aware that if set V(true), a new keytab will be generated.
+      - Be aware that if set V(true), a new keytab is generated.
       - This invalidates all previously retrieved keytabs for this service principal.
     type: bool
   encryption_types:
     description:
       - The list of encryption types to use to generate keys.
-      - It will use local client defaults if not provided.
+      - It uses local client defaults if not provided.
       - Valid values depend on the Kerberos library version and configuration.
     type: str
   state:
     description:
       - The state of the keytab file.
-      - V(present) only check for existence of a file, if you want to recreate keytab with other parameters you should set O(force=true).
+      - V(present) only check for existence of a file, if you want to recreate keytab with other parameters you should set
+        O(force=true).
     type: str
     default: present
     choices: ["present", "absent"]
@@ -95,14 +95,12 @@ requirements:
   - Managed host is FreeIPA client
 extends_documentation_fragment:
   - community.general.attributes
-'''
+"""
 
-EXAMPLES = r'''
-- name: Get kerberos ticket
-  ansible.builtin.shell: kinit admin
-  args:
-    stdin: "{{ aldpro_admin_password }}"
-  changed_when: true
+EXAMPLES = r"""
+- name: Get Kerberos ticket using default principal
+  community.general.krb_ticket:
+    password: "{{ aldpro_admin_password }}"
 
 - name: Create keytab
   community.general.ipa_getkeytab:
@@ -123,7 +121,7 @@ EXAMPLES = r'''
     principal: HTTP/freeipa-dc02.ipa.test
     ipa_host: freeipa-dc01.ipa.test
     force: true
-'''
+"""
 
 import os
 

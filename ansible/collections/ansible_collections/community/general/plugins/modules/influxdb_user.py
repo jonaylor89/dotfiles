@@ -10,8 +10,7 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-DOCUMENTATION = r'''
----
+DOCUMENTATION = r"""
 module: influxdb_user
 short_description: Manage InfluxDB users
 description:
@@ -38,30 +37,29 @@ options:
   admin:
     description:
       - Whether the user should be in the admin role or not.
-      - Since version 2.8, the role will also be updated.
+      - Since version 2.8, the role is also updated.
     default: false
     type: bool
   state:
     description:
       - State of the user.
-    choices: [ absent, present ]
+    choices: [absent, present]
     default: present
     type: str
   grants:
     description:
       - Privileges to grant to this user.
       - Takes a list of dicts containing the "database" and "privilege" keys.
-      - If this argument is not provided, the current grants will be left alone.
-      - If an empty list is provided, all grants for the user will be removed.
+      - If this argument is not provided, the current grants are left alone.
+      - If an empty list is provided, all grants for the user are removed.
     type: list
     elements: dict
 extends_documentation_fragment:
   - community.general.influxdb
   - community.general.attributes
+"""
 
-'''
-
-EXAMPLES = r'''
+EXAMPLES = r"""
 - name: Create a user on localhost using default login credentials
   community.general.influxdb_user:
     user_name: john
@@ -101,11 +99,9 @@ EXAMPLES = r'''
     login_username: "{{ influxdb_username }}"
     login_password: "{{ influxdb_password }}"
     state: absent
-'''
+"""
 
-RETURN = r'''
-#only defaults
-'''
+RETURN = r"""#"""
 
 import json
 

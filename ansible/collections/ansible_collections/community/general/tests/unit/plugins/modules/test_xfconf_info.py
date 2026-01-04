@@ -7,7 +7,7 @@ __metaclass__ = type
 
 
 from ansible_collections.community.general.plugins.modules import xfconf_info
-from .helper import Helper, RunCommandMock  # pylint: disable=unused-import
+from .uthelper import UTHelper, RunCommandMock
 
 
-Helper.from_module(xfconf_info, __name__)
+UTHelper.from_module(xfconf_info, __name__, mocks=[RunCommandMock])

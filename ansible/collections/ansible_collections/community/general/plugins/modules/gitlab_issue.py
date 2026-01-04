@@ -12,14 +12,14 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-DOCUMENTATION = '''
+DOCUMENTATION = r"""
 module: gitlab_issue
 short_description: Create, update, or delete GitLab issues
 version_added: '8.1.0'
 description:
   - Creates an issue if it does not exist.
-  - When an issue does exist, it will be updated if the provided parameters are different.
-  - When an issue does exist and O(state=absent), the issue will be deleted.
+  - When an issue does exist, it is updated if the provided parameters are different.
+  - When an issue does exist and O(state=absent), the issue is deleted.
   - When multiple issues are detected, the task fails.
   - Existing issues are matched based on O(title) and O(state_filter) filters.
 author:
@@ -97,10 +97,10 @@ options:
       - A title for the issue. The title is used as a unique identifier to ensure idempotency.
     type: str
     required: true
-'''
+"""
 
 
-EXAMPLES = '''
+EXAMPLES = r"""
 - name: Create Issue
   community.general.gitlab_issue:
     api_url: https://gitlab.com
@@ -109,10 +109,10 @@ EXAMPLES = '''
     title: "Ansible demo Issue"
     description: "Demo Issue description"
     labels:
-        - Ansible
-        - Demo
+      - Ansible
+      - Demo
     assignee_ids:
-        - testassignee
+      - testassignee
     state_filter: "opened"
     state: present
 
@@ -124,9 +124,9 @@ EXAMPLES = '''
     title: "Ansible demo Issue"
     state_filter: "opened"
     state: absent
-'''
+"""
 
-RETURN = r'''
+RETURN = r"""
 msg:
   description: Success or failure message.
   returned: always
@@ -137,7 +137,7 @@ issue:
   description: API object.
   returned: success
   type: dict
-'''
+"""
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.api import basic_auth_argument_spec

@@ -6,13 +6,12 @@ from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 from ansible.executor.task_result import TaskResult
-from ansible_collections.community.general.tests.unit.compat import unittest
-from ansible_collections.community.general.tests.unit.compat.mock import patch, Mock
+from ansible_collections.community.internal_test_tools.tests.unit.compat import unittest
+from ansible_collections.community.internal_test_tools.tests.unit.compat.mock import patch, Mock
 from ansible_collections.community.general.plugins.callback.loganalytics import AzureLogAnalyticsSource
 
 from datetime import datetime
 import json
-import sys
 
 
 class TestAzureLogAnalytics(unittest.TestCase):
@@ -27,10 +26,6 @@ class TestAzureLogAnalytics(unittest.TestCase):
         self.task_fields = {'args': {}}
         self.mock_host = Mock('MockHost')
         self.mock_host.name = 'myhost'
-
-        # Add backward compatibility
-        if sys.version_info < (3, 2):
-            self.assertRegex = self.assertRegexpMatches
 
     @patch('ansible_collections.community.general.plugins.callback.loganalytics.now')
     @patch('ansible_collections.community.general.plugins.callback.loganalytics.open_url')

@@ -9,16 +9,15 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = """
----
+DOCUMENTATION = r"""
 module: pipx
 short_description: Manages applications installed with pipx
 version_added: 3.8.0
 description:
-- Manage Python applications installed in isolated virtualenvs using pipx.
+  - Manage Python applications installed in isolated virtualenvs using pipx.
 extends_documentation_fragment:
-- community.general.attributes
-- community.general.pipx
+  - community.general.attributes
+  - community.general.pipx
 attributes:
   check_mode:
     support: full
@@ -28,131 +27,140 @@ options:
   state:
     type: str
     choices:
-    - present
-    - absent
-    - install
-    - install_all
-    - uninstall
-    - uninstall_all
-    - inject
-    - uninject
-    - upgrade
-    - upgrade_shared
-    - upgrade_all
-    - reinstall
-    - reinstall_all
-    - latest
-    - pin
-    - unpin
+      - present
+      - absent
+      - install
+      - install_all
+      - uninstall
+      - uninstall_all
+      - inject
+      - uninject
+      - upgrade
+      - upgrade_shared
+      - upgrade_all
+      - reinstall
+      - reinstall_all
+      - latest
+      - pin
+      - unpin
     default: install
     description:
-    - Desired state for the application.
-    - The states V(present) and V(absent) are aliases to V(install) and V(uninstall), respectively.
-    - The state V(latest) is equivalent to executing the task twice, with state V(install) and then V(upgrade). It was added in community.general
-      5.5.0.
-    - The states V(install_all), V(uninject), V(upgrade_shared), V(pin) and V(unpin) are only available in C(pipx>=1.6.0), make sure to have a
-      compatible version when using this option. These states have been added in community.general 9.4.0.
+      - Desired state for the application.
+      - The states V(present) and V(absent) are aliases to V(install) and V(uninstall), respectively.
+      - The state V(latest) is equivalent to executing the task twice, with state V(install) and then V(upgrade). It was added
+        in community.general 5.5.0.
+      - The states V(install_all), V(uninject), V(upgrade_shared), V(pin) and V(unpin) are only available in C(pipx>=1.6.0),
+        make sure to have a compatible version when using this option. These states have been added in community.general 9.4.0.
   name:
     type: str
     description:
-    - The name of the application. In C(pipx) documentation it is also referred to as the name of the virtual environment where the application
-      will be installed.
-    - If O(name) is a simple package name without version specifiers, then that name is used as the Python package name to be installed.
-    - Use O(source) for passing package specifications or installing from URLs or directories.
+      - The name of the application and also the name of the Python package being installed.
+      - In C(pipx) documentation it is also referred to as the name of the virtual environment where the application is installed.
+      - If O(name) is a simple package name without version specifiers, then that name is used as the Python package name
+        to be installed.
+      - Starting in community.general 10.7.0, you can use package specifiers when O(state=present) or O(state=install). For
+        example, O(name=tox<4.0.0) or O(name=tox>3.0.27).
+      - Please note that when you use O(state=present) and O(name) with version specifiers, contrary to the behavior of C(pipx),
+        this module honors the version specifier and installs a version of the application that satisfies it. If you want
+        to ensure the reinstallation of the application even when the version specifier is met, then you must use O(force=true),
+        or perhaps use O(state=upgrade) instead.
+      - Use O(source) for installing from URLs or directories.
   source:
     type: str
     description:
-    - Source for the package. This option is used when O(state=install) or O(state=latest), and it is ignored with other states.
-    - Use O(source) when installing a Python package with version specifier, or from a local path, from a VCS URL or compressed file.
-    - The value of this option is passed as-is to C(pipx).
-    - O(name) is still required when using O(source) to establish the application name without fetching the package from a remote source.
+      - Source for the package. This option is used when O(state=install) or O(state=latest), and it is ignored with other
+        states.
+      - Use O(source) when installing a Python package with version specifier, or from a local path, from a VCS URL or compressed
+        file.
+      - The value of this option is passed as-is to C(pipx).
+      - O(name) is still required when using O(source) to establish the application name without fetching the package from
+        a remote source.
+      - The module is not idempotent when using O(source).
   install_apps:
     description:
-    - Add apps from the injected packages.
-    - Only used when O(state=inject).
+      - Add apps from the injected packages.
+      - Only used when O(state=inject).
     type: bool
     default: false
     version_added: 6.5.0
   install_deps:
     description:
-    - Include applications of dependent packages.
-    - Only used when O(state=install), O(state=latest), or O(state=inject).
+      - Include applications of dependent packages.
+      - Only used when O(state=install), O(state=latest), or O(state=inject).
     type: bool
     default: false
   inject_packages:
     description:
-    - Packages to be injected into an existing virtual environment.
-    - Only used when O(state=inject).
+      - Packages to be injected into an existing virtual environment.
+      - Only used when O(state=inject).
     type: list
     elements: str
   force:
     description:
-    - Force modification of the application's virtual environment. See C(pipx) for details.
-    - Only used when O(state=install), O(state=upgrade), O(state=upgrade_all), O(state=latest), or O(state=inject).
+      - Force modification of the application's virtual environment. See C(pipx) for details.
+      - Only used when O(state=install), O(state=upgrade), O(state=upgrade_all), O(state=latest), or O(state=inject).
+      - The module is not idempotent when O(force=true).
     type: bool
     default: false
   include_injected:
     description:
-    - Upgrade the injected packages along with the application.
-    - Only used when O(state=upgrade), O(state=upgrade_all), or O(state=latest).
-    - This is used with O(state=upgrade) and O(state=latest) since community.general 6.6.0.
+      - Upgrade the injected packages along with the application.
+      - Only used when O(state=upgrade), O(state=upgrade_all), or O(state=latest).
+      - This is used with O(state=upgrade) and O(state=latest) since community.general 6.6.0.
     type: bool
     default: false
   index_url:
     description:
-    - Base URL of Python Package Index.
-    - Only used when O(state=install), O(state=upgrade), O(state=latest), or O(state=inject).
+      - Base URL of Python Package Index.
+      - Only used when O(state=install), O(state=upgrade), O(state=latest), or O(state=inject).
     type: str
   python:
     description:
-    - Python version to be used when creating the application virtual environment. Must be 3.6+.
-    - Only used when O(state=install), O(state=latest), O(state=reinstall), or O(state=reinstall_all).
+      - Python version to be used when creating the application virtual environment. Must be 3.6+.
+      - Only used when O(state=install), O(state=latest), O(state=reinstall), or O(state=reinstall_all).
     type: str
   system_site_packages:
     description:
-    - Give application virtual environment access to the system site-packages directory.
-    - Only used when O(state=install) or O(state=latest).
+      - Give application virtual environment access to the system site-packages directory.
+      - Only used when O(state=install) or O(state=latest).
     type: bool
     default: false
     version_added: 6.6.0
   editable:
     description:
-    - Install the project in editable mode.
+      - Install the project in editable mode.
     type: bool
     default: false
     version_added: 4.6.0
   pip_args:
     description:
-    - Arbitrary arguments to pass directly to C(pip).
+      - Arbitrary arguments to pass directly to C(pip).
     type: str
     version_added: 4.6.0
   suffix:
     description:
-    - Optional suffix for virtual environment and executable names.
-    - "B(Warning:) C(pipx) documentation states this is an B(experimental) feature subject to change."
+      - Optional suffix for virtual environment and executable names.
+      - B(Warning:) C(pipx) documentation states this is an B(experimental) feature subject to change.
     type: str
     version_added: 9.3.0
   global:
     version_added: 9.4.0
   spec_metadata:
     description:
-    - Spec metadata file for O(state=install_all).
-    - This content of the file is usually generated with C(pipx list --json), and it can be obtained with M(community.general.pipx_info) with
-      O(community.general.pipx_info#module:include_raw=true) and obtaining the content from the RV(community.general.pipx_info#module:raw_output).
+      - Spec metadata file for O(state=install_all).
+      - This content of the file is usually generated with C(pipx list --json), and it can be obtained with M(community.general.pipx_info)
+        with O(community.general.pipx_info#module:include_raw=true) and obtaining the content from the RV(community.general.pipx_info#module:raw_output).
     type: path
     version_added: 9.4.0
-notes:
-- >
-  This first implementation does not verify whether a specified version constraint has been installed or not.
-  Hence, when using version operators, C(pipx) module will always try to execute the operation,
-  even when the application was previously installed.
-  This feature will be added in the future.
+requirements:
+  - When using O(name) with version specifiers, the Python package C(packaging) is required.
+  - If the package C(packaging) is at a version lesser than C(22.0.0), it will fail silently when processing invalid specifiers,
+    like C(tox<<<<4.0).
 author:
-- "Alexei Znamensky (@russoz)"
+  - "Alexei Znamensky (@russoz)"
 """
 
-EXAMPLES = """
----
+EXAMPLES = r"""
 - name: Install tox
   community.general.pipx:
     name: tox
@@ -166,6 +174,12 @@ EXAMPLES = """
   community.general.pipx:
     name: tox
     state: upgrade
+
+- name: Install or upgrade tox with dependency group 'docs'
+  community.general.pipx:
+    name: tox
+    source: tox[docs]
+    state: latest
 
 - name: Reinstall black with specific Python version
   community.general.pipx:
@@ -181,20 +195,29 @@ EXAMPLES = """
 - name: Install multiple packages from list
   vars:
     pipx_packages:
-    - pycowsay
-    - black
-    - tox
+      - pycowsay
+      - black
+      - tox
   community.general.pipx:
     name: "{{ item }}"
     state: latest
   with_items: "{{ pipx_packages }}"
 """
 
+RETURN = r"""
+version:
+  description: Version of pipx.
+  type: str
+  returned: always
+  sample: "1.7.1"
+  version_added: 10.1.0
+"""
 
-import json
 
 from ansible_collections.community.general.plugins.module_utils.module_helper import StateModuleHelper
-from ansible_collections.community.general.plugins.module_utils.pipx import pipx_runner, pipx_common_argspec
+from ansible_collections.community.general.plugins.module_utils.pipx import pipx_runner, pipx_common_argspec, make_process_dict
+from ansible_collections.community.general.plugins.module_utils.pkg_req import PackageRequirement
+from ansible_collections.community.general.plugins.module_utils.version import LooseVersion
 
 from ansible.module_utils.facts.compat import ansible_facts
 
@@ -248,33 +271,15 @@ class PipX(StateModuleHelper):
         ),
         supports_check_mode=True,
     )
-    use_old_vardict = False
 
     def _retrieve_installed(self):
-        def process_list(rc, out, err):
-            if not out:
-                return {}
+        output_process = make_process_dict(include_injected=True)
+        installed, dummy = self.runner('_list global', output_process=output_process).run()
 
-            results = {}
-            raw_data = json.loads(out)
-            for venv_name, venv in raw_data['venvs'].items():
-                results[venv_name] = {
-                    'version': venv['metadata']['main_package']['package_version'],
-                    'injected': {k: v['package_version'] for k, v in venv['metadata']['injected_packages'].items()},
-                }
-            return results
+        if self.app_name is None:
+            return installed
 
-        installed = self.runner('_list', output_process=process_list).run(_list=1)
-
-        if self.vars.name is not None:
-            name = _make_name(self.vars.name, self.vars.suffix)
-            app_list = installed.get(name)
-            if app_list:
-                return {name: app_list}
-            else:
-                return {}
-
-        return installed
+        return {k: v for k, v in installed.items() if k == self.app_name}
 
     def __init_module__(self):
         if self.vars.executable:
@@ -284,7 +289,19 @@ class PipX(StateModuleHelper):
             self.command = [facts['python']['executable'], '-m', 'pipx']
         self.runner = pipx_runner(self.module, self.command)
 
+        pkg_req = PackageRequirement(self.module, self.vars.name)
+        self.parsed_name = pkg_req.parsed_name
+        self.parsed_req = pkg_req.requirement
+        self.app_name = _make_name(self.parsed_name, self.vars.suffix)
+
         self.vars.set('application', self._retrieve_installed(), change=True, diff=True)
+
+        with self.runner("version") as ctx:
+            rc, out, err = ctx.run()
+            self.vars.version = out.strip()
+
+        if LooseVersion(self.vars.version) < LooseVersion("1.7.0"):
+            self.do_raise("The pipx tool must be at least at version 1.7.0")
 
     def __quit_module__(self):
         self.vars.application = self._retrieve_installed()
@@ -296,12 +313,27 @@ class PipX(StateModuleHelper):
         self.vars.set('run_info', ctx.run_info, verbosity=4)
 
     def state_install(self):
-        if not self.vars.application or self.vars.force:
-            self.changed = True
-            args_order = 'state global index_url install_deps force python system_site_packages editable pip_args suffix name_source'
-            with self.runner(args_order, check_mode_skip=True) as ctx:
-                ctx.run(name_source=[self.vars.name, self.vars.source])
-                self._capture_results(ctx)
+        # If we have a version spec and no source, use the version spec as source
+        if self.parsed_req and not self.vars.source:
+            self.vars.source = self.vars.name
+
+        if self.vars.application.get(self.app_name):
+            is_installed = True
+            version_match = self.vars.application[self.app_name]['version'] in self.parsed_req.specifier if self.parsed_req else True
+            force = self.vars.force or (not version_match)
+        else:
+            is_installed = False
+            version_match = False
+            force = self.vars.force
+
+        if is_installed and version_match and not force:
+            return
+
+        self.changed = True
+        args_order = 'state global index_url install_deps force python system_site_packages editable pip_args suffix name_source'
+        with self.runner(args_order, check_mode_skip=True) as ctx:
+            ctx.run(name_source=[self.parsed_name, self.vars.source], force=force)
+            self._capture_results(ctx)
 
     state_present = state_install
 
@@ -383,12 +415,12 @@ class PipX(StateModuleHelper):
     def state_latest(self):
         if not self.vars.application or self.vars.force:
             self.changed = True
-            args_order = 'state index_url install_deps force python system_site_packages editable pip_args suffix name_source'
+            args_order = 'state global index_url install_deps force python system_site_packages editable pip_args suffix name_source'
             with self.runner(args_order, check_mode_skip=True) as ctx:
                 ctx.run(state='install', name_source=[self.vars.name, self.vars.source])
                 self._capture_results(ctx)
 
-        with self.runner('state include_injected index_url force editable pip_args name', check_mode_skip=True) as ctx:
+        with self.runner('state global include_injected index_url force editable pip_args name', check_mode_skip=True) as ctx:
             ctx.run(state='upgrade')
             self._capture_results(ctx)
 

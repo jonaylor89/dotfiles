@@ -29,22 +29,20 @@ schedules:
     always: true
     branches:
       include:
-        - stable-9
-        - stable-8
+        - stable-11
+        - stable-10
   - cron: 0 11 * * 0
     displayName: Weekly (old stable branches)
     always: true
     branches:
       include:
-        - stable-7
+        - stable-9
 
 variables:
   - name: checkoutPath
     value: ansible_collections/community/general
   - name: coverageBranches
     value: main
-  - name: pipelinesCoverage
-    value: coverage
   - name: entryPoint
     value: tests/utils/shippable/shippable.sh
   - name: fetchDepth
@@ -72,7 +70,19 @@ stages:
             - test: 2
             - test: 3
             - test: 4
-            - test: extra
+  - stage: Sanity_2_19
+    displayName: Sanity 2.19
+    dependsOn: []
+    jobs:
+      - template: templates/matrix.yml
+        parameters:
+          nameFormat: Test {0}
+          testFormat: 2.19/sanity/{0}
+          targets:
+            - test: 1
+            - test: 2
+            - test: 3
+            - test: 4
   - stage: Sanity_2_18
     displayName: Sanity 2.18
     dependsOn: []
@@ -99,19 +109,6 @@ stages:
             - test: 2
             - test: 3
             - test: 4
-  - stage: Sanity_2_16
-    displayName: Sanity 2.16
-    dependsOn: []
-    jobs:
-      - template: templates/matrix.yml
-        parameters:
-          nameFormat: Test {0}
-          testFormat: 2.16/sanity/{0}
-          targets:
-            - test: 1
-            - test: 2
-            - test: 3
-            - test: 4
 ### Units
   - stage: Units_devel
     displayName: Units devel
@@ -128,6 +125,17 @@ stages:
             - test: '3.11'
             - test: '3.12'
             - test: '3.13'
+  - stage: Units_2_19
+    displayName: Units 2.19
+    dependsOn: []
+    jobs:
+      - template: templates/matrix.yml
+        parameters:
+          nameFormat: Python {0}
+          testFormat: 2.19/units/{0}/1
+          targets:
+            - test: 3.9
+            - test: "3.13"
   - stage: Units_2_18
     displayName: Units 2.18
     dependsOn: []
@@ -150,18 +158,6 @@ stages:
           targets:
             - test: 3.7
             - test: "3.12"
-  - stage: Units_2_16
-    displayName: Units 2.16
-    dependsOn: []
-    jobs:
-      - template: templates/matrix.yml
-        parameters:
-          nameFormat: Python {0}
-          testFormat: 2.16/units/{0}/1
-          targets:
-            - test: 2.7
-            - test: 3.6
-            - test: "3.11"
 
 ## Remote
   - stage: Remote_devel_extra_vms
@@ -172,10 +168,10 @@ stages:
         parameters:
           testFormat: devel/{0}
           targets:
-            - name: Alpine 3.20
-              test: alpine/3.20
-            # - name: Fedora 40
-            #   test: fedora/40
+            - name: Alpine 3.21
+              test: alpine/3.21
+            # - name: Fedora 41
+            #   test: fedora/41
             - name: Ubuntu 22.04
               test: ubuntu/22.04
             - name: Ubuntu 24.04
@@ -190,12 +186,30 @@ stages:
         parameters:
           testFormat: devel/{0}
           targets:
-            - name: macOS 14.3
-              test: macos/14.3
-            - name: RHEL 9.4
-              test: rhel/9.4
-            - name: FreeBSD 14.1
-              test: freebsd/14.1
+            - name: macOS 15.3
+              test: macos/15.3
+            - name: RHEL 10.0
+              test: rhel/10.0
+            - name: RHEL 9.5
+              test: rhel/9.5
+            - name: FreeBSD 14.2
+              test: freebsd/14.2
+            - name: FreeBSD 13.5
+              test: freebsd/13.5
+          groups:
+            - 1
+            - 2
+            - 3
+  - stage: Remote_2_19
+    displayName: Remote 2.19
+    dependsOn: []
+    jobs:
+      - template: templates/matrix.yml
+        parameters:
+          testFormat: 2.19/{0}
+          targets:
+            - name: RHEL 10.0
+              test: rhel/10.0
           groups:
             - 1
             - 2
@@ -208,8 +222,12 @@ stages:
         parameters:
           testFormat: 2.18/{0}
           targets:
+            - name: macOS 14.3
+              test: macos/14.3
             - name: RHEL 9.4
               test: rhel/9.4
+            - name: FreeBSD 14.1
+              test: freebsd/14.1
           groups:
             - 1
             - 2
@@ -226,30 +244,6 @@ stages:
               test: freebsd/13.3
             - name: RHEL 9.3
               test: rhel/9.3
-            - name: FreeBSD 14.0
-              test: freebsd/14.0
-          groups:
-            - 1
-            - 2
-            - 3
-  - stage: Remote_2_16
-    displayName: Remote 2.16
-    dependsOn: []
-    jobs:
-      - template: templates/matrix.yml
-        parameters:
-          testFormat: 2.16/{0}
-          targets:
-            - name: macOS 13.2
-              test: macos/13.2
-            - name: RHEL 9.2
-              test: rhel/9.2
-            - name: RHEL 8.8
-              test: rhel/8.8
-            - name: RHEL 7.9
-              test: rhel/7.9
-            # - name: FreeBSD 13.2
-            #   test: freebsd/13.2
           groups:
             - 1
             - 2
@@ -264,12 +258,26 @@ stages:
         parameters:
           testFormat: devel/linux/{0}
           targets:
-            - name: Fedora 40
-              test: fedora40
-            - name: Alpine 3.20
-              test: alpine320
+            - name: Fedora 41
+              test: fedora41
+            - name: Alpine 3.21
+              test: alpine321
             - name: Ubuntu 22.04
               test: ubuntu2204
+            - name: Ubuntu 24.04
+              test: ubuntu2404
+          groups:
+            - 1
+            - 2
+            - 3
+  - stage: Docker_2_19
+    displayName: Docker 2.19
+    dependsOn: []
+    jobs:
+      - template: templates/matrix.yml
+        parameters:
+          testFormat: 2.19/linux/{0}
+          targets:
             - name: Ubuntu 24.04
               test: ubuntu2404
           groups:
@@ -284,6 +292,10 @@ stages:
         parameters:
           testFormat: 2.18/linux/{0}
           targets:
+            - name: Fedora 40
+              test: fedora40
+            - name: Alpine 3.20
+              test: alpine320
             - name: Ubuntu 24.04
               test: ubuntu2404
           groups:
@@ -308,26 +320,6 @@ stages:
             - 1
             - 2
             - 3
-  - stage: Docker_2_16
-    displayName: Docker 2.16
-    dependsOn: []
-    jobs:
-      - template: templates/matrix.yml
-        parameters:
-          testFormat: 2.16/linux/{0}
-          targets:
-            - name: Fedora 38
-              test: fedora38
-            - name: openSUSE 15
-              test: opensuse15
-            - name: Alpine 3
-              test: alpine3
-            - name: CentOS 7
-              test: centos7
-          groups:
-            - 1
-            - 2
-            - 3
 
 ### Community Docker
   - stage: Docker_community_devel
@@ -343,7 +335,7 @@ stages:
             - name: Debian Bookworm
               test: debian-bookworm/3.11
             - name: ArchLinux
-              test: archlinux/3.12
+              test: archlinux/3.13
           groups:
             - 1
             - 2
@@ -362,6 +354,17 @@ stages:
 #          targets:
 #            - test: '3.8'
 #            - test: '3.11'
+#            - test: '3.13'
+#  - stage: Generic_2_19
+#    displayName: Generic 2.19
+#    dependsOn: []
+#    jobs:
+#      - template: templates/matrix.yml
+#        parameters:
+#          nameFormat: Python {0}
+#          testFormat: 2.19/generic/{0}/1
+#          targets:
+#            - test: '3.9'
 #            - test: '3.13'
 #  - stage: Generic_2_18
 #    displayName: Generic 2.18
@@ -385,44 +388,32 @@ stages:
 #          targets:
 #            - test: '3.7'
 #            - test: '3.12'
-#  - stage: Generic_2_16
-#    displayName: Generic 2.16
-#    dependsOn: []
-#    jobs:
-#      - template: templates/matrix.yml
-#        parameters:
-#          nameFormat: Python {0}
-#          testFormat: 2.16/generic/{0}/1
-#          targets:
-#            - test: '2.7'
-#            - test: '3.6'
-#            - test: '3.11'
 
   - stage: Summary
     condition: succeededOrFailed()
     dependsOn:
       - Sanity_devel
+      - Sanity_2_19
       - Sanity_2_18
       - Sanity_2_17
-      - Sanity_2_16
       - Units_devel
+      - Units_2_19
       - Units_2_18
       - Units_2_17
-      - Units_2_16
       - Remote_devel_extra_vms
       - Remote_devel
+      - Remote_2_19
       - Remote_2_18
       - Remote_2_17
-      - Remote_2_16
       - Docker_devel
+      - Docker_2_19
       - Docker_2_18
       - Docker_2_17
-      - Docker_2_16
       - Docker_community_devel
 # Right now all generic tests are disabled. Uncomment when at least one of them is re-enabled.
 #      - Generic_devel
+#      - Generic_2_19
 #      - Generic_2_18
 #      - Generic_2_17
-#      - Generic_2_16
     jobs:
       - template: templates/coverage.yml

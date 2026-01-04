@@ -7,8 +7,7 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-DOCUMENTATION = r'''
----
+DOCUMENTATION = r"""
 module: dnf_config_manager
 short_description: Enable or disable dnf repositories using config-manager
 version_added: 8.2.0
@@ -40,12 +39,14 @@ options:
     required: false
     type: str
     choices: [enabled, disabled]
+notes:
+  - Does not work with C(dnf5).
 seealso:
   - module: ansible.builtin.dnf
   - module: ansible.builtin.yum_repository
-'''
+"""
 
-EXAMPLES = r'''
+EXAMPLES = r"""
 - name: Ensure the crb repository is enabled
   community.general.dnf_config_manager:
     name: crb
@@ -57,9 +58,9 @@ EXAMPLES = r'''
       - appstream
       - zfs
     state: disabled
-'''
+"""
 
-RETURN = r'''
+RETURN = r"""
 repo_states_pre:
   description: Repo IDs before action taken.
   returned: success
@@ -115,12 +116,12 @@ repo_states_post:
       - crb-debug
       - crb-source
 changed_repos:
-    description: Repositories changed.
-    returned: success
-    type: list
-    elements: str
-    sample: [ 'crb' ]
-'''
+  description: Repositories changed.
+  returned: success
+  type: list
+  elements: str
+  sample: ["crb"]
+"""
 
 from ansible.module_utils.basic import AnsibleModule
 import os
@@ -153,7 +154,7 @@ def get_repo_states(module):
 
 
 def set_repo_states(module, repo_ids, state):
-    module.run_command([DNF_BIN, 'config-manager', '--set-{0}'.format(state)] + repo_ids, check_rc=True)
+    module.run_command([DNF_BIN, 'config-manager', '--assumeyes', '--set-{0}'.format(state)] + repo_ids, check_rc=True)
 
 
 def pack_repo_states_for_return(states):
@@ -186,6 +187,7 @@ def main():
         argument_spec=module_args,
         supports_check_mode=True
     )
+    module.run_command_environ_update = dict(LANGUAGE='C', LC_ALL='C')
 
     if not os.path.exists(DNF_BIN):
         module.fail_json(msg="%s was not found" % DNF_BIN)

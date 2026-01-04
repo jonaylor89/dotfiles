@@ -12,7 +12,7 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-DOCUMENTATION = r'''
+DOCUMENTATION = r"""
 module: gitlab_project_access_token
 short_description: Manages GitLab project access tokens
 version_added: 8.4.0
@@ -27,11 +27,10 @@ extends_documentation_fragment:
   - community.general.gitlab
   - community.general.attributes
 notes:
-  - Access tokens can not be changed. If a parameter needs to be changed, an acceess token has to be recreated.
-    Whether tokens will be recreated is controlled by the O(recreate) option, which defaults to V(never).
+  - Access tokens can not be changed. If a parameter needs to be changed, an acceess token has to be recreated. Whether tokens
+    are recreated or not is controlled by the O(recreate) option, which defaults to V(never).
   - Token string is contained in the result only when access token is created or recreated. It can not be fetched afterwards.
   - Token matching is done by comparing O(name) option.
-
 attributes:
   check_mode:
     support: full
@@ -56,7 +55,16 @@ options:
     type: list
     elements: str
     aliases: ["scope"]
-    choices: ["api", "read_api", "read_registry", "write_registry", "read_repository", "write_repository", "create_runner", "ai_features", "k8s_proxy"]
+    choices:
+      - api
+      - read_api
+      - read_registry
+      - write_registry
+      - read_repository
+      - write_repository
+      - create_runner
+      - ai_features
+      - k8s_proxy
   access_level:
     description:
       - Access level of the access token.
@@ -71,23 +79,23 @@ options:
     required: true
   recreate:
     description:
-      - Whether the access token will be recreated if it already exists.
-      - When V(never) the token will never be recreated.
-      - When V(always) the token will always be recreated.
-      - When V(state_change) the token will be recreated if there is a difference between desired state and actual state.
+      - Whether the access token is recreated if it already exists.
+      - When V(never) the token is never recreated.
+      - When V(always) the token is always recreated.
+      - When V(state_change) the token is recreated if there is a difference between desired state and actual state.
     type: str
     choices: ["never", "always", "state_change"]
     default: never
   state:
     description:
-      - When V(present) the access token will be added to the project if it does not exist.
-      - When V(absent) it will be removed from the project if it exists.
+      - When V(present) the access token is added to the project if it does not exist.
+      - When V(absent) it is removed from the project if it exists.
     default: present
     type: str
-    choices: [ "present", "absent" ]
-'''
+    choices: ["present", "absent"]
+"""
 
-EXAMPLES = r'''
+EXAMPLES = r"""
 - name: "Creating a project access token"
   community.general.gitlab_project_access_token:
     api_url: https://gitlab.example.com/
@@ -131,16 +139,16 @@ EXAMPLES = r'''
       - write_repository
     recreate: state_change
     state: present
-'''
+"""
 
-RETURN = r'''
+RETURN = r"""
 access_token:
   description:
     - API object.
     - Only contains the value of the token if the token was created or recreated.
   returned: success and O(state=present)
   type: dict
-'''
+"""
 
 from datetime import datetime
 
@@ -183,9 +191,9 @@ class GitLabProjectAccessToken(object):
     @param name of the access token
     '''
     def find_access_token(self, project, name):
-        access_tokens = project.access_tokens.list(all=True)
+        access_tokens = [x for x in project.access_tokens.list(all=True) if not getattr(x, 'revoked', False)]
         for access_token in access_tokens:
-            if (access_token.name == name):
+            if access_token.name == name:
                 self.access_token_object = access_token
                 return False
         return False

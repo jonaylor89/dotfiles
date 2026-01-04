@@ -15,3 +15,4 @@ function format {
 function gcurl {
  curl -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" $1
 }
+

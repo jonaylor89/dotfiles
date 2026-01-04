@@ -9,14 +9,13 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-DOCUMENTATION = """
+DOCUMENTATION = r"""
 module: consul_token
 short_description: Manipulate Consul tokens
 version_added: 8.3.0
 description:
- - Allows the addition, modification and deletion of tokens in a consul
-   cluster via the agent. For more details on using and configuring ACLs,
-   see U(https://www.consul.io/docs/guides/acl.html).
+  - Allows the addition, modification and deletion of tokens in a Consul cluster using the agent. For more details on using
+    and configuring ACLs, see U(https://www.consul.io/docs/guides/acl.html).
 author:
   - Florian Apolloner (@apollo13)
 extends_documentation_fragment:
@@ -30,7 +29,7 @@ attributes:
   diff_mode:
     support: partial
     details:
-      - In check mode the diff will miss operational attributes.
+      - In check mode the diff misses operational attributes.
   action_group:
     version_added: 8.3.0
 options:
@@ -42,13 +41,11 @@ options:
     type: str
   accessor_id:
     description:
-      - Specifies a UUID to use as the token's Accessor ID.
-        If not specified a UUID will be generated for this field.
+      - Specifies a UUID to use as the token's Accessor ID. If not specified a UUID is generated for this field.
     type: str
   secret_id:
     description:
-      - Specifies a UUID to use as the token's Secret ID.
-        If not specified a UUID will be generated for this field.
+      - Specifies a UUID to use as the token's Secret ID. If not specified a UUID is generated for this field.
     type: str
   description:
     description:
@@ -59,8 +56,8 @@ options:
     elements: dict
     description:
       - List of policies to attach to the token. Each policy is a dict.
-      - If the parameter is left blank, any policies currently assigned will not be changed.
-      - Any empty array (V([])) will clear any policies previously set.
+      - If the parameter is left blank, any policies currently assigned are not changed.
+      - Any empty array (V([])) clears any policies previously set.
     suboptions:
       name:
         description:
@@ -77,8 +74,8 @@ options:
     elements: dict
     description:
       - List of roles to attach to the token. Each role is a dict.
-      - If the parameter is left blank, any roles currently assigned will not be changed.
-      - Any empty array (V([])) will clear any roles previously set.
+      - If the parameter is left blank, any roles currently assigned are not changed.
+      - Any empty array (V([])) clears any roles previously set.
     suboptions:
       name:
         description:
@@ -111,8 +108,8 @@ options:
     elements: dict
     description:
       - List of service identities to attach to the token.
-      - If not specified, any service identities currently assigned will not be changed.
-      - If the parameter is an empty array (V([])), any node identities assigned will be unassigned.
+      - If not specified, any service identities currently assigned are not changed.
+      - If the parameter is an empty array (V([])), any node identities assigned are unassigned.
     suboptions:
       service_name:
         description:
@@ -123,9 +120,9 @@ options:
         required: true
       datacenters:
         description:
-          - The datacenters the token will be effective.
-          - If an empty array (V([])) is specified, the token will valid in all datacenters.
-          - including those which do not yet exist but may in the future.
+          - The datacenters where the token is effective.
+          - If an empty array (V([])) is specified, the token is valid in all datacenters.
+          - Including those which do not yet exist but may in the future.
         type: list
         elements: str
   node_identities:
@@ -133,8 +130,8 @@ options:
     elements: dict
     description:
       - List of node identities to attach to the token.
-      - If not specified, any node identities currently assigned will not be changed.
-      - If the parameter is an empty array (V([])), any node identities assigned will be unassigned.
+      - If not specified, any node identities currently assigned are not changed.
+      - If the parameter is an empty array (V([])), any node identities assigned are unassigned.
     suboptions:
       node_name:
         description:
@@ -146,23 +143,21 @@ options:
       datacenter:
         description:
           - The nodes datacenter.
-          - This will result in effective token only being valid in this datacenter.
+          - This results in effective token only being valid in this datacenter.
         type: str
         required: true
   local:
     description:
-      - If true, indicates that the token should not be replicated globally
-        and instead be local to the current datacenter.
+      - If true, indicates that the token should not be replicated globally and instead be local to the current datacenter.
     type: bool
   expiration_ttl:
     description:
-      - This is a convenience field and if set will initialize the C(expiration_time).
-        Can be specified in the form of V(60s) or V(5m) (that is, 60 seconds or 5 minutes,
-        respectively). Ingored when the token is updated!
+      - This is a convenience field and if set it initializes the C(expiration_time). Can be specified in the form of V(60s)
+        or V(5m) (that is, 60 seconds or 5 minutes, respectively). Ingored when the token is updated!
     type: str
 """
 
-EXAMPLES = """
+EXAMPLES = r"""
 - name: Create / Update a token by accessor_id
   community.general.consul_token:
     state: present
@@ -186,26 +181,26 @@ EXAMPLES = """
     token: 8adddd91-0bd6-d41d-ae1a-3b49cfa9a0e8
 """
 
-RETURN = """
+RETURN = r"""
 token:
-    description: The token as returned by the consul HTTP API.
-    returned: always
-    type: dict
-    sample:
-        AccessorID: 07a7de84-c9c7-448a-99cc-beaf682efd21
-        CreateIndex: 632
-        CreateTime: "2024-01-14T21:53:01.402749174+01:00"
-        Description: Testing
-        Hash: rj5PeDHddHslkpW7Ij4OD6N4bbSXiecXFmiw2SYXg2A=
-        Local: false
-        ModifyIndex: 633
-        SecretID: bd380fba-da17-7cee-8576-8d6427c6c930
-        ServiceIdentities: [{"ServiceName": "test"}]
+  description: The token as returned by the Consul HTTP API.
+  returned: always
+  type: dict
+  sample:
+    AccessorID: 07a7de84-c9c7-448a-99cc-beaf682efd21
+    CreateIndex: 632
+    CreateTime: "2024-01-14T21:53:01.402749174+01:00"
+    Description: Testing
+    Hash: rj5PeDHddHslkpW7Ij4OD6N4bbSXiecXFmiw2SYXg2A=
+    Local: false
+    ModifyIndex: 633
+    SecretID: bd380fba-da17-7cee-8576-8d6427c6c930
+    ServiceIdentities: ["ServiceName": "test"]
 operation:
-    description: The operation performed.
-    returned: changed
-    type: str
-    sample: update
+  description: The operation performed.
+  returned: changed
+  type: str
+  sample: update
 """
 
 from ansible.module_utils.basic import AnsibleModule
@@ -225,7 +220,7 @@ def normalize_link_obj(api_obj, module_obj, key):
 
     for obj in module_objs:
         identifier = obj.get("ID")
-        name = obj.get("Name)")
+        name = obj.get("Name")
         if identifier and not name and identifier in id_to_name:
             obj["Name"] = id_to_name[identifier]
         if not identifier and name and name in name_to_id:

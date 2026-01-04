@@ -10,6 +10,10 @@ export PATH="/opt/homebrew/bin:$PATH"
 # Path to your oh-my-zsh installation.  
 export ZSH=$HOME/.oh-my-zsh
 
+export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh}"
+export ZSH_COMPDUMP="${ZSH_COMPDUMP:-$ZSH_CACHE_DIR/.zcompdump}"
+mkdir -p "$ZSH_CACHE_DIR" 2>/dev/null || true
+
 # Terminal Things
 export LANG="en_US.UTF-8"
 export TERM=xterm-256color
@@ -21,12 +25,16 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 # Use rust ripgrep for fzf
 export FZF_DEFAULT_COMMAND='fd'
 
-# The next line updates PATH for the Google Cloud SDK
-if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
+for _gcloud_dir in "$HOME/Repos/google-cloud-sdk" "$HOME/google-cloud-sdk"; do
+  if [ -f "$_gcloud_dir/path.zsh.inc" ]; then
+    . "$_gcloud_dir/path.zsh.inc"
+    break
+  fi
+done
 
-# The next line enables shell command completion for gcloud.
-if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+for _gcloud_dir in "$HOME/Repos/google-cloud-sdk" "$HOME/google-cloud-sdk"; do
+  if [ -f "$_gcloud_dir/completion.zsh.inc" ]; then
+    . "$_gcloud_dir/completion.zsh.inc"
+    break
+  fi
+done

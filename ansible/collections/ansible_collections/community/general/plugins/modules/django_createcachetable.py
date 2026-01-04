@@ -7,7 +7,7 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-DOCUMENTATION = """
+DOCUMENTATION = r"""
 module: django_createcachetable
 author:
   - Alexei Znamensky (@russoz)
@@ -26,7 +26,7 @@ attributes:
     support: none
 """
 
-EXAMPLES = """
+EXAMPLES = r"""
 - name: Create cache table in the default database
   community.general.django_createcachetable:
     settings: myproject.settings
@@ -39,11 +39,17 @@ EXAMPLES = """
     venv: /home/joedoe/project/fancysite/venv
 """
 
-RETURN = """
+RETURN = r"""
 run_info:
   description: Command-line execution information.
   type: dict
   returned: success and O(verbosity) >= 3
+version:
+  description: Version of Django.
+  type: str
+  returned: always
+  sample: 5.1.2
+  version_added: 10.0.0
 """
 
 from ansible_collections.community.general.plugins.module_utils.django import DjangoModuleHelper

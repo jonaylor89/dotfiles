@@ -5,52 +5,65 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-DOCUMENTATION = """
-    name: bitwarden
-    author:
-      - Jonathan Lung (@lungj) <lungj@heresjono.com>
-    requirements:
-      - bw (command line utility)
-      - be logged into bitwarden
-      - bitwarden vault unlocked
-      - E(BW_SESSION) environment variable set
-    short_description: Retrieve secrets from Bitwarden
-    version_added: 5.4.0
+DOCUMENTATION = r"""
+name: bitwarden
+author:
+  - Jonathan Lung (@lungj) <lungj@heresjono.com>
+requirements:
+  - bw (command line utility)
+  - be logged into bitwarden
+  - bitwarden vault unlocked
+  - E(BW_SESSION) environment variable set
+short_description: Retrieve secrets from Bitwarden
+version_added: 5.4.0
+description:
+  - Retrieve secrets from Bitwarden.
+options:
+  _terms:
+    description: Key(s) to fetch values for from login info.
+    required: true
+    type: list
+    elements: str
+  search:
     description:
-      - Retrieve secrets from Bitwarden.
-    options:
-      _terms:
-        description: Key(s) to fetch values for from login info.
-        required: true
-        type: list
-        elements: str
-      search:
-        description:
-          - Field to retrieve, for example V(name) or V(id).
-          - If set to V(id), only zero or one element can be returned.
-            Use the Jinja C(first) filter to get the only list element.
-          - If set to V(None) or V(''), or if O(_terms) is empty, records are not filtered by fields.
-        type: str
-        default: name
-        version_added: 5.7.0
-      field:
-        description: Field to fetch. Leave unset to fetch whole response.
-        type: str
-      collection_id:
-        description: Collection ID to filter results by collection. Leave unset to skip filtering.
-        type: str
-        version_added: 6.3.0
-      organization_id:
-        description: Organization ID to filter results by organization. Leave unset to skip filtering.
-        type: str
-        version_added: 8.5.0
-      bw_session:
-        description: Pass session key instead of reading from env.
-        type: str
-        version_added: 8.4.0
+      - Field to retrieve, for example V(name) or V(id).
+      - If set to V(id), only zero or one element can be returned. Use the Jinja C(first) filter to get the only list element.
+      - If set to V(None) or V(''), or if O(_terms) is empty, records are not filtered by fields.
+    type: str
+    default: name
+    version_added: 5.7.0
+  field:
+    description: Field to fetch. Leave unset to fetch whole response.
+    type: str
+  collection_id:
+    description:
+      - Collection ID to filter results by collection. Leave unset to skip filtering.
+      - O(collection_id) and O(collection_name) are mutually exclusive.
+    type: str
+    version_added: 6.3.0
+  collection_name:
+    description:
+      - Collection name to filter results by collection. Leave unset to skip filtering.
+      - O(collection_id) and O(collection_name) are mutually exclusive.
+    type: str
+    version_added: 10.4.0
+  organization_id:
+    description: Organization ID to filter results by organization. Leave unset to skip filtering.
+    type: str
+    version_added: 8.5.0
+  bw_session:
+    description: Pass session key instead of reading from env.
+    type: str
+    version_added: 8.4.0
+  result_count:
+    description:
+      - Number of results expected for the lookup query. Task fails if O(result_count) is set but does not match the number
+        of query results. Leave empty to skip this check.
+    type: int
+    version_added: 10.4.0
 """
 
-EXAMPLES = """
+EXAMPLES = r"""
 - name: "Get 'password' from all Bitwarden records named 'a_test'"
   ansible.builtin.debug:
     msg: >-
@@ -85,21 +98,31 @@ EXAMPLES = """
   ansible.builtin.debug:
     msg: >-
       {{ lookup('community.general.bitwarden', None, collection_id='bafba515-af11-47e6-abe3-af1200cd18b2') }}
+
+- name: "Get all Bitwarden records from collection"
+  ansible.builtin.debug:
+    msg: >-
+      {{ lookup('community.general.bitwarden', None, collection_name='my_collections/test_collection') }}
+
+- name: "Get Bitwarden record named 'a_test', ensure there is exactly one match"
+  ansible.builtin.debug:
+    msg: >-
+      {{ lookup('community.general.bitwarden', 'a_test', result_count=1) }}
 """
 
-RETURN = """
-  _raw:
-    description:
-      - A one-element list that contains a list of requested fields or JSON objects of matches.
-      - If you use C(query), you get a list of lists. If you use C(lookup) without C(wantlist=true),
-        this always gets reduced to a list of field values or JSON objects.
-    type: list
-    elements: list
+RETURN = r"""
+_raw:
+  description:
+    - A one-element list that contains a list of requested fields or JSON objects of matches.
+    - If you use C(query), you get a list of lists. If you use C(lookup) without C(wantlist=true), this always gets reduced
+      to a list of field values or JSON objects.
+  type: list
+  elements: list
 """
 
 from subprocess import Popen, PIPE
 
-from ansible.errors import AnsibleError
+from ansible.errors import AnsibleError, AnsibleOptionsError
 from ansible.module_utils.common.text.converters import to_bytes, to_text
 from ansible.parsing.ajson import AnsibleJSONDecoder
 from ansible.plugins.lookup import LookupBase
@@ -207,9 +230,27 @@ class Bitwarden(object):
                 continue
 
         if matches and not field_matches:
-            raise AnsibleError("field {field} does not exist in {search_value}".format(field=field, search_value=search_value))
+            raise AnsibleError(f"field {field} does not exist in {search_value}")
 
         return field_matches
+
+    def get_collection_ids(self, collection_name: str, organization_id=None) -> list[str]:
+        """Return matching IDs of collections whose name is equal to collection_name."""
+
+        # Prepare set of params for Bitwarden CLI
+        params = ['list', 'collections', '--search', collection_name]
+
+        if organization_id:
+            params.extend(['--organizationid', organization_id])
+
+        out, err = self._run(params)
+
+        # This includes things that matched in different fields.
+        initial_matches = AnsibleJSONDecoder().raw_decode(out)[0]
+
+        # Filter to only return the ID of a collections with exactly matching name
+        return [item['id'] for item in initial_matches
+                if str(item.get('name')).lower() == collection_name.lower()]
 
 
 class LookupModule(LookupBase):
@@ -219,7 +260,9 @@ class LookupModule(LookupBase):
         field = self.get_option('field')
         search_field = self.get_option('search')
         collection_id = self.get_option('collection_id')
+        collection_name = self.get_option('collection_name')
         organization_id = self.get_option('organization_id')
+        result_count = self.get_option('result_count')
         _bitwarden.session = self.get_option('bw_session')
 
         if not _bitwarden.unlocked:
@@ -228,7 +271,27 @@ class LookupModule(LookupBase):
         if not terms:
             terms = [None]
 
-        return [_bitwarden.get_field(field, term, search_field, collection_id, organization_id) for term in terms]
+        if collection_name and collection_id:
+            raise AnsibleOptionsError("'collection_name' and 'collection_id' are mutually exclusive!")
+        elif collection_name:
+            collection_ids = _bitwarden.get_collection_ids(collection_name, organization_id)
+            if not collection_ids:
+                raise BitwardenException("No matching collections found!")
+        else:
+            collection_ids = [collection_id]
+
+        results = [
+            _bitwarden.get_field(field, term, search_field, collection_id, organization_id)
+            for collection_id in collection_ids
+            for term in terms
+        ]
+
+        for result in results:
+            if result_count is not None and len(result) != result_count:
+                raise BitwardenException(
+                    f"Number of results doesn't match result_count! ({len(result)} != {result_count})")
+
+        return results
 
 
 _bitwarden = Bitwarden()

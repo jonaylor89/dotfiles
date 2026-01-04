@@ -1,0 +1,207 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+"""This module allows users to retrieve and modify Linode account settings."""
+
+from __future__ import absolute_import, division, print_function
+
+from typing import Any, List, Optional
+
+import ansible_collections.linode.cloud.plugins.module_utils.doc_fragments.account_settings as docs
+from ansible_collections.linode.cloud.plugins.module_utils.linode_common import (
+    LinodeModuleBase,
+)
+from ansible_collections.linode.cloud.plugins.module_utils.linode_docs import (
+    global_authors,
+    global_requirements,
+)
+from ansible_collections.linode.cloud.plugins.module_utils.linode_helper import (
+    filter_null_values,
+    handle_updates,
+)
+from ansible_specdoc.objects import (
+    FieldType,
+    SpecDocMeta,
+    SpecField,
+    SpecReturnValue,
+)
+from linode_api4 import AccountSettings
+
+SPEC = {
+    "state": SpecField(
+        type=FieldType.string,
+        choices=["present"],
+        required=True,
+        description=["The state of Account Settings."],
+    ),
+    "backups_enabled": SpecField(
+        type=FieldType.bool,
+        description=[
+            "Account-wide backups default. If true, all Linodes created "
+            "will automatically be enrolled in the Backups service. "
+            "If false, Linodes will not be enrolled by default, "
+            "but may still be enrolled on creation or later."
+        ],
+    ),
+    "longview_subscription": SpecField(
+        type=FieldType.string,
+        description=[
+            "The Longview Pro tier you are currently subscribed to. "
+            "The value must be a Longview subscription ID or null for Longview Free."
+        ],
+    ),
+    "network_helper": SpecField(
+        type=FieldType.bool,
+        description=[
+            "Enables network helper across all users by default "
+            "for new Linodes and Linode Configs."
+        ],
+    ),
+    "maintenance_policy": SpecField(
+        type=FieldType.string,
+        description=[
+            "The Slug of the maintenance policy associated with the account.",
+            "NOTE: This field is under v4beta.",
+        ],
+        choices=["linode/migrate", "linode/power_off_on"],
+    ),
+}
+
+SPECDOC_META = SpecDocMeta(
+    description=["Returns information related to your Account settings."],
+    requirements=global_requirements,
+    author=global_authors,
+    options=SPEC,
+    examples=docs.specdoc_examples,
+    return_values={
+        "account_settings": SpecReturnValue(
+            description="Account Settings in JSON serialized form.",
+            docs_url="https://techdocs.akamai.com/linode-api/reference/get-account-settings",
+            type=FieldType.dict,
+            sample=docs.result_account_settings_samples,
+        )
+    },
+)
+
+MUTABLE_FIELDS = {"backups_enabled", "network_helper", "maintenance_policy"}
+
+DOCUMENTATION = r"""
+author:
+- Luke Murphy (@decentral1se)
+- Charles Kenney (@charliekenney23)
+- Phillip Campbell (@phillc)
+- Lena Garber (@lbgarber)
+- Jacob Riddle (@jriddle)
+- Zhiwei Liang (@zliang)
+- Ye Chen (@yechen)
+- Youjung Kim (@ykim)
+- Vinay Shanthegowda (@vshanthe)
+- Erik Zilber (@ezilber)
+description:
+- Returns information related to your Account settings.
+module: account_settings
+notes: []
+options:
+  backups_enabled:
+    description:
+    - Account-wide backups default. If true, all Linodes created will automatically
+      be enrolled in the Backups service. If false, Linodes will not be enrolled by
+      default, but may still be enrolled on creation or later.
+    required: false
+    type: bool
+  longview_subscription:
+    description:
+    - The Longview Pro tier you are currently subscribed to. The value must be a Longview
+      subscription ID or null for Longview Free.
+    required: false
+    type: str
+  maintenance_policy:
+    choices:
+    - linode/migrate
+    - linode/power_off_on
+    description:
+    - The Slug of the maintenance policy associated with the account.
+    - 'NOTE: This field is under v4beta.'
+    required: false
+    type: str
+  network_helper:
+    description:
+    - Enables network helper across all users by default for new Linodes and Linode
+      Configs.
+    required: false
+    type: bool
+  state:
+    choices:
+    - present
+    description:
+    - The state of Account Settings.
+    required: true
+    type: str
+requirements:
+- python >= 3
+short_description: Returns information related to your Account settings.
+"""
+EXAMPLES = r"""
+- name: Retrieve
+  linode.cloud.account_settings:
+    state: present
+"""
+RETURN = r"""
+account_settings:
+  description: Account Settings in JSON serialized form.
+  returned: always
+  sample:
+  - backups_enabled: true
+    interfaces_for_new_linodes: linode_only
+    longview_subscription: longview-3
+    maintenance_policy: linode/migrate
+    managed: true
+    network_helper: false
+    object_storage: active
+  type: dict
+"""
+
+
+class Module(LinodeModuleBase):
+    """Module for viewing and updating Account Settings"""
+
+    def __init__(self) -> None:
+        self.module_arg_spec = SPECDOC_META.ansible_spec
+        self.required_one_of: List[str] = []
+        self.results = {
+            "changed": False,
+            "actions": [],
+            "account_settings": None,
+        }
+
+        self._account_settings: Optional[AccountSettings] = None
+
+        super().__init__(
+            module_arg_spec=self.module_arg_spec,
+            required_one_of=self.required_one_of,
+        )
+
+    def _update(self) -> None:
+        """Handles all updates for Account Settings"""
+        handle_updates(
+            self._account_settings,
+            filter_null_values(self.module.params),
+            MUTABLE_FIELDS,
+            self.register_action,
+        )
+
+    def _present(self) -> None:
+        self._account_settings = self.client.account.settings()
+        self._update()
+        self._account_settings._api_get()
+        self.results["account_settings"] = self._account_settings._raw_json
+
+    def exec_module(self, **kwargs: Any) -> Optional[dict]:
+        """Entrypoint for Account Settings module"""
+        if kwargs.get("state") == "present":
+            self._present()
+        return self.results
+
+
+if __name__ == "__main__":
+    Module()

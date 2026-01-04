@@ -1,4 +1,10 @@
 
+if [ -n "$DOTFILES_ZSH_LOADED" ]; then
+  DOTFILES_ZSH_RELOAD=1
+else
+  DOTFILES_ZSH_LOADED=1
+fi
+
 # load all files from .shell/zshrc.d directory
 if [ -d $HOME/Repos/dotfiles/zshrc.d ]; then
   for file in "$HOME/Repos/dotfiles/zshrc.d/"*.zsh; do
@@ -17,18 +23,6 @@ if [ -f $HOME/.zshrc_local ]; then
   source $HOME/.zshrc_local
 fi
 
-
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-export PATH=$PATH:/Users/johannes/.spicetify
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f "$HOME/Repos/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/Repos/google-cloud-sdk/path.zsh.inc"; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f "$HOME/Repos/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/Repos/google-cloud-sdk/completion.zsh.inc"; fi
 
 ## [Completion] 
 ## Completion scripts setup. Remove the following line to uninstall
@@ -62,3 +56,8 @@ export PATH="/Users/johannes/.codeium/windsurf/bin:$PATH"
 . "$HOME/.atuin/bin/env"
 
 eval "$(atuin init zsh)"
+
+# Added by Antigravity
+export PATH="/Users/johannes/.antigravity/antigravity/bin:$PATH"
+
+unset DOTFILES_ZSH_RELOAD

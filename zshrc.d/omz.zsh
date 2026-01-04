@@ -14,6 +14,9 @@
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
 
+# Skip compaudit on startup; keeps completion initialization fast.
+ZSH_DISABLE_COMPFIX="true"
+
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
 
@@ -42,13 +45,11 @@
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git
-  sudo
-  web-search
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
 
-source $ZSH/oh-my-zsh.sh
-
-
+if [ -z "$DOTFILES_ZSH_RELOAD" ] && [ -z "$_DOTFILES_OMZ_LOADED" ]; then
+  source $ZSH/oh-my-zsh.sh
+  _DOTFILES_OMZ_LOADED=1
+fi

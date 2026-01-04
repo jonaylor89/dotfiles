@@ -12,19 +12,18 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = r'''
----
+DOCUMENTATION = r"""
 module: ini_file
 short_description: Tweak settings in INI files
 extends_documentation_fragment:
   - files
   - community.general.attributes
 description:
-  - Manage (add, remove, change) individual settings in an INI-style file without having
-    to manage the file as a whole with, say, M(ansible.builtin.template) or M(ansible.builtin.assemble).
-  - Adds missing sections if they don't exist.
-  - This module adds missing ending newlines to files to keep in line with the POSIX standard, even when
-    no other modifications need to be applied.
+  - Manage (add, remove, change) individual settings in an INI-style file without having to manage the file as a whole with,
+    say, M(ansible.builtin.template) or M(ansible.builtin.assemble).
+  - Adds missing sections if they do not exist.
+  - This module adds missing ending newlines to files to keep in line with the POSIX standard, even when no other modifications
+    need to be applied.
 attributes:
   check_mode:
     support: full
@@ -36,12 +35,11 @@ options:
       - Path to the INI-style file; this file is created if required.
     type: path
     required: true
-    aliases: [ dest ]
+    aliases: [dest]
   section:
     description:
-      - Section name in INI file. This is added if O(state=present) automatically when
-        a single value is being set.
-      - If being omitted, the O(option) will be placed before the first O(section).
+      - Section name in INI file. This is added if O(state=present) automatically when a single value is being set.
+      - If being omitted, the O(option) is placed before the first O(section).
       - Omitting O(section) is also required if the config format does not support sections.
     type: str
   section_has_values:
@@ -65,7 +63,7 @@ options:
         elements: str
     description:
       - Among possibly multiple sections of the same name, select the first one that contains matching options and values.
-      - With O(state=present), if a suitable section is not found, a new section will be added, including the required options.
+      - With O(state=present), if a suitable section is not found, a new section is added, including the required options.
       - With O(state=absent), at most one O(section) is removed if it contains the values.
     version_added: 8.6.0
   option:
@@ -91,28 +89,27 @@ options:
     version_added: 3.6.0
   backup:
     description:
-      - Create a backup file including the timestamp information so you can get
-        the original file back if you somehow clobbered it incorrectly.
+      - Create a backup file including the timestamp information so you can get the original file back if you somehow clobbered
+        it incorrectly.
     type: bool
     default: false
   state:
     description:
       - If set to V(absent) and O(exclusive) set to V(true) all matching O(option) lines are removed.
-      - If set to V(absent) and O(exclusive) set to V(false) the specified O(option=value) lines are removed,
-        but the other O(option)s with the same name are not touched.
-      - If set to V(present) and O(exclusive) set to V(false) the specified O(option=values) lines are added,
-        but the other O(option)s with the same name are not touched.
-      - If set to V(present) and O(exclusive) set to V(true) all given O(option=values) lines will be
-        added and the other O(option)s with the same name are removed.
+      - If set to V(absent) and O(exclusive) set to V(false) the specified O(option=value) lines are removed, but the other
+        O(option)s with the same name are not touched.
+      - If set to V(present) and O(exclusive) set to V(false) the specified O(option=values) lines are added, but the other
+        O(option)s with the same name are not touched.
+      - If set to V(present) and O(exclusive) set to V(true) all given O(option=values) lines are added and the other O(option)s
+        with the same name are removed.
     type: str
-    choices: [ absent, present ]
+    choices: [absent, present]
     default: present
   exclusive:
     description:
-      - If set to V(true) (default), all matching O(option) lines are removed when O(state=absent),
-        or replaced when O(state=present).
-      - If set to V(false), only the specified O(value)/O(values) are added when O(state=present),
-        or removed when O(state=absent), and existing ones are not modified.
+      - If set to V(true) (default), all matching O(option) lines are removed when O(state=absent), or replaced when O(state=present).
+      - If set to V(false), only the specified O(value)/O(values) are added when O(state=present), or removed when O(state=absent),
+        and existing ones are not modified.
     type: bool
     default: true
     version_added: 3.6.0
@@ -129,8 +126,8 @@ options:
     version_added: 7.5.0
   create:
     description:
-      - If set to V(false), the module will fail if the file does not already exist.
-      - By default it will create the file if it is missing.
+      - If set to V(false), the module fails if the file does not already exist.
+      - By default it creates the file if it is missing.
     type: bool
     default: true
   allow_no_value:
@@ -141,27 +138,27 @@ options:
   modify_inactive_option:
     description:
       - By default the module replaces a commented line that matches the given option.
-      - Set this option to V(false) to avoid this. This is useful when you want to keep commented example
-        C(key=value) pairs for documentation purposes.
+      - Set this option to V(false) to avoid this. This is useful when you want to keep commented example C(key=value) pairs
+        for documentation purposes.
     type: bool
     default: true
     version_added: 8.0.0
   follow:
     description:
-    - This flag indicates that filesystem links, if they exist, should be followed.
-    - O(follow=true) can modify O(path) when combined with parameters such as O(mode).
+      - This flag indicates that filesystem links, if they exist, should be followed.
+      - O(follow=true) can modify O(path) when combined with parameters such as O(mode).
     type: bool
     default: false
     version_added: 7.1.0
 notes:
-   - While it is possible to add an O(option) without specifying a O(value), this makes no sense.
-   - As of community.general 3.2.0, UTF-8 BOM markers are discarded when reading files.
+  - While it is possible to add an O(option) without specifying a O(value), this makes no sense.
+  - As of community.general 3.2.0, UTF-8 BOM markers are discarded when reading files.
 author:
-    - Jan-Piet Mens (@jpmens)
-    - Ales Nosek (@noseka1)
-'''
+  - Jan-Piet Mens (@jpmens)
+  - Ales Nosek (@noseka1)
+"""
 
-EXAMPLES = r'''
+EXAMPLES = r"""
 - name: Ensure "fav=lemonade is in section "[drinks]" in specified file
   community.general.ini_file:
     path: /etc/conf
@@ -257,7 +254,7 @@ EXAMPLES = r'''
     value: xxxxxxxxxxxxxxxxxxxx
     mode: '0600'
     state: present
-'''
+"""
 
 import io
 import os
@@ -271,21 +268,21 @@ from ansible.module_utils.common.text.converters import to_bytes, to_text
 
 def match_opt(option, line):
     option = re.escape(option)
-    return re.match('([#;]?)( |\t)*(%s)( |\t)*(=|$)( |\t)*(.*)' % option, line)
+    return re.match('( |\t)*([#;]?)( |\t)*(%s)( |\t)*(=|$)( |\t)*(.*)' % option, line)
 
 
 def match_active_opt(option, line):
     option = re.escape(option)
-    return re.match('()( |\t)*(%s)( |\t)*(=|$)( |\t)*(.*)' % option, line)
+    return re.match('()()( |\t)*(%s)( |\t)*(=|$)( |\t)*(.*)' % option, line)
 
 
 def update_section_line(option, changed, section_lines, index, changed_lines, ignore_spaces, newline, msg):
     option_changed = None
     if ignore_spaces:
         old_match = match_opt(option, section_lines[index])
-        if not old_match.group(1):
+        if not old_match.group(2):
             new_match = match_opt(option, newline)
-            option_changed = old_match.group(7) != new_match.group(7)
+            option_changed = old_match.group(8) != new_match.group(8)
     if option_changed is None:
         option_changed = section_lines[index] != newline
     if option_changed:
@@ -302,7 +299,7 @@ def check_section_has_values(section_has_values, section_lines):
         for condition in section_has_values:
             for line in section_lines:
                 match = match_opt(condition["option"], line)
-                if match and (len(condition["values"]) == 0 or match.group(7) in condition["values"]):
+                if match and (len(condition["values"]) == 0 or match.group(8) in condition["values"]):
                     break
             else:
                 return False
@@ -435,8 +432,8 @@ def do_ini(module, filename, section=None, section_has_values=None, option=None,
         for index, line in enumerate(section_lines):
             if match_function(option, line):
                 match = match_function(option, line)
-                if values and match.group(7) in values:
-                    matched_value = match.group(7)
+                if values and match.group(8) in values:
+                    matched_value = match.group(8)
                     if not matched_value and allow_no_value:
                         # replace existing option with no value line(s)
                         newline = u'%s\n' % option
@@ -508,7 +505,7 @@ def do_ini(module, filename, section=None, section_has_values=None, option=None,
                     section_lines = new_section_lines
             elif not exclusive and len(values) > 0:
                 # delete specified option=value line(s)
-                new_section_lines = [i for i in section_lines if not (match_active_opt(option, i) and match_active_opt(option, i).group(7) in values)]
+                new_section_lines = [i for i in section_lines if not (match_active_opt(option, i) and match_active_opt(option, i).group(8) in values)]
                 if section_lines != new_section_lines:
                     changed = True
                     msg = 'option changed'

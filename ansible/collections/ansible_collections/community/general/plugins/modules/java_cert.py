@@ -8,14 +8,13 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-DOCUMENTATION = r'''
----
+DOCUMENTATION = r"""
 module: java_cert
 
 short_description: Uses keytool to import/remove certificate to/from java keystore (cacerts)
 description:
-  - This is a wrapper module around keytool, which can be used to import certificates
-    and optionally private keys to a given java keystore, or remove them from it.
+  - This is a wrapper module around keytool, which can be used to import certificates and optionally private keys to a given
+    java keystore, or remove them from it.
 extends_documentation_fragment:
   - community.general.attributes
   - ansible.builtin.files
@@ -61,9 +60,8 @@ options:
   pkcs12_path:
     description:
       - Local path to load PKCS12 keystore from.
-      - Unlike O(cert_url), O(cert_path) and O(cert_content), the PKCS12 keystore embeds the private key matching
-        the certificate, and is used to import both the certificate and its private key into the
-        java keystore.
+      - Unlike O(cert_url), O(cert_path) and O(cert_content), the PKCS12 keystore embeds the private key matching the certificate,
+        and is used to import both the certificate and its private key into the java keystore.
       - Exactly one of O(cert_url), O(cert_path), O(cert_content), or O(pkcs12_path) is required to load certificate.
     type: path
   pkcs12_password:
@@ -100,10 +98,10 @@ options:
   state:
     description:
       - Defines action which can be either certificate import or removal.
-      - When state is present, the certificate will always idempotently be inserted
-        into the keystore, even if there already exists a cert alias that is different.
+      - When state is present, the certificate will always idempotently be inserted into the keystore, even if there already
+        exists a cert alias that is different.
     type: str
-    choices: [ absent, present ]
+    choices: [absent, present]
     default: present
   mode:
     version_added: 8.5.0
@@ -125,10 +123,10 @@ options:
     version_added: 8.5.0
 requirements: [openssl, keytool]
 author:
-- Adam Hamsik (@haad)
-'''
+  - Adam Hamsik (@haad)
+"""
 
-EXAMPLES = r'''
+EXAMPLES = r"""
 - name: Import SSL certificate from google.com to a given cacerts keystore
   community.general.java_cert:
     cert_url: google.com
@@ -196,9 +194,9 @@ EXAMPLES = r'''
     keystore_pass: changeit
     keystore_create: true
     state: present
-'''
+"""
 
-RETURN = r'''
+RETURN = r"""
 msg:
   description: Output from stdout of keytool command after execution of given command.
   returned: success
@@ -216,7 +214,7 @@ cmd:
   returned: success
   type: str
   sample: "keytool -importcert -noprompt -keystore"
-'''
+"""
 
 import os
 import tempfile
@@ -280,7 +278,7 @@ def _get_first_certificate_from_x509_file(module, pem_certificate_file, pem_cert
         (extract_rc, dummy, extract_stderr) = module.run_command(extract_cmd, check_rc=False)
 
         if extract_rc != 0:
-            # this time it's a real failure
+            # this time it is a real failure
             module.fail_json(msg="Internal module failure, cannot extract certificate, error: %s" % extract_stderr,
                              rc=extract_rc, cmd=extract_cmd)
 
@@ -317,12 +315,13 @@ def _export_public_cert_from_pkcs12(module, executable, pkcs_file, alias, passwo
         "-noprompt",
         "-keystore",
         pkcs_file,
-        "-alias",
-        alias,
         "-storetype",
         "pkcs12",
         "-rfc"
     ]
+    # Append optional alias
+    if alias:
+        export_cmd.extend(["-alias", alias])
     (export_rc, export_stdout, export_err) = module.run_command(export_cmd, data=password, check_rc=False)
 
     if export_rc != 0:
@@ -395,6 +394,10 @@ def import_pkcs12_path(module, executable, pkcs12_path, pkcs12_pass, pkcs12_alia
                        keystore_path, keystore_pass, keystore_alias, keystore_type):
     ''' Import pkcs12 from path into keystore located on
         keystore_path as alias '''
+    optional_aliases = {
+        "-destalias": keystore_alias,
+        "-srcalias": pkcs12_alias
+    }
     import_cmd = [
         executable,
         "-importkeystore",
@@ -403,13 +406,14 @@ def import_pkcs12_path(module, executable, pkcs12_path, pkcs12_pass, pkcs12_alia
         "pkcs12",
         "-srckeystore",
         pkcs12_path,
-        "-srcalias",
-        pkcs12_alias,
         "-destkeystore",
         keystore_path,
-        "-destalias",
-        keystore_alias
     ]
+    # Append optional aliases
+    for flag, value in optional_aliases.items():
+        if value:
+            import_cmd.extend([flag, value])
+
     import_cmd += _get_keystore_type_keytool_parameters(keystore_type)
 
     secret_data = "%s\n%s" % (keystore_pass, pkcs12_pass)
