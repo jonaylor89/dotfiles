@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  uptime:
+    image: louislam/uptime-kuma:latest
+    restart: always
+    volumes:
+      - /srv/data/uptime:/app/data
+    ports:
+      - "3001:3001"
+
+  homarr:
+    image: ghcr.io/ajnart/homarr:latest
+    restart: always
+    volumes:
+      - /srv/data/homarr:/app/data/configs
+    ports:
+      - "7575:7575"
+
