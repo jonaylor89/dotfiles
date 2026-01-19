@@ -142,6 +142,7 @@ link_file "$DOTFILES_DIR/vimrc" "$HOME/.vimrc"
 link_file "$DOTFILES_DIR/ideavimrc" "$HOME/.ideavimrc"
 link_file "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 link_file "$DOTFILES_DIR/SpaceVim.d" "$HOME/.SpaceVim.d"
+link_file "$DOTFILES_DIR/helix_config.toml" "$HOME/.config/helix/config.toml"
 
 # Terminal configurations
 link_file "$DOTFILES_DIR/tmux.conf" "$HOME/.tmux.conf"
