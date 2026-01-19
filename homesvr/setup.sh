@@ -32,10 +32,18 @@ ufw default deny incoming
 ufw default allow outgoing
 ufw allow ssh
 ufw allow 41641/udp
+ufw allow 51820/udp
 ufw --force enable
 
+echo "Enable IP forwarding..."
+cat > /etc/sysctl.d/99-wireguard.conf <<'EOF'
+net.ipv4.ip_forward=1
+net.ipv4.conf.all.src_valid_mark=1
+EOF
+sysctl -q -p /etc/sysctl.d/99-wireguard.conf
+
 echo "Create directories..."
-mkdir -p /srv/{infra,data/{homarr,uptime}}
+mkdir -p /srv/{infra,data/{gitea,homarr,prowlarr,radarr,sonarr,uptime,wireguard},data/jellyfin/{cache,config},data/transmission/{config,downloads,watch},media/{movies,music,tv}}
 chown -R "$USER_NAME":"$USER_NAME" /srv
 
 echo "Setup complete!"
@@ -44,4 +52,3 @@ echo "Next:"
 echo "  1. Re-login or run: newgrp docker"
 echo "  2. Run: tailscale up"
 echo "  3. Create /srv/infra/docker-compose.yml"
-

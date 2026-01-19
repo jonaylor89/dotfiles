@@ -17,3 +17,139 @@ services:
     ports:
       - "7575:7575"
 
+  wireguard:
+    image: lscr.io/linuxserver/wireguard:latest
+    container_name: wireguard-residential
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - SERVERURL=your.dyndns.com # change me
+      - SERVERPORT=51820
+      - PEERS=1
+      - PEERDNS=auto
+      - INTERNAL_SUBNET=10.13.13.0
+      - ALLOWEDIPS=0.0.0.0/0
+    volumes:
+      - /srv/data/wireguard:/config
+      - /lib/modules:/lib/modules:ro
+    ports:
+      - "51820:51820/udp"
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv4.ip_forward=1
+    restart: unless-stopped
+
+  transmission:
+    image: ghcr.io/linuxserver/transmission:latest
+    container_name: transmission
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - USER=username
+      - PASS=password # change me
+    ports:
+      - "9091:9091"
+      - "51413:51413"
+      - "51413:51413/udp"
+    volumes:
+      - /srv/data/transmission/config:/config
+      - /srv/data/transmission/downloads:/downloads
+      - /srv/data/transmission/watch:/watch
+    networks:
+      - media
+
+  prowlarr:
+    image: ghcr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    ports:
+      - "9696:9696"
+    volumes:
+      - /srv/data/prowlarr:/config
+    networks:
+      - media
+
+  sonarr:
+    image: ghcr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    ports:
+      - "8989:8989"
+    volumes:
+      - /srv/data/sonarr:/config
+      - /srv/data/transmission/downloads:/data
+    networks:
+      - media
+
+  radarr:
+    image: ghcr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    ports:
+      - "7878:7878"
+    volumes:
+      - /srv/data/radarr:/config
+      - /srv/data/transmission/downloads:/data
+    networks:
+      - media
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    user: "1000:1000"
+    environment:
+      - TZ=America/New_York
+      - JELLYFIN_PublishedServerUrl=http://localhost # change me
+    ports:
+      - "8096:8096"
+      - "8920:8920"
+      - "7359:7359/udp"
+      - "1900:1900/udp"
+    volumes:
+      - /srv/data/jellyfin/config:/config
+      - /srv/data/jellyfin/cache:/cache
+      - /srv/media/tv:/data/tv
+      - /srv/media/movies:/data/movies
+      - /srv/media/music:/data/music
+    networks:
+      - media
+
+  gitea:
+    image: gitea/gitea:latest
+    container_name: gitea
+    restart: unless-stopped
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__server__DOMAIN=localhost
+      - GITEA__server__ROOT_URL=http://localhost # change me
+    volumes:
+      - /srv/data/gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "2222:22"
+
+networks:
+  media:
+    driver: bridge
