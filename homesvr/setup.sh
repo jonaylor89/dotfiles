@@ -37,6 +37,7 @@ ufw --force enable
 
 echo "Enable IP forwarding..."
 cat > /etc/sysctl.d/99-wireguard.conf <<'EOF'
+net.ipv6.conf.all.forwarding=1
 net.ipv4.ip_forward=1
 net.ipv4.conf.all.src_valid_mark=1
 EOF
@@ -53,7 +54,9 @@ echo "  1. Re-login or run: newgrp docker"
 echo "  2. Run: tailscale up"
 echo "  3. Copy docker-compose.yml to /srv/infra/"
 echo "  4. Copy .env.example to /srv/infra/.env and fill in secrets"
-echo "  5. Build newsletter image: docker build -t email_newsletter:latest <path-to-email_newsletter>"
-echo "  6. Run: docker compose up -d (from /srv/infra/)"
-echo "  7. Run migrations against postgres from the email_newsletter repo:"
+echo "  5. Set APP_BASE_URL in /srv/infra/.env to your public newsletter URL"
+echo "  6. Set CLOUDFLARE_TUNNEL_TOKEN in /srv/infra/.env"
+echo "  7. Build newsletter image: docker build -t email_newsletter:latest <path-to-email_newsletter>"
+echo "  8. Run: docker compose up -d (from /srv/infra/)"
+echo "  9. Run migrations against postgres from the email_newsletter repo:"
 echo "     SKIP_DOCKER=1 POSTGRES_PORT=5432 POSTGRES_PASSWORD=<pw> ./scripts/init_db.sh"

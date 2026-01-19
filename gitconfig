@@ -55,3 +55,5 @@
 	excludesFile = ~/.gitignore
 [commit]
 	gpgsign = true
+[gitbutler]
+	aiModelProvider = openai
