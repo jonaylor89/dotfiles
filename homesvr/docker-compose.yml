@@ -167,8 +167,8 @@ services:
     volumes:
       - /srv/data/redis:/data
 
-  newsletter:
-    image: email_newsletter:latest
+  hub:
+    image: jonaylor/hub:latest
     restart: always
     depends_on:
       - postgres

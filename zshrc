@@ -43,15 +43,13 @@ complete -o nospace -C /opt/homebrew/bin/terraform terraform
 # pnpm
 export PNPM_HOME="/Users/johannes/Library/pnpm"
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 # pnpm end
 
 . "/Users/johannes/.deno/env"
 
-# Added by Windsurf
-export PATH="/Users/johannes/.codeium/windsurf/bin:$PATH"
 
 . "$HOME/.atuin/bin/env"
 
