@@ -32,7 +32,7 @@ services:
       - PEERS=1
       - PEERDNS=auto
       - INTERNAL_SUBNET=10.13.13.0
-      - ALLOWEDIPS=0.0.0.0/0
+      - ALLOWEDIPS=0.0.0.0/0,::/0
     volumes:
       - /srv/data/wireguard:/config
       - /lib/modules:/lib/modules:ro
@@ -41,6 +41,7 @@ services:
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
       - net.ipv4.ip_forward=1
+      - net.ipv6.conf.all.forwarding=1
     restart: unless-stopped
 
   transmission:
@@ -140,8 +141,8 @@ services:
     environment:
       - USER_UID=1000
       - USER_GID=1000
-      - GITEA__server__DOMAIN=localhost
-      - GITEA__server__ROOT_URL=http://localhost # change me
+      - GITEA__server__DOMAIN=localhost # change to ip
+      - GITEA__server__ROOT_URL=localhost # change to ip
     volumes:
       - /srv/data/gitea:/data
       - /etc/timezone:/etc/timezone:ro
