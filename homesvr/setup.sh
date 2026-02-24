@@ -43,7 +43,7 @@ EOF
 sysctl -q -p /etc/sysctl.d/99-wireguard.conf
 
 echo "Create directories..."
-mkdir -p /srv/{infra,data/{gitea,homarr,prowlarr,radarr,sonarr,uptime,wireguard},data/jellyfin/{cache,config},data/transmission/{config,downloads,watch},media/{movies,music,tv}}
+mkdir -p /srv/{infra,data/{gitea,homarr,prowlarr,radarr,sonarr,uptime,wireguard,postgres,redis},data/jellyfin/{cache,config},data/transmission/{config,downloads,watch},media/{movies,music,tv}}
 chown -R "$USER_NAME":"$USER_NAME" /srv
 
 echo "Setup complete!"
@@ -51,4 +51,9 @@ echo ""
 echo "Next:"
 echo "  1. Re-login or run: newgrp docker"
 echo "  2. Run: tailscale up"
-echo "  3. Create /srv/infra/docker-compose.yml"
+echo "  3. Copy docker-compose.yml to /srv/infra/"
+echo "  4. Copy .env.example to /srv/infra/.env and fill in secrets"
+echo "  5. Build newsletter image: docker build -t email_newsletter:latest <path-to-email_newsletter>"
+echo "  6. Run: docker compose up -d (from /srv/infra/)"
+echo "  7. Run migrations against postgres from the email_newsletter repo:"
+echo "     SKIP_DOCKER=1 POSTGRES_PORT=5432 POSTGRES_PASSWORD=<pw> ./scripts/init_db.sh"
