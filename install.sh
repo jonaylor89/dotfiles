@@ -157,6 +157,7 @@ link_file "$DOTFILES_DIR/starship.toml" "$HOME/.config/starship/starship.toml"
 link_file "$DOTFILES_DIR/pypirc" "$HOME/.pypirc"
 link_file "$DOTFILES_DIR/jj_config.toml" "$HOME/.jj/config.toml"
 link_file "$DOTFILES_DIR/py_startup.py" "$HOME/.py_startup.py"
+link_file "$DOTFILES_DIR/pi-extensions" "$HOME/.pi/agent/extensions"
 
 # macOS specific
 if [[ "$OSTYPE" == "darwin"* ]]; then
