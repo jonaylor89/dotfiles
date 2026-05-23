@@ -17,6 +17,18 @@ tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
 # `-d trunk()` sets the destination. trunk() finds the most recent `main | master | trunk` branch thats on a remote. trunk() is builtin.
 retrunk = ["rebase", "-d", "trunk()"]
 
+# Gitconfig-style aliases
+# dm: describe current change with a message (like git cim)
+dm = ["describe", "-m"]
+cl = ["git", "clone"]
+ps = ["git", "push"]
+ra = ["git", "remote", "add"]
+rao = ["git", "remote", "add", "origin"]
+tree = ["log", "-r", "::"]
+
+# JJ-native shortcut used frequently
+bs = ["bookmark", "set"]
+
 [revset-aliases]
 "closest_bookmark(to)" = "heads(::to & bookmarks())"
 
