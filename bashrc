@@ -48,3 +48,4 @@ export PATH="$PATH:$HOME/.rvm/bin"
 
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 eval "$(atuin init bash)"
+. "$HOME/.cargo/env"

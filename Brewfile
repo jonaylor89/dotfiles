@@ -3,8 +3,8 @@
 
 # Taps
 tap "koekeishiya/formulae"
-tap "homebrew/bundle"
-tap "homebrew/services"
+# tap "homebrew/bundle"
+# tap "homebrew/services"
 tap "jonaylor89/tap"
 
 # CLI Tools
@@ -24,7 +24,6 @@ brew "git-lfs"
 brew "go"
 brew "htop"
 brew "hub"
-brew "neofetch"
 brew "fastfetch"
 brew "nmap"
 brew "openssl"
@@ -35,9 +34,11 @@ brew "tailscale"
 brew "tmux"
 brew "wget"
 brew "yarn"
-brew "youtube-dl"
 brew "zsh"
 brew "zsh-syntax-highlighting"
+brew "helix"
+brew "eza"
+brew "orbstack"
 
 # GUI Applications
 cask "docker-desktop"
@@ -51,3 +52,4 @@ cask "notion"
 cask "slack"
 cask "spotify"
 cask "zed"
+cask "font-anonymice-nerd-font"

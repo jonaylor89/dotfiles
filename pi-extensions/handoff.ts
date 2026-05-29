@@ -146,15 +146,16 @@ export default function (pi: ExtensionAPI) {
 
 			const newSessionResult = await ctx.newSession({
 				parentSession: currentSessionFile ?? undefined,
+				withSession: async (ctx) => {
+					ctx.ui.setEditorText(editedPrompt);
+					ctx.ui.notify("Handoff ready. Submit when ready.", "info");
+				},
 			});
 
 			if (newSessionResult.cancelled) {
 				ctx.ui.notify("New session cancelled", "info");
-				return;
 			}
-
-			ctx.ui.setEditorText(editedPrompt);
-			ctx.ui.notify("Handoff ready. Submit when ready.", "info");
+			return;
 		},
 	});
 }

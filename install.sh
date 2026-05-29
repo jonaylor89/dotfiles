@@ -146,7 +146,7 @@ link_file "$DOTFILES_DIR/helix_config.toml" "$HOME/.config/helix/config.toml"
 
 # Terminal configurations
 link_file "$DOTFILES_DIR/tmux.conf" "$HOME/.tmux.conf"
-link_file "$DOTFILES_DIR/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml"
+link_file "$DOTFILES_DIR/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
 link_file "$DOTFILES_DIR/kitty.conf" "$HOME/.config/kitty/kitty.conf"
 
 # Git configuration

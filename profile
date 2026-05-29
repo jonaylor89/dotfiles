@@ -1,2 +1,5 @@
 
-export PATH="$HOME/.cargo/bin:$PATH"
+. "$HOME/.cargo/env"
+. "/Users/johannes/.deno/env"
+
+. "$HOME/.atuin/bin/env"

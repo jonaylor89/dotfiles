@@ -1,3 +1,5 @@
+# Add deno completions to search path
+if [[ ":$FPATH:" != *":/Users/johannes/.zsh/completions:"* ]]; then export FPATH="/Users/johannes/.zsh/completions:$FPATH"; fi
 
 if [ -n "$DOTFILES_ZSH_LOADED" ]; then
   DOTFILES_ZSH_RELOAD=1
@@ -59,3 +61,10 @@ eval "$(atuin init zsh)"
 export PATH="/Users/johannes/.antigravity/antigravity/bin:$PATH"
 
 unset DOTFILES_ZSH_RELOAD
+# Initialize zsh completions (added by deno install script)
+autoload -Uz compinit
+compinit
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
