@@ -34,10 +34,37 @@ link_file() {
     mkdir -p "$(dirname "$dst")"
 
     # Remove existing file/symlink
-    [ -e "$dst" ] && rm -rf "$dst"
+    if [ -e "$dst" ] || [ -L "$dst" ]; then
+        rm -rf "$dst"
+    fi
 
     # Create symlink
     ln -sf "$src" "$dst"
+    log_info "Linked: $dst -> $src"
+}
+
+# Function to preserve existing directory contents before replacing it with a symlink
+link_dir_preserving_contents() {
+    local src="$1"
+    local dst="$2"
+
+    # Create source and parent directories if they don't exist
+    mkdir -p "$src"
+    mkdir -p "$(dirname "$dst")"
+
+    # Copy existing non-symlinked directory contents without clobbering dotfiles
+    if [ -d "$dst" ] && [ ! -L "$dst" ]; then
+        log_info "Preserving existing contents: $dst -> $src"
+        cp -Rpn "$dst"/. "$src"/
+    fi
+
+    # Remove existing file/directory/symlink
+    if [ -e "$dst" ] || [ -L "$dst" ]; then
+        rm -rf "$dst"
+    fi
+
+    # Create symlink
+    ln -sfn "$src" "$dst"
     log_info "Linked: $dst -> $src"
 }
 
@@ -158,7 +185,7 @@ link_file "$DOTFILES_DIR/pypirc" "$HOME/.pypirc"
 link_file "$DOTFILES_DIR/jj_config.toml" "$HOME/.jj/config.toml"
 link_file "$DOTFILES_DIR/py_startup.py" "$HOME/.py_startup.py"
 link_file "$DOTFILES_DIR/pi-extensions" "$HOME/.pi/agent/extensions"
-link_file "$DOTFILES_DIR/pi-skills" "$HOME/.pi/agent/skills"
+link_dir_preserving_contents "$DOTFILES_DIR/pi-skills" "$HOME/.pi/agent/skills"
 
 # macOS specific
 if [[ "$OSTYPE" == "darwin"* ]]; then
