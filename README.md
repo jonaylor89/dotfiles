@@ -53,6 +53,7 @@ cd ~/Repos/dotfiles
 6. **Development Tools** (Git, Docker, language runtimes)
 7. **OSINT/Security Tools** (nmap, metasploit, wireshark, etc.)
 8. **System Optimizations** (kernel parameters, firewall, SSH hardening)
+9. **Pi Agent Configuration** (extensions and skills)
 
 ## Features
 
@@ -89,6 +90,10 @@ cd ~/Repos/dotfiles
 - Reconnaissance: theharvester, recon-ng, subfinder, amass
 - Reverse Engineering: radare2, ghidra, gdb, binwalk
 - Forensics: autopsy, volatility, sleuthkit, foremost
+
+**Pi Coding Agent:**
+- Extensions: tracked in `pi-extensions/` and linked to `~/.pi/agent/extensions`
+- Skills: tracked in `pi-skills/` and linked to `~/.pi/agent/skills`
 
 **Modern CLI Tools:**
 - Search: ripgrep, fd, fzf, ag
@@ -235,6 +240,10 @@ dotfiles/
 │   ├── starship.toml           # Starship prompt
 │   ├── pypirc                  # PyPI configuration
 │   └── py_startup.py           # Python REPL startup
+│
+├── Pi Coding Agent
+│   ├── pi-extensions/          # Pi extensions linked to ~/.pi/agent/extensions
+│   └── pi-skills/              # Pi skills linked to ~/.pi/agent/skills
 │
 ├── Submodules
 │   ├── ansible/                # Ansible collections (DEPRECATED)
