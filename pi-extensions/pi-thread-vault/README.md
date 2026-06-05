@@ -20,7 +20,7 @@ Commands exposed by `activate`:
 - `/thread-retry-sync`
 - `/thread-handoff`
 
-Configuration is read from extension config, environment variables, and `~/.pi-thread-vault/config.toml`.
+Configuration is read from extension config, canonical `JONAYLOR_*` environment variables, and `~/.config/jonaylor/config.toml`.
 
 ## Install
 

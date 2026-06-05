@@ -1,3 +1,5 @@
+import { mkdir, writeFile } from "node:fs/promises"
+import path from "node:path"
 import type { VaultConfig } from "./config.js"
 import type { PendingEvent, UploadQueue } from "./queue.js"
 
@@ -29,6 +31,21 @@ export interface CurrentThreadContext {
   lastSyncedEventId?: string
 }
 
+export interface MemoryMatch {
+  id: string
+  fact: string
+  similarity: number
+  created_at: string
+}
+
+export interface MemoryEntry {
+  id: string
+  user_id: string
+  fact: string
+  created_at: string
+  updated_at: string
+}
+
 export class VaultClient {
   private currentContexts = new Map<string, CurrentThreadContext>()
 
@@ -54,16 +71,58 @@ export class VaultClient {
       if (!response.ok) throw new Error(`server returned ${response.status}: ${await response.text()}`)
       const body = await response.json() as { thread_id: string, thread_url: string }
       this.queue.markSynced(batch.map((event) => event.id))
-      this.currentContexts.set(session.external_session_id, {
+      const context = {
         threadId: body.thread_id,
         threadUrl: body.thread_url,
         serverUrl: this.config.serverUrl,
         sessionExternalId: session.external_session_id,
         lastSyncedEventId: events.at(-1)?.external_event_id,
-      })
+      }
+      this.currentContexts.set(session.external_session_id, context)
+      await this.writeCurrentThreadContext(context)
     } catch (error) {
       this.queue.markFailed(batch.map((event) => event.id), error instanceof Error ? error.message : String(error))
     }
+  }
+
+  async searchMemories(userId: string, query: string): Promise<MemoryMatch[]> {
+    const response = await fetch(new URL("/api/memory/search", this.config.serverUrl), {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${this.config.apiToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user_id: userId, query }),
+    })
+    if (!response.ok) return []
+    const body = await response.json() as { memories: MemoryMatch[] }
+    return body.memories ?? []
+  }
+
+  async addMemory(userId: string, text: string): Promise<void> {
+    const response = await fetch(new URL("/api/memory", this.config.serverUrl), {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${this.config.apiToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user_id: userId, text }),
+    })
+    if (!response.ok) throw new Error(`memory add failed with ${response.status}: ${await response.text()}`)
+  }
+
+  async listMemories(userId: string): Promise<MemoryEntry[]> {
+    const response = await fetch(new URL(`/api/memory/${encodeURIComponent(userId)}`, this.config.serverUrl), {
+      headers: { "Authorization": `Bearer ${this.config.apiToken}` },
+    })
+    if (!response.ok) return []
+    const body = await response.json() as { memories: MemoryEntry[] }
+    return body.memories ?? []
+  }
+
+  private async writeCurrentThreadContext(context: CurrentThreadContext): Promise<void> {
+    await mkdir(this.config.dataDir, { recursive: true })
+    await writeFile(path.join(this.config.dataDir, "current-thread.json"), `${JSON.stringify(context, null, 2)}\n`)
   }
 
   async recordHandoff(input: {

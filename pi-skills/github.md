@@ -179,6 +179,58 @@ Valid submit events:
 
 ## Common workflows
 
+### Include pi coding-agent threads in PR descriptions
+
+When creating or editing a PR description for Johannes, include a reviewer-openable pi-thread-vault share link so reviewers can see the agent work thread. Threads should remain private by default during normal work; make a public/share link only when preparing the PR.
+
+Use a small, idempotent section:
+
+```markdown
+<!-- pi-threads:start -->
+## Pi threads
+- [current coding-agent thread](https://.../s/...) 
+<!-- pi-threads:end -->
+```
+
+Prefer the `jonaylor` CLI for current-thread lookup and share-link creation:
+
+```bash
+jonaylor vault current-thread --json
+THREAD_PUBLIC_URL=$(jonaylor vault share-current-thread)
+```
+
+If you only need the markdown block, generate it directly:
+
+```bash
+THREAD_BLOCK=$(jonaylor github pi-threads-block)
+```
+
+Rules:
+- Put only reviewer-openable `/s/...` share URLs in PR bodies. Do **not** put `/admin/threads/...` URLs in PR descriptions; reviewers usually cannot open them.
+- If `jonaylor vault share-current-thread` cannot find a synced current thread, ask Johannes to run `/thread-retry-sync`, wait for pi-thread-vault to sync, or provide a share URL.
+- If a PR body already has the `pi-threads` marker block, replace that block instead of appending another one.
+- Mutating the PR body still requires an explicit user request under the Safety rule.
+
+Example body update after explicit approval/request, once you have a share URL:
+
+```bash
+REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
+BODY=$(gh pr view <number> -R "$REPO" --json body -q .body)
+THREAD_BLOCK=$(jonaylor github pi-threads-block)
+UPDATED_BODY=$(BODY="$BODY" THREAD_BLOCK="$THREAD_BLOCK" python3 - <<'PY'
+import os, re
+body = os.environ["BODY"]
+block = os.environ["THREAD_BLOCK"]
+pattern = r"<!-- pi-threads:start -->.*?<!-- pi-threads:end -->"
+if re.search(pattern, body, flags=re.S):
+    print(re.sub(pattern, block, body, flags=re.S))
+else:
+    print(body.rstrip() + "\n\n" + block)
+PY
+)
+gh pr edit <number> -R "$REPO" --body "$UPDATED_BODY"
+```
+
 ### Summarize unresolved PR feedback
 
 ```bash

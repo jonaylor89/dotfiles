@@ -276,6 +276,81 @@ if ! command -v starship &>/dev/null; then
 fi
 
 ###############################################################################
+# Personal hub / Pi tooling                                                  #
+###############################################################################
+
+ensure_npm() {
+    export NVM_DIR="$HOME/.nvm"
+
+    if [ ! -s "$NVM_DIR/nvm.sh" ]; then
+        log_info "Installing nvm for Node.js/npm..."
+        mkdir -p "$NVM_DIR"
+        curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+    fi
+
+    # shellcheck disable=SC1091
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+    if ! command -v nvm &>/dev/null; then
+        log_info "Could not load nvm; npm is unavailable"
+        return 1
+    fi
+
+    if ! command -v npm &>/dev/null; then
+        log_info "Installing latest LTS Node.js/npm via nvm..."
+        nvm install --lts
+        nvm alias default 'lts/*'
+        nvm use default
+    fi
+
+    command -v npm &>/dev/null
+}
+
+# Use HTTPS by default so a fresh machine does not need GitHub SSH keys yet.
+# If the repo is private, authenticate with GitHub first or override this with SSH:
+#   JONAYLOR_REPO_URL=git@github.com:jonaylor89/jonaylor.com.git ./install.sh
+JONAYLOR_REPO_URL="${JONAYLOR_REPO_URL:-https://github.com/jonaylor89/jonaylor.com.git}"
+JONAYLOR_REPO_DIR="${JONAYLOR_REPO_DIR:-$HOME/Repos/jonaylor.com}"
+JONAYLOR_HUB_DIR="${JONAYLOR_HUB_DIR:-$JONAYLOR_REPO_DIR/services/hub}"
+if [ ! -d "$JONAYLOR_HUB_DIR" ]; then
+    if command -v git &>/dev/null; then
+        log_info "Hub repo not found; cloning $JONAYLOR_REPO_URL into $JONAYLOR_REPO_DIR..."
+        mkdir -p "$(dirname "$JONAYLOR_REPO_DIR")"
+        git clone "$JONAYLOR_REPO_URL" "$JONAYLOR_REPO_DIR" || \
+            log_info "Could not clone jonaylor.com; skipping jonaylor CLI install"
+    else
+        log_info "Skipping jonaylor CLI install; git is not available"
+    fi
+fi
+
+if [ -d "$JONAYLOR_HUB_DIR" ]; then
+    if command -v cargo &>/dev/null; then
+        log_info "Installing jonaylor CLI from $JONAYLOR_HUB_DIR..."
+        cargo install --path "$JONAYLOR_HUB_DIR" --bin jonaylor --force
+        log_success "jonaylor CLI installed"
+    else
+        log_info "Skipping jonaylor CLI install; cargo is not available"
+    fi
+fi
+
+if ! command -v pi &>/dev/null && ensure_npm; then
+    log_info "Installing pi coding agent..."
+    npm install -g @earendil-works/pi-coding-agent || \
+        log_info "Could not install pi globally; continuing because extensions are symlinked"
+fi
+
+PI_THREAD_VAULT_EXTENSION_DIR="$DOTFILES_DIR/pi-extensions/pi-thread-vault"
+if [ -d "$PI_THREAD_VAULT_EXTENSION_DIR" ]; then
+    if ensure_npm; then
+        log_info "Installing/building pi-thread-vault extension dependencies..."
+        (cd "$PI_THREAD_VAULT_EXTENSION_DIR" && npm install && npm run build)
+        log_success "pi-thread-vault extension is ready"
+    else
+        log_info "Skipping pi-thread-vault dependency install; npm is not available"
+    fi
+fi
+
+###############################################################################
 # Set default shell to zsh                                                   #
 ###############################################################################
 

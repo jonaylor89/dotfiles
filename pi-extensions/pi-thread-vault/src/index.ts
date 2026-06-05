@@ -42,6 +42,7 @@ export function activate(pi: PiLikeApi, extensionConfig: Partial<VaultConfig> = 
   const queue = new UploadQueue(config.dataDir)
   const client = new VaultClient(config, queue)
   const sessions = new Map<string, NormalizedSession>()
+  const sessionUserMessages = new Map<string, string[]>()
   let currentSessionExternalId: string | undefined
 
   const rememberSession = (rawSession: unknown, ctx?: unknown) => {
@@ -54,7 +55,7 @@ export function activate(pi: PiLikeApi, extensionConfig: Partial<VaultConfig> = 
   const enqueue = (rawEvent: unknown, session: NormalizedSession) => {
     const event = normalizeEvent(rawEvent, config.redaction.enabled)
     queue.enqueue({
-      id: event.external_event_id ?? crypto.randomUUID(),
+      id: crypto.randomUUID(),
       thread_external_id: session.external_session_id,
       event_hash: event.event_hash,
       payload_json: JSON.stringify(event),
@@ -68,12 +69,33 @@ export function activate(pi: PiLikeApi, extensionConfig: Partial<VaultConfig> = 
     void client.flush(session)
   })
 
-  pi.on?.("before_agent_start", (event, ctx) => {
+  pi.on?.("before_agent_start", async (event, ctx) => {
     const session = rememberSession(event, ctx)
     const value = asRecord(event)
     const systemPrompt = optionalString(value.systemPrompt)
-    if (systemPrompt) {
-      enqueue({ id: `system-prompt-${hashContent(systemPrompt)}`, role: "system", kind: "system_prompt", content: systemPrompt, metadata: { source: "before_agent_start" } }, session)
+
+    // Inject long-term memory context into the system prompt
+    if (config.memory.enabled && systemPrompt) {
+      try {
+        const searchQuery = session.title ?? systemPrompt.slice(0, 200)
+        const memories = await client.searchMemories(config.memory.userId, searchQuery)
+        if (memories.length > 0) {
+          const memoryBlock = memories
+            .filter((m) => m.similarity > 0.3)
+            .map((m) => `- ${m.fact}`)
+            .join("\n")
+          if (memoryBlock) {
+            value.systemPrompt = `${systemPrompt}\n\n## Known context about this user:\n${memoryBlock}`
+          }
+        }
+      } catch {
+        // Memory search is best-effort; don't block the session
+      }
+    }
+
+    const finalPrompt = optionalString(value.systemPrompt) ?? systemPrompt
+    if (finalPrompt) {
+      enqueue({ id: `system-prompt-${hashContent(finalPrompt)}`, role: "system", kind: "system_prompt", content: finalPrompt, metadata: { source: "before_agent_start" } }, session)
     }
     const options = asRecord(value.systemPromptOptions)
     const tools = toolsSnapshot(options)
@@ -89,6 +111,14 @@ export function activate(pi: PiLikeApi, extensionConfig: Partial<VaultConfig> = 
     const text = optionalString(value.text)
     if (text) {
       enqueue({ id: `input-${hashContent(text)}`, role: "user", kind: "message", content: text, metadata: { source: value.source ?? "input" } }, session)
+      if (config.memory.enabled) {
+        const msgs = sessionUserMessages.get(session.external_session_id) ?? []
+        // Cap at 50 messages per session; truncate long messages to 4KB each
+        if (msgs.length < 50) {
+          msgs.push(text.length > 4096 ? text.slice(0, 4096) : text)
+          sessionUserMessages.set(session.external_session_id, msgs)
+        }
+      }
     }
     return { action: "continue" }
   })
@@ -132,6 +162,18 @@ export function activate(pi: PiLikeApi, extensionConfig: Partial<VaultConfig> = 
   pi.on?.("session_shutdown", (_event, ctx) => {
     const session = rememberSession(_event, ctx)
     void client.flush(session)
+
+    // Send accumulated user messages for async memory extraction
+    if (config.memory.enabled) {
+      const msgs = sessionUserMessages.get(session.external_session_id)
+      if (msgs && msgs.length > 0) {
+        const combinedText = msgs.join("\n\n")
+        void client.addMemory(config.memory.userId, combinedText).catch((error) => {
+          pi.logger?.warn?.("pi-thread-vault memory extraction failed", error)
+        })
+        sessionUserMessages.delete(session.external_session_id)
+      }
+    }
   })
 
   pi.hooks?.onSessionStart?.((rawSession) => {
@@ -191,6 +233,32 @@ export function activate(pi: PiLikeApi, extensionConfig: Partial<VaultConfig> = 
     })
     notify(ctx, `Recorded handoff for ${current.threadId}`)
   })
+  registerCommand(pi, "memory", "List stored memories for this user", async (_args, ctx) => {
+    if (!config.memory.enabled) { notify(ctx, "Memory is disabled"); return }
+    const memories = await client.listMemories(config.memory.userId)
+    if (memories.length === 0) { notify(ctx, "No memories stored yet"); return }
+    const lines = memories.map((m) => `- ${m.fact}`).join("\n")
+    notify(ctx, `Memories for ${config.memory.userId}:\n${lines}`)
+    return memories
+  })
+  registerCommand(pi, "memory-search", "Search memories by relevance", async (args, ctx) => {
+    if (!config.memory.enabled) { notify(ctx, "Memory is disabled"); return }
+    const query = args.trim()
+    if (!query) { notify(ctx, "Usage: /memory-search <query>"); return }
+    const matches = await client.searchMemories(config.memory.userId, query)
+    if (matches.length === 0) { notify(ctx, "No relevant memories found"); return }
+    const lines = matches.map((m) => `- [${(m.similarity * 100).toFixed(0)}%] ${m.fact}`).join("\n")
+    notify(ctx, lines)
+    return matches
+  })
+  registerCommand(pi, "memory-add", "Manually store a memory from text", async (args, ctx) => {
+    if (!config.memory.enabled) { notify(ctx, "Memory is disabled"); return }
+    const text = args.trim()
+    if (!text) { notify(ctx, "Usage: /memory-add <text to extract facts from>"); return }
+    await client.addMemory(config.memory.userId, text)
+    notify(ctx, "Memory extraction queued")
+  })
+
   pi.commands?.register("thread", (sessionExternalId) => client.currentThreadContext(String(sessionExternalId ?? "")))
   pi.commands?.register("thread-url", (sessionExternalId) => client.currentThreadContext(String(sessionExternalId ?? ""))?.threadUrl)
   pi.commands?.register("thread-open", (sessionExternalId) => client.currentThreadContext(String(sessionExternalId ?? ""))?.threadUrl)
