@@ -567,7 +567,7 @@ export default function (pi: ExtensionAPI) {
 
 		const seedMessages = buildSeedMessages(ctx, thread);
 		if (seedMessages.length > 0) {
-			session.agent.replaceMessages(seedMessages as typeof session.state.messages);
+			session.agent.state.messages = seedMessages as typeof session.state.messages;
 		}
 
 		const unsubscribe = session.subscribe((event: AgentSessionEvent) => {
@@ -740,8 +740,11 @@ export default function (pi: ExtensionAPI) {
 			throw new Error("No active model selected.");
 		}
 
-		const apiKey = await ctx.modelRegistry.getApiKey(model);
-		if (!apiKey) {
+		const auth = await ctx.modelRegistry.getApiKeyAndHeaders(model);
+		if (!auth.ok) {
+			throw new Error(auth.error || `No credentials available for ${model.provider}/${model.id}.`);
+		}
+		if (!ctx.modelRegistry.hasConfiguredAuth(model) && !auth.apiKey && !auth.headers && !auth.env) {
 			throw new Error(`No credentials available for ${model.provider}/${model.id}.`);
 		}
 
@@ -825,9 +828,11 @@ export default function (pi: ExtensionAPI) {
 			return;
 		}
 
-		const apiKey = await ctx.modelRegistry.getApiKey(model);
-		if (!apiKey) {
-			const message = `No credentials available for ${model.provider}/${model.id}.`;
+		const auth = await ctx.modelRegistry.getApiKeyAndHeaders(model);
+		if (!auth.ok || (!ctx.modelRegistry.hasConfiguredAuth(model) && !auth.apiKey && !auth.headers && !auth.env)) {
+			const message = auth.ok
+				? `No credentials available for ${model.provider}/${model.id}.`
+				: auth.error || `No credentials available for ${model.provider}/${model.id}.`;
 			setOverlayStatus(message);
 			notify(ctx, message, "error");
 			return;
